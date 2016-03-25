@@ -11,6 +11,12 @@ all: scripts step1 step2 step3 step4
 scripts:
 	stack --install-ghc install
 
+
+# Big, heavy step to fetch everything:
+step0: ./data/0_hackage_all_tarballs/
+./data/0_hackage_all_tarballs/:
+	time ./hackage-mirror.sh
+
 # These steps are really per-package and could be broken up that way
 # ------------------------------------------------------------------
 step1:
