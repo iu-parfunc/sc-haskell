@@ -1,4 +1,4 @@
--- {-# LANGUAGE Safe #-} -- is it?
+{-# LANGUAGE Trustworthy #-} -- is it?
 {-# LANGUAGE CPP #-}
 
 module SC.Data.IORef
@@ -35,11 +35,20 @@ import qualified SC.Data.IORef.Unsafe as U
 
 -- Are we going to provide alternate, safer implementations of these?
 modifyIORef :: IORef a -> (a -> a) -> IO ()
-modifyIORef = U.modifyIORef
+modifyIORef a f = do
+  atomicModifyIORef a (\x -> (f x, ()))
+  return ()
+-- modifyIORef = U.modifyIORef
 modifyIORef' :: IORef a -> (a -> a) -> IO ()
-modifyIORef' = U.modifyIORef'
+modifyIORef' a f = do
+  atomicModifyIORef' a (\x -> (f x, ()))
+  return ()                
+-- modifyIORef' = U.modifyIORef'
 writeIORef  :: IORef a -> a -> IO ()
 writeIORef = U.atomicWriteIORef
+{-# INLINE modifyIORef #-}
+{-# INLINE modifyIORef' #-}
+{-# INLINE writeIORef #-}
                    
 -- #if !defined(__PARALLEL_HASKELL__)
 -- mkWeakIORef :: IORef a -> IO () -> IO (Weak (IORef a))
