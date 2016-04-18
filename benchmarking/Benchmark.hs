@@ -1,3 +1,9 @@
+#!/usr/bin/env stack
+-- stack --no-system-ghc  --resolver lts-5.13 --install-ghc runghc --package http-client --package Cabal --package bytestring --package filepath
+
+-- --verbosity silent
+--  --package turtle --package filemanip --package split
+
 module Main (main) where
 
 import Data.ByteString.Lazy (ByteString)
