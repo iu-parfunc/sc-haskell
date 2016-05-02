@@ -1,5 +1,14 @@
 #!/usr/bin/env stack
--- stack --no-system-ghc  --resolver lts-5.13 --install-ghc runghc --package http-client --package Cabal --package bytestring --package filepath
+{- stack
+    --no-system-ghc
+    --resolver lts-5.13
+    --install-ghc runghc
+    --package bytestring
+    --package Cabal
+    --package filepath
+    --package http-client
+    --package tar
+-}
 
 -- --verbosity silent
 --  --package turtle --package filemanip --package split
