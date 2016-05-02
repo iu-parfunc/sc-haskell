@@ -9,11 +9,13 @@
     --package filepath
     --package http-client
     --package tar
+    --package zlib
 -}
 
 module Main (main) where
 
 import qualified Codec.Archive.Tar as Tar
+import qualified Codec.Compression.GZip as GZip
 
 import           Control.Monad (unless)
 
@@ -85,12 +87,12 @@ extractPkgTarball m pkgId = do
     let pkgIdStr    = show $ disp pkgId
         cabalTarURL = baseHackageURL </> pkgIdStr </> pkgIdStr <.> "tar" <.> "gz"
     initialRequest <- parseUrl $ "GET " ++ cabalTarURL
-    tarBytes <- withProgress ("Downloading " ++ cabalTarURL) $
+    tarBytesCompressed <- withProgress ("Downloading " ++ cabalTarURL) $
         responseBody <$> httpLbs initialRequest m
-    let tarball   = Tar.read tarBytes
-        unpackDir = benchBuildDir </> pkgIdStr
-    withProgress ("Unpacking to " ++ unpackDir) $
-        Tar.unpack unpackDir tarball
+    withProgress ("Unpacking to " ++ benchBuildDir </> pkgIdStr) $ do
+        let tarBytesDecompressed = GZip.decompress tarBytesCompressed
+            tarball              = Tar.read tarBytesDecompressed
+        Tar.unpack benchBuildDir tarball
 
 main :: IO ()
 main = do
@@ -108,6 +110,5 @@ main = do
         putStrLn " benchmarks: "
         let benches = condBenchmarks pkgDescr
         for_ benches $ \p -> putStrLn $ '\t':fst p ++ " "
-        unless (null benches) $ do
-            createDirectoryIfMissing True benchBuildDir
+        unless (null benches) $
             extractPkgTarball manager ver
