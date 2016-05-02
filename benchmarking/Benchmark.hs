@@ -6,20 +6,24 @@
 
 module Main (main) where
 
-import Data.ByteString.Lazy (ByteString)
+import qualified Codec.Archive.Tar as Tar
+
+import           Data.ByteString.Lazy (ByteString)
 import qualified Data.ByteString.Lazy.Char8 as L
-import Data.Maybe (mapMaybe)
-import Data.Version (makeVersion)
+import           Data.Foldable (for_)
+import           Data.Maybe (mapMaybe)
+import           Data.Version (makeVersion)
 
-import Distribution.Compat.ReadP
-import Distribution.Package (Dependency(..), PackageIdentifier(..), PackageName(..))
-import Distribution.PackageDescription.Parse (ParseResult(..), parsePackageDescription)
-import Distribution.Text (Text(..), simpleParse)
-import Distribution.Version (isSpecificVersion)
+import           Distribution.Compat.ReadP
+import           Distribution.Package (Dependency(..), PackageIdentifier(..), PackageName(..))
+import           Distribution.PackageDescription (GenericPackageDescription(..), PackageDescription(..))
+import           Distribution.PackageDescription.Parse (ParseResult(..), parsePackageDescription)
+import           Distribution.Text (Text(..), simpleParse)
+import           Distribution.Version (isSpecificVersion)
 
-import Network.HTTP.Client
+import           Network.HTTP.Client
 
-import System.FilePath ((</>), (<.>))
+import           System.FilePath ((</>), (<.>))
 
 comments :: ReadP r ()
 comments = do
@@ -52,17 +56,23 @@ downloadCabalFile m pkgId = do
                               </> pkgIdStr </> pkgStr <.> "cabal"
     responseBody <$> httpLbs initialRequest m
 
+-- downloadPkgTarball :: Manager -> PackageIdentifier -> IO
+
 main :: IO ()
 main = do
-    {-
     cnf <- readFile $! "test.config"
     let vers = case simpleParse cnf :: Maybe CabalConfig of
           Nothing -> error "Parse error"
           Just (CabalConfig cc) -> mapMaybe toPackageIdentifier cc
-    -}
     manager   <- newManager defaultManagerSettings
-    cabalFile <- downloadCabalFile manager (PackageIdentifier (PackageName "hello") (makeVersion [1,0,0,2]))
-    let pkgDescr = case parsePackageDescription (L.unpack cabalFile) of
-                     ParseFailed pe -> error $ show pe
-                     ParseOk _ d    -> d
-    print pkgDescr
+    for_ vers $ \ver -> do
+        cabalFile <- downloadCabalFile manager ver
+        let pkgDescr = case parsePackageDescription (L.unpack cabalFile) of
+                         ParseFailed pe -> error $ show pe
+                         ParseOk _ d    -> d
+        putStr $ show $ disp $ package $ packageDescription pkgDescr
+        putStrLn " benchmarks: "
+        let benches = condBenchmarks pkgDescr
+        for_ benches $ \p -> putStrLn $ '\t':fst p ++ " "
+
+
