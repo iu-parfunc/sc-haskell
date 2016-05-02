@@ -19,6 +19,7 @@ import qualified Codec.Compression.GZip as GZip
 
 import           Control.Monad (unless)
 
+import           Data.Bool (bool)
 import           Data.ByteString.Lazy (ByteString)
 import qualified Data.ByteString.Lazy.Char8 as L
 import           Data.Foldable (for_)
@@ -34,7 +35,7 @@ import           Distribution.Version (isSpecificVersion)
 
 import           Network.HTTP.Client
 
-import           System.Directory (createDirectoryIfMissing)
+import           System.Directory (createDirectoryIfMissing, doesDirectoryExist)
 import           System.FilePath ((</>), (<.>))
 
 comments :: ReadP r ()
@@ -67,10 +68,13 @@ benchBuildDir :: FilePath
 benchBuildDir = "bench-build"
 
 withProgress :: String -> IO a -> IO a
-withProgress progressStr action = do
+withProgress progressStr = withProgressFinish progressStr (const "Done!")
+
+withProgressFinish :: String -> (a -> String) -> IO a -> IO a
+withProgressFinish progressStr finishStr action = do
     putStr $ progressStr ++ "... "
     res <- action
-    putStrLn "Done!"
+    putStrLn $ finishStr res
     pure res
 
 downloadCabalFile :: Manager -> PackageIdentifier -> IO ByteString
@@ -82,10 +86,9 @@ downloadCabalFile m pkgId = do
     withProgress ("Downloading " ++ cabalURL) $
         responseBody <$> httpLbs initialRequest m
 
-extractPkgTarball :: Manager -> PackageIdentifier -> IO ()
-extractPkgTarball m pkgId = do
-    let pkgIdStr    = show $ disp pkgId
-        cabalTarURL = baseHackageURL </> pkgIdStr </> pkgIdStr <.> "tar" <.> "gz"
+extractPkgTarball :: Manager -> String -> IO ()
+extractPkgTarball m pkgIdStr = do
+    let cabalTarURL = baseHackageURL </> pkgIdStr </> pkgIdStr <.> "tar" <.> "gz"
     initialRequest <- parseUrl $ "GET " ++ cabalTarURL
     tarBytesCompressed <- withProgress ("Downloading " ++ cabalTarURL) $
         responseBody <$> httpLbs initialRequest m
@@ -110,5 +113,11 @@ main = do
         putStrLn " benchmarks: "
         let benches = condBenchmarks pkgDescr
         for_ benches $ \p -> putStrLn $ '\t':fst p ++ " "
-        unless (null benches) $
-            extractPkgTarball manager ver
+        unless (null benches) $ do
+            let pkgIdStr = show $ disp ver
+                tarDir   = benchBuildDir </> pkgIdStr
+            tarDirExists <- withProgressFinish ("Checking if " ++ tarDir ++ " exists")
+                                               (bool "No" "Yes") $
+                doesDirectoryExist tarDir
+            unless tarDirExists $
+                extractPkgTarball manager pkgIdStr
