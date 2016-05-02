@@ -5,17 +5,17 @@
     --install-ghc runghc
     --package bytestring
     --package Cabal
+    --package directory
     --package filepath
     --package http-client
     --package tar
 -}
 
--- --verbosity silent
---  --package turtle --package filemanip --package split
-
 module Main (main) where
 
 import qualified Codec.Archive.Tar as Tar
+
+import           Control.Monad (unless)
 
 import           Data.ByteString.Lazy (ByteString)
 import qualified Data.ByteString.Lazy.Char8 as L
@@ -32,6 +32,7 @@ import           Distribution.Version (isSpecificVersion)
 
 import           Network.HTTP.Client
 
+import           System.Directory (createDirectoryIfMissing)
 import           System.FilePath ((</>), (<.>))
 
 comments :: ReadP r ()
@@ -57,15 +58,39 @@ toPackageIdentifier :: Dependency -> Maybe PackageIdentifier
 toPackageIdentifier (Dependency p vr) =
   PackageIdentifier p <$> isSpecificVersion vr
 
+baseHackageURL :: String
+baseHackageURL = "http://hackage.haskell.org/package"
+
+benchBuildDir :: FilePath
+benchBuildDir = "bench-build"
+
+withProgress :: String -> IO a -> IO a
+withProgress progressStr action = do
+    putStr $ progressStr ++ "... "
+    res <- action
+    putStrLn "Done!"
+    pure res
+
 downloadCabalFile :: Manager -> PackageIdentifier -> IO ByteString
 downloadCabalFile m pkgId = do
     let pkgIdStr = show $ disp pkgId
         pkgStr   = show $ disp $ case pkgId of PackageIdentifier pkg _ -> pkg
-    initialRequest <- parseUrl $ "GET http://hackage.haskell.org/package"
-                              </> pkgIdStr </> pkgStr <.> "cabal"
-    responseBody <$> httpLbs initialRequest m
+        cabalURL = baseHackageURL </> pkgIdStr </> pkgStr <.> "cabal"
+    initialRequest <- parseUrl $ "GET " ++ cabalURL
+    withProgress ("Downloading " ++ cabalURL) $
+        responseBody <$> httpLbs initialRequest m
 
--- downloadPkgTarball :: Manager -> PackageIdentifier -> IO
+extractPkgTarball :: Manager -> PackageIdentifier -> IO ()
+extractPkgTarball m pkgId = do
+    let pkgIdStr    = show $ disp pkgId
+        cabalTarURL = baseHackageURL </> pkgIdStr </> pkgIdStr <.> "tar" <.> "gz"
+    initialRequest <- parseUrl $ "GET " ++ cabalTarURL
+    tarBytes <- withProgress ("Downloading " ++ cabalTarURL) $
+        responseBody <$> httpLbs initialRequest m
+    let tarball   = Tar.read tarBytes
+        unpackDir = benchBuildDir </> pkgIdStr
+    withProgress ("Unpacking to " ++ unpackDir) $
+        Tar.unpack unpackDir tarball
 
 main :: IO ()
 main = do
@@ -73,7 +98,7 @@ main = do
     let vers = case simpleParse cnf :: Maybe CabalConfig of
           Nothing -> error "Parse error"
           Just (CabalConfig cc) -> mapMaybe toPackageIdentifier cc
-    manager   <- newManager defaultManagerSettings
+    manager <- newManager defaultManagerSettings
     for_ vers $ \ver -> do
         cabalFile <- downloadCabalFile manager ver
         let pkgDescr = case parsePackageDescription (L.unpack cabalFile) of
@@ -83,5 +108,6 @@ main = do
         putStrLn " benchmarks: "
         let benches = condBenchmarks pkgDescr
         for_ benches $ \p -> putStrLn $ '\t':fst p ++ " "
-
-
+        unless (null benches) $ do
+            createDirectoryIfMissing True benchBuildDir
+            extractPkgTarball manager ver
