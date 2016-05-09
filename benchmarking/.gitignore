@@ -16,4 +16,6 @@ cabal.sandbox.config
 *.hp
 *.eventlog
 .stack-work/
-bench-build-*/
+
+# Original stuff
+.bench-build/

@@ -93,7 +93,7 @@ baseHackageURL :: String
 baseHackageURL = "http://hackage.haskell.org/package"
 
 benchBuildDirPrefix :: FilePath
-benchBuildDirPrefix = "bench-build-"
+benchBuildDirPrefix = ".bench-build"
 
 baseStackageURL :: String
 baseStackageURL = "https://www.stackage.org"
@@ -190,21 +190,20 @@ main :: IO ()
 main = do
     manager <- newManager defaultManagerSettings
     !cnf <- readFile "test.config"
-    let vers = case simpleParse cnf :: Maybe CabalConfig of
+    let pkgIds = case simpleParse cnf :: Maybe CabalConfig of
           Nothing -> error "Parse error"
           Just (CabalConfig cc) -> mapMaybe toPackageIdentifier cc
-    for_ vers $ \ver -> do
-        cabalFile <- downloadCabalFile manager ver
-        let pkgDescr = case parsePackageDescription (L.unpack cabalFile) of
+    for_ pkgIds $ \pkgId -> do
+        cabalFile <- downloadCabalFile manager pkgId
+        let pkgIdStr = show $ disp pkgId
+            pkgDescr = case parsePackageDescription (L.unpack cabalFile) of
                          ParseFailed pe -> error $ show pe
                          ParseOk _ d    -> d
-        putStr $ show $ disp $ package $ packageDescription pkgDescr
-        putStrLn " benchmarks: "
         let benches = condBenchmarks pkgDescr
-        for_ benches $ \p -> putStrLn $ '\t':fst p ++ " "
         unless (null benches) $ do
-            let pkgIdStr      = show $ disp ver
-                benchBuildDir = benchBuildDirPrefix ++ targetSlug stackageTarget
+            putStrLn $ pkgIdStr ++  " benchmarks: "
+            for_ benches $ \p -> putStrLn $ '\t':fst p ++ " "
+            let benchBuildDir = benchBuildDirPrefix </> targetSlug stackageTarget
                 pkgBuildDir   = benchBuildDir </> pkgIdStr
             dirExists <- withProgressYesNo ("Checking if " ++ pkgBuildDir ++ " exists") $
                 doesDirectoryExist pkgBuildDir
