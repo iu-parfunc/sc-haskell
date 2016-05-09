@@ -152,6 +152,7 @@ invoke cmd args = do
     let fullCmd = unwords (cmd:args)
     ec <- liftIO $ do
         let createProc = proc cmd args
+        putStrLn $ "+ " ++ fullCmd
         (_, _, _, handle) <- createProcess createProc
         ec' <- waitForProcess handle
         pure ec'
@@ -167,6 +168,8 @@ runBenchmarks = do
         unless exists $ writeStackDotYaml yamlFile
     invoke "stack" ["setup"]
     -- TODO: Determine a way to run individual benchmarks
+    invoke "stack" ["bench", "--only-dependencies"]
+    -- TODO: Timeout after, say, 10 minutes
     invoke "stack" ["bench"]
 
 -- | Run an 'IO' action with the given working directory and restore the
