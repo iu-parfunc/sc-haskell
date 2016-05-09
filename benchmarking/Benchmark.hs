@@ -12,6 +12,7 @@
     --package process
     --package tar
     --package transformers
+    --package witherable
     --package yaml
     --package zlib
 -}
@@ -34,9 +35,9 @@ import           Data.Bool (bool)
 import           Data.ByteString.Lazy (ByteString)
 import qualified Data.ByteString.Lazy.Char8 as L
 import           Data.Foldable (for_)
-import           Data.Maybe (mapMaybe)
 import qualified Data.Text as TS
 import           Data.Time.Calendar (Day(..))
+import           Data.Witherable (Witherable(..), forMaybe)
 import           Data.Yaml (encodeFile)
 
 import           Distribution.Compat.ReadP
@@ -139,11 +140,14 @@ extractPkgTarball m benchBuildDir pkgIdStr = do
             tarball              = Tar.read tarBytesDecompressed
         Tar.unpack benchBuildDir tarball
 
-writeStackDotYaml :: FilePath -> IO ()
-writeStackDotYaml path =
-    let yaml :: Value
-        yaml = object ["resolver" .= targetSlug stackageTarget]
-    in encodeFile path yaml
+writeStackDotYaml :: FilePath
+                  -> [String]
+                  -> IO ()
+writeStackDotYaml buildPath pkgIdStrs =
+    let packages = "packages" .= map ("." </>) pkgIdStrs
+        resolver = "resolver" .= targetSlug stackageTarget
+        yaml     = object [resolver, packages]
+    in encodeFile buildPath yaml
 
 type ShellM = ExceptT (String, Int) IO
 
@@ -160,17 +164,13 @@ invoke cmd args = do
          ExitSuccess   -> pure ()
          ExitFailure c -> throwError (fullCmd, c)
 
-runBenchmarks :: ShellM ()
-runBenchmarks = do
-    liftIO $ do
-        let yamlFile = "stack.yaml"
-        exists <- doesFileExist yamlFile
-        unless exists $ writeStackDotYaml yamlFile
+runBenchmarks :: String -> ShellM ()
+runBenchmarks pkgIdStr = do
     invoke "stack" ["setup"]
     -- TODO: Determine a way to run individual benchmarks
-    invoke "stack" ["bench", "--only-dependencies"]
+    invoke "stack" ["bench", "--only-dependencies", pkgIdStr]
     -- TODO: Timeout after, say, 10 minutes
-    invoke "stack" ["bench"]
+    invoke "stack" ["bench", pkgIdStr]
 
 -- | Run an 'IO' action with the given working directory and restore the
 -- original working directory afterwards, even if the given action fails due
@@ -190,27 +190,43 @@ main :: IO ()
 main = do
     manager <- newManager defaultManagerSettings
     !cnf <- readFile "test.config"
-    let pkgIds = case simpleParse cnf :: Maybe CabalConfig of
+    let benchBuildDir = benchBuildDirPrefix </> targetSlug stackageTarget
+        pkgIds = case simpleParse cnf :: Maybe CabalConfig of
           Nothing -> error "Parse error"
           Just (CabalConfig cc) -> mapMaybe toPackageIdentifier cc
-    for_ pkgIds $ \pkgId -> do
+    createDirectoryIfMissing True benchBuildDir
+
+    pkgIdStrs <- forMaybe pkgIds $ \pkgId -> do
         cabalFile <- downloadCabalFile manager pkgId
         let pkgIdStr = show $ disp pkgId
             pkgDescr = case parsePackageDescription (L.unpack cabalFile) of
                          ParseFailed pe -> error $ show pe
                          ParseOk _ d    -> d
         let benches = condBenchmarks pkgDescr
-        unless (null benches) $ do
-            putStrLn $ pkgIdStr ++  " benchmarks: "
-            for_ benches $ \p -> putStrLn $ '\t':fst p ++ " "
-            let benchBuildDir = benchBuildDirPrefix </> targetSlug stackageTarget
-                pkgBuildDir   = benchBuildDir </> pkgIdStr
-            dirExists <- withProgressYesNo ("Checking if " ++ pkgBuildDir ++ " exists") $
-                doesDirectoryExist pkgBuildDir
-            unless dirExists $
+        if null benches
+           then pure Nothing
+           else do
+             putStrLn $ pkgIdStr ++ " has benchmarks, they are:"
+             for_ benches $ \p -> putStrLn ('\t':fst p)
+
+             let pkgBuildDir = benchBuildDir </> pkgIdStr
+             dirExists <- withProgressYesNo ("Checking if " ++ pkgBuildDir ++ " exists") $
+                 doesDirectoryExist pkgBuildDir
+             unless dirExists $
                 extractPkgTarball manager benchBuildDir pkgIdStr
-            res <- withCurrentDirectory pkgBuildDir $ runExceptT runBenchmarks
-            case res of
-                 Left (cmd, c) -> do
-                     putStrLn $ "ERROR: " ++ cmd ++ " returned exit code " ++ show c
-                 Right () -> putStrLn "It worked!"
+
+             pure (Just pkgIdStr)
+
+    writeStackDotYaml (benchBuildDir </> "stack" <.> "yaml") pkgIdStrs
+
+    putStrLn "Packages with benchmarks:"
+    for_ pkgIdStrs $ \pkgIdStr -> putStrLn ('\t':pkgIdStr)
+
+    for_ pkgIdStrs $ \pkgIdStr -> do
+        res <- withCurrentDirectory benchBuildDir
+               $ runExceptT
+               $ runBenchmarks pkgIdStr
+        case res of
+             Left (cmd, c) -> do
+                 putStrLn $ "ERROR: " ++ cmd ++ " returned exit code " ++ show c
+             Right () -> putStrLn "It worked!"
