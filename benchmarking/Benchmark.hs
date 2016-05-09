@@ -202,11 +202,12 @@ main = do
         unless (null benches) $ do
             let pkgIdStr      = show $ disp ver
                 benchBuildDir = benchBuildDirPrefix ++ targetSlug stackageTarget </> pkgIdStr
-            dirExists <- withProgressYesNo ("Checking if " ++ benchBuildDir ++ " exists") $
-                doesDirectoryExist benchBuildDir
+                pkgBuildDir   = benchBuildDir </> pkgIdStr
+            dirExists <- withProgressYesNo ("Checking if " ++ pkgBuildDir ++ " exists") $
+                doesDirectoryExist pkgBuildDir
             unless dirExists $
                 extractPkgTarball manager benchBuildDir pkgIdStr
-            res <- withCurrentDirectory benchBuildDir $ runExceptT runBenchmarks
+            res <- withCurrentDirectory pkgBuildDir $ runExceptT runBenchmarks
             case res of
                  Left (cmd, c) -> do
                      putStrLn $ "ERROR: " ++ cmd ++ " returned exit code " ++ show c
