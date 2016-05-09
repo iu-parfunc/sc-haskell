@@ -204,7 +204,7 @@ main = do
         for_ benches $ \p -> putStrLn $ '\t':fst p ++ " "
         unless (null benches) $ do
             let pkgIdStr      = show $ disp ver
-                benchBuildDir = benchBuildDirPrefix ++ targetSlug stackageTarget </> pkgIdStr
+                benchBuildDir = benchBuildDirPrefix ++ targetSlug stackageTarget
                 pkgBuildDir   = benchBuildDir </> pkgIdStr
             dirExists <- withProgressYesNo ("Checking if " ++ pkgBuildDir ++ " exists") $
                 doesDirectoryExist pkgBuildDir
