@@ -3,7 +3,7 @@
     --no-system-ghc
     --resolver lts-5.13
     --install-ghc runghc
-    --package Aeson
+    --package aeson
     --package bytestring
     --package Cabal
     --package directory
