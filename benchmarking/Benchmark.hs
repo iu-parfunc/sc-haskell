@@ -51,7 +51,7 @@ import           Network.HTTP.Client
 import           System.Directory
 import           System.Exit (ExitCode(..))
 import           System.FilePath ((</>), (<.>))
-import           System.Process (readProcessWithExitCode)
+import           System.Process
 
 -----
 -- Taken from stackage-curator
@@ -92,18 +92,18 @@ toPackageIdentifier (Dependency p vr) =
 baseHackageURL :: String
 baseHackageURL = "http://hackage.haskell.org/package"
 
-benchBuildDir :: FilePath
-benchBuildDir = "bench-build"
+benchBuildDirPrefix :: FilePath
+benchBuildDirPrefix = "bench-build-"
 
 baseStackageURL :: String
 baseStackageURL = "https://www.stackage.org"
 
-stackageLTS :: Target
-stackageLTS = TargetLts 5 13
+stackageTarget :: Target
+stackageTarget = TargetLts 5 13
 
 stackageCabalConfigURL :: String
 stackageCabalConfigURL =  baseStackageURL
-                      </> targetSlug stackageLTS
+                      </> targetSlug stackageTarget
                       </> "cabal" <.> "config"
 
 withProgress :: String -> IO a -> IO a
@@ -128,8 +128,8 @@ downloadCabalFile m pkgId = do
     withProgress ("Downloading " ++ cabalURL) $
         responseBody <$> httpLbs initialRequest m
 
-extractPkgTarball :: Manager -> String -> IO ()
-extractPkgTarball m pkgIdStr = do
+extractPkgTarball :: Manager -> FilePath -> String -> IO ()
+extractPkgTarball m benchBuildDir pkgIdStr = do
     let cabalTarURL = baseHackageURL </> pkgIdStr </> pkgIdStr <.> "tar" <.> "gz"
     initialRequest <- parseUrl $ "GET " ++ cabalTarURL
     tarBytesCompressed <- withProgress ("Downloading " ++ cabalTarURL) $
@@ -142,22 +142,22 @@ extractPkgTarball m pkgIdStr = do
 writeStackDotYaml :: FilePath -> IO ()
 writeStackDotYaml path =
     let yaml :: Value
-        yaml = object ["resolver" .= targetSlug stackageLTS]
+        yaml = object ["resolver" .= targetSlug stackageTarget]
     in encodeFile path yaml
 
-type ShellM = ExceptT (Int, String, String) IO
+type ShellM = ExceptT (String, Int) IO
 
-shell :: Bool -> FilePath -> [String] -> ShellM String
-shell verbose cmd args = do
+invoke :: FilePath -> [String] -> ShellM ()
+invoke cmd args = do
     let fullCmd = unwords (cmd:args)
-    (ec, stdout, stderr) <- liftIO $ do
-        when verbose $ putStrLn fullCmd
-        res@(_, stdout', _) <- readProcessWithExitCode cmd args ""
-        when verbose $ putStrLn stdout'
-        pure res
+    ec <- liftIO $ do
+        let createProc = proc cmd args
+        (_, _, _, handle) <- createProcess createProc
+        ec' <- waitForProcess handle
+        pure ec'
     case ec of
-         ExitSuccess   -> pure stdout
-         ExitFailure c -> throwError (c, fullCmd, stderr)
+         ExitSuccess   -> pure ()
+         ExitFailure c -> throwError (fullCmd, c)
 
 runBenchmarks :: ShellM ()
 runBenchmarks = do
@@ -165,9 +165,9 @@ runBenchmarks = do
         let yamlFile = "stack.yaml"
         exists <- doesFileExist yamlFile
         unless exists $ writeStackDotYaml yamlFile
-    void $ shell False "stack" ["setup"]
+    invoke "stack" ["setup"]
     -- TODO: Determine a way to run individual benchmarks
-    void $ shell True  "stack" ["bench"]
+    invoke "stack" ["bench"]
 
 -- | Run an 'IO' action with the given working directory and restore the
 -- original working directory afterwards, even if the given action fails due
@@ -200,17 +200,14 @@ main = do
         let benches = condBenchmarks pkgDescr
         for_ benches $ \p -> putStrLn $ '\t':fst p ++ " "
         unless (null benches) $ do
-            let pkgIdStr = show $ disp ver
-                tarDir   = benchBuildDir </> pkgIdStr
-            tarDirExists <- withProgressYesNo ("Checking if " ++ tarDir ++ " exists") $
-                doesDirectoryExist tarDir
-            unless tarDirExists $
-                extractPkgTarball manager pkgIdStr
-            res <- withCurrentDirectory tarDir $ runExceptT runBenchmarks
+            let pkgIdStr      = show $ disp ver
+                benchBuildDir = benchBuildDirPrefix ++ targetSlug stackageTarget </> pkgIdStr
+            dirExists <- withProgressYesNo ("Checking if " ++ benchBuildDir ++ " exists") $
+                doesDirectoryExist benchBuildDir
+            unless dirExists $
+                extractPkgTarball manager benchBuildDir pkgIdStr
+            res <- withCurrentDirectory benchBuildDir $ runExceptT runBenchmarks
             case res of
-                 Left (c, cmd, stderr) -> do
+                 Left (cmd, c) -> do
                      putStrLn $ "ERROR: " ++ cmd ++ " returned exit code " ++ show c
-                     putStrLn "----------------------------------------"
-                     putStrLn stderr
-                     putStrLn "----------------------------------------"
                  Right () -> putStrLn "It worked!"
