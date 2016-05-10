@@ -11,7 +11,9 @@
     --package http-client
     --package process
     --package tar
+    --package text
     --package transformers
+    --package unordered-containers
     --package witherable
     --package yaml
     --package zlib
@@ -19,6 +21,7 @@
 
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ViewPatterns #-}
 module Main (main) where
 
 import qualified Codec.Archive.Tar as Tar
@@ -30,15 +33,17 @@ import           Control.Monad.Except (MonadError(..))
 import           Control.Monad.IO.Class (MonadIO(..))
 import           Control.Monad.Trans.Except (ExceptT, runExceptT)
 
-import           Data.Aeson.Types (Value, (.=), object)
+import           Data.Aeson.Types (Value(..), (.=), object)
 import           Data.Bool (bool)
 import           Data.ByteString.Lazy (ByteString)
 import qualified Data.ByteString.Lazy.Char8 as L
 import           Data.Foldable (for_)
-import qualified Data.Text as TS
+import qualified Data.HashMap.Strict as HM
+import qualified Data.Text as T
 import           Data.Time.Calendar (Day(..))
+import qualified Data.Vector as V
 import           Data.Witherable (Witherable(..), forMaybe)
-import           Data.Yaml (encodeFile)
+import           Data.Yaml (decodeFile, encodeFile)
 
 import           Distribution.Compat.ReadP
 import           Distribution.Package (Dependency(..), PackageIdentifier(..), PackageName(..))
@@ -51,7 +56,7 @@ import           Network.HTTP.Client
 
 import           System.Directory
 import           System.Exit (ExitCode(..))
-import           System.FilePath ((</>), (<.>))
+import           System.FilePath ((</>), (<.>), takeFileName)
 import           System.Process
 
 -----
@@ -140,14 +145,55 @@ extractPkgTarball m benchBuildDir pkgIdStr = do
             tarball              = Tar.read tarBytesDecompressed
         Tar.unpack benchBuildDir tarball
 
+getPkgsWithBenchmarks :: Manager
+                      -> FilePath
+                      -> [PackageIdentifier]
+                      -> IO [String]
+getPkgsWithBenchmarks m benchBuildDir pkgIds = do
+    let stackYamlFile = benchBuildDir </> "stack" <.> "yaml"
+    exists <- doesFileExist stackYamlFile
+    if exists
+       then do
+         stackYaml <- decodeFile stackYamlFile
+         pure $ case stackYaml of
+              Just (Object (HM.lookup "packages" -> Just (Array packages))) ->
+                    map (\(String s) -> takeFileName $ T.unpack s)
+                        (V.toList packages)
+              Nothing -> error $ "Corrupt " ++ stackYamlFile ++ " file."
+
+       else do
+         pkgIdStrs <- forMaybe pkgIds $ \pkgId -> do
+             cabalFile <- downloadCabalFile m pkgId
+             let pkgIdStr = show $ disp pkgId
+                 pkgDescr = case parsePackageDescription (L.unpack cabalFile) of
+                              ParseFailed pe -> error $ show pe
+                              ParseOk _ d    -> d
+             let benches = condBenchmarks pkgDescr
+             if null benches
+                then pure Nothing
+                else do
+                  putStrLn $ pkgIdStr ++ " has benchmarks, they are:"
+                  for_ benches $ \p -> putStrLn ('\t':fst p)
+
+                  let pkgBuildDir = benchBuildDir </> pkgIdStr
+                  dirExists <- withProgressYesNo ("Checking if " ++ pkgBuildDir ++ " exists") $
+                      doesDirectoryExist pkgBuildDir
+                  unless dirExists $
+                      extractPkgTarball m benchBuildDir pkgIdStr
+
+                  pure (Just pkgIdStr)
+
+         writeStackDotYaml stackYamlFile pkgIdStrs
+         pure pkgIdStrs
+
 writeStackDotYaml :: FilePath
                   -> [String]
                   -> IO ()
-writeStackDotYaml buildPath pkgIdStrs =
+writeStackDotYaml fileLoc pkgIdStrs =
     let packages = "packages" .= map ("." </>) pkgIdStrs
         resolver = "resolver" .= targetSlug stackageTarget
         yaml     = object [resolver, packages]
-    in encodeFile buildPath yaml
+    in encodeFile fileLoc yaml
 
 type ShellM = ExceptT (String, Int) IO
 
@@ -196,36 +242,16 @@ main = do
           Just (CabalConfig cc) -> mapMaybe toPackageIdentifier cc
     createDirectoryIfMissing True benchBuildDir
 
-    pkgIdStrs <- forMaybe pkgIds $ \pkgId -> do
-        cabalFile <- downloadCabalFile manager pkgId
-        let pkgIdStr = show $ disp pkgId
-            pkgDescr = case parsePackageDescription (L.unpack cabalFile) of
-                         ParseFailed pe -> error $ show pe
-                         ParseOk _ d    -> d
-        let benches = condBenchmarks pkgDescr
-        if null benches
-           then pure Nothing
-           else do
-             putStrLn $ pkgIdStr ++ " has benchmarks, they are:"
-             for_ benches $ \p -> putStrLn ('\t':fst p)
-
-             let pkgBuildDir = benchBuildDir </> pkgIdStr
-             dirExists <- withProgressYesNo ("Checking if " ++ pkgBuildDir ++ " exists") $
-                 doesDirectoryExist pkgBuildDir
-             unless dirExists $
-                extractPkgTarball manager benchBuildDir pkgIdStr
-
-             pure (Just pkgIdStr)
-
-    writeStackDotYaml (benchBuildDir </> "stack" <.> "yaml") pkgIdStrs
-
+    pkgIdStrs <- getPkgsWithBenchmarks manager benchBuildDir pkgIds
+    putStrLn "-------------------------"
     putStrLn "Packages with benchmarks:"
     for_ pkgIdStrs $ \pkgIdStr -> putStrLn ('\t':pkgIdStr)
 
-    for_ pkgIdStrs $ \pkgIdStr -> do
-        res <- withCurrentDirectory benchBuildDir
-               $ runExceptT
-               $ runBenchmarks pkgIdStr
+    withCurrentDirectory benchBuildDir $ for_ pkgIdStrs $ \pkgIdStr -> do
+        putStrLn "-------------------------"
+        putStrLn $ "Benchmarking " ++ pkgIdStr
+        putStrLn $ "Entering " ++ benchBuildDir
+        res <- runExceptT $ runBenchmarks pkgIdStr
         case res of
              Left (cmd, c) -> do
                  putStrLn $ "ERROR: " ++ cmd ++ " returned exit code " ++ show c
