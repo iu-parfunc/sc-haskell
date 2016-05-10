@@ -12,9 +12,7 @@ RUN git clone --quiet --recursive git://git.haskell.org/ghc.git
 
 WORKDIR /root/ghc
 
-# [2016.05.10] This was Michael's initial version of the Data.IORef mods:
-# Let's call this version 0.0.1
-ENV SUBMOD_SHA 26884af9474223c1516b12fe67087210f6226140
+ENV SUBMOD_SHA fad34426a58ca9584b093cdae323c518584e21f2
 
 ENV GHC_PREFIX /opt/ghc
 
