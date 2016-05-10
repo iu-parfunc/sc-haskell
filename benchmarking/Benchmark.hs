@@ -151,15 +151,20 @@ getPkgsWithBenchmarks :: Manager
                       -> IO [String]
 getPkgsWithBenchmarks m benchBuildDir pkgIds = do
     let stackYamlFile = benchBuildDir </> "stack" <.> "yaml"
-    exists <- doesFileExist stackYamlFile
+        -- TODO: Remove hack
+        cacheFile     = benchBuildDir </> ".awful-hacky-cache"
+    -- TODO: Remove hack
+    exists <- doesFileExist cacheFile -- stackYamlFile
     if exists
        then do
-         stackYaml <- decodeFile stackYamlFile
+         -- TODO: Remove hack
+         stackYaml <- decodeFile cacheFile -- stackYamlFile
          pure $ case stackYaml of
               Just (Object (HM.lookup "packages" -> Just (Array packages))) ->
                     map (\(String s) -> takeFileName $ T.unpack s)
                         (V.toList packages)
-              Nothing -> error $ "Corrupt " ++ stackYamlFile ++ " file."
+              -- TODO: Remove hack
+              Nothing -> error $ "Corrupt " ++ cacheFile {-stackYamlFile-} ++ " file."
 
        else do
          pkgIdStrs <- forMaybe pkgIds $ \pkgId -> do
@@ -183,17 +188,27 @@ getPkgsWithBenchmarks m benchBuildDir pkgIds = do
 
                   pure (Just pkgIdStr)
 
-         writeStackDotYaml stackYamlFile pkgIdStrs
+         -- TODO: Remove hack
+         writeCacheFile cacheFile pkgIdStrs
+         -- writeStackDotYaml stackYamlFile pkgIdStrs
          pure pkgIdStrs
 
 writeStackDotYaml :: FilePath
                   -> [String]
                   -> IO ()
-writeStackDotYaml fileLoc pkgIdStrs =
-    let packages = "packages" .= map ("." </>) pkgIdStrs
+writeStackDotYaml fileLoc _pkgIdStrs =
+    let -- packages = "packages" .= map ("." </>) pkgIdStrs
         resolver = "resolver" .= targetSlug stackageTarget
-        yaml     = object [resolver, packages]
+        yaml     = object [resolver{-, packages-}]
     in encodeFile fileLoc yaml
+
+-- TODO: This is a temporary hack. Remove when Stackage vets benchmarks.
+writeCacheFile :: FilePath
+               -> [String]
+               -> IO ()
+writeCacheFile fileLoc pkgIdStrs =
+    let packages = "packages" .= pkgIdStrs
+    in encodeFile fileLoc (object [packages])
 
 type ShellM = ExceptT (String, Int) IO
 
@@ -210,13 +225,20 @@ invoke cmd args = do
          ExitSuccess   -> pure ()
          ExitFailure c -> throwError (fullCmd, c)
 
-runBenchmarks :: String -> ShellM ()
-runBenchmarks pkgIdStr = do
-    invoke "stack" ["setup"]
+runBenchmarks :: ShellM ()
+runBenchmarks = do
+    -- TODO REALLY IMPORTANT: Remove hack
+    let stackYamlFile           = "hacky-stack" <.> "yaml"
+        invokeWithYamlFile args = invoke "stack" $ args ++ ["--stack-yaml", stackYamlFile]
+    liftIO $ do
+        exists <- doesFileExist stackYamlFile
+        unless exists $ writeStackDotYaml stackYamlFile []
+
+    invokeWithYamlFile ["setup"]
     -- TODO: Determine a way to run individual benchmarks
-    invoke "stack" ["bench", "--only-dependencies", pkgIdStr]
+    invokeWithYamlFile ["bench", "--only-dependencies"]
     -- TODO: Timeout after, say, 10 minutes
-    invoke "stack" ["bench", pkgIdStr]
+    invokeWithYamlFile ["bench"]
 
 -- | Run an 'IO' action with the given working directory and restore the
 -- original working directory afterwards, even if the given action fails due
@@ -247,11 +269,12 @@ main = do
     putStrLn "Packages with benchmarks:"
     for_ pkgIdStrs $ \pkgIdStr -> putStrLn ('\t':pkgIdStr)
 
-    withCurrentDirectory benchBuildDir $ for_ pkgIdStrs $ \pkgIdStr -> do
+    for_ pkgIdStrs $ \pkgIdStr -> do
+        let pkgBuildDir = benchBuildDir </> pkgIdStr
         putStrLn "-------------------------"
         putStrLn $ "Benchmarking " ++ pkgIdStr
-        putStrLn $ "Entering " ++ benchBuildDir
-        res <- runExceptT $ runBenchmarks pkgIdStr
+        putStrLn $ "Entering " ++ pkgBuildDir
+        res <- withCurrentDirectory pkgBuildDir $ runExceptT runBenchmarks
         case res of
              Left (cmd, c) -> do
                  putStrLn $ "ERROR: " ++ cmd ++ " returned exit code " ++ show c
