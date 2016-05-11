@@ -1,4 +1,4 @@
-{-# LANGUAGE BangPatterns #-}
+{-# LANGUAGE BangPatterns, CPP #-}
 --
 -- The Computer Language Benchmarks Game
 -- http://benchmarksgame.alioth.debian.org/
@@ -15,20 +15,31 @@
 import Foreign (Ptr, Storable(..), plusPtr, mallocBytes)
 import Foreign.Storable
 import Foreign.Marshal.Alloc
+#ifdef SCIOREF
 import SC.Data.IORef
+#else
+import SC.Data.IORef.Unsafe
+#endif
 import Control.Monad
 import System.Environment
 import System.IO.Unsafe (unsafePerformIO)
 import Text.Printf
+import Criterion.Main
+import System.Environment
 
-main = do
-    n <- getArgs >>= readIO.head
-    initialize
-    offset_momentum
+work n = do
     energy 0 planets >>= printf "%.9f\n"
     replicateM_ n (advance planets)
     energy 0 planets >>= printf "%.9f\n"
 
+main = do
+  initialize
+  offset_momentum
+  n <- getEnv "N" >>= readIO :: IO Int
+  defaultMain [
+        bgroup "nbody" [ bench (show n) $ nfIO (work n) ]
+        ]
+                         
 offset_momentum = do
     m <- foldr (.+.) (Vec 0 0 0)
              `fmap` (mapM momentum

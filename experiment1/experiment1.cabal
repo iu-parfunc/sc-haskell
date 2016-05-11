@@ -30,8 +30,8 @@ library
 
 executable nbody
   main-is:             bench/Nbody.hs
-  build-depends:       base, experiment1
-  ghc-options:         -funbox-strict-fields -threaded
+  build-depends:       base, experiment1, criterion
+  ghc-options:         -funbox-strict-fields -threaded -O2
 
 executable knucleotide
   main-is:             bench/Knucleotide.hs
