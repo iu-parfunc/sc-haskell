@@ -6,10 +6,13 @@
     --package aeson
     --package bytestring
     --package Cabal
+    --package deepseq
     --package directory
     --package filepath
     --package http-client
+    --package http-client-tls
     --package process
+    --package streaming-commons
     --package tar
     --package text
     --package transformers
@@ -19,7 +22,6 @@
     --package zlib
 -}
 
-{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ViewPatterns #-}
 module Main (main) where
@@ -27,6 +29,7 @@ module Main (main) where
 import qualified Codec.Archive.Tar as Tar
 import qualified Codec.Compression.GZip as GZip
 
+import           Control.DeepSeq (($!!))
 import           Control.Exception (bracket)
 import           Control.Monad (unless, when, void)
 import           Control.Monad.Except (MonadError(..))
@@ -53,6 +56,7 @@ import           Distribution.Text (Text(..), simpleParse)
 import           Distribution.Version (isSpecificVersion)
 
 import           Network.HTTP.Client
+import           Network.HTTP.Client.TLS
 
 import           System.Directory
 import           System.Exit (ExitCode(..))
@@ -105,7 +109,7 @@ baseStackageURL :: String
 baseStackageURL = "https://www.stackage.org"
 
 stackageTarget :: Target
-stackageTarget = TargetLts 5 13
+stackageTarget = TargetLts 5 16
 
 stackageCabalConfigURL :: String
 stackageCabalConfigURL =  baseStackageURL
@@ -124,6 +128,16 @@ withProgressFinish progressStr finishStr action = do
 
 withProgressYesNo :: String -> IO Bool -> IO Bool
 withProgressYesNo progressStr = withProgressFinish progressStr (bool "No" "Yes")
+
+downloadStackageCabalConfig :: Manager -> FilePath -> IO ()
+downloadStackageCabalConfig m cabalConfigPath = do
+    let cabalConfigURL = baseStackageURL
+                     </> targetSlug stackageTarget
+                     </> "cabal" <.> "config"
+    initialRequest <- parseUrl $ "GET " ++ cabalConfigURL
+    bs <- withProgress ("Downloading " ++ cabalConfigURL) $
+        responseBody <$> httpLbs initialRequest m
+    L.writeFile cabalConfigPath bs
 
 downloadCabalFile :: Manager -> PackageIdentifier -> IO ByteString
 downloadCabalFile m pkgId = do
@@ -256,13 +270,20 @@ withCurrentDirectory dir action =
 
 main :: IO ()
 main = do
-    manager <- newManager defaultManagerSettings
-    !cnf <- readFile "test.config"
-    let benchBuildDir = benchBuildDirPrefix </> targetSlug stackageTarget
-        pkgIds = case simpleParse cnf :: Maybe CabalConfig of
+    manager <- newManager tlsManagerSettings
+
+    let targetStr     = targetSlug stackageTarget
+        benchBuildDir = benchBuildDirPrefix </> targetStr
+    createDirectoryIfMissing True benchBuildDir
+
+    let cabalConfigFile = benchBuildDir </> "cabal" <.> "config"
+    exists <- doesFileExist cabalConfigFile
+    unless exists $ downloadStackageCabalConfig manager cabalConfigFile
+
+    cnf <- readFile cabalConfigFile
+    let pkgIds = case simpleParse $!! cnf :: Maybe CabalConfig of
           Nothing -> error "Parse error"
           Just (CabalConfig cc) -> mapMaybe toPackageIdentifier cc
-    createDirectoryIfMissing True benchBuildDir
 
     pkgIdStrs <- getPkgsWithBenchmarks manager benchBuildDir pkgIds
     putStrLn "-------------------------"
