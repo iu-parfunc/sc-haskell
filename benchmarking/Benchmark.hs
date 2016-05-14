@@ -93,7 +93,7 @@ comments :: ReadP r ()
 comments = do
     _ <- string "--"
     _ <- manyTill (satisfy (const True)) (char '\n')
-    return ()
+    pure ()
 
 parser :: ReadP r [Dependency]
 parser = do
@@ -347,7 +347,4 @@ main = do
                  let errMsg = "ERROR: " ++ cmd ++ " returned exit code " ++ show c
                  putStrLn errMsg
                  appendFile benchResLog errMsg
-             Right () -> do
-                 let successMsg = "Benchmark " ++ pkgIdStr ++ " finished successfully!"
-                 putStrLn successMsg
-                 appendFile benchResLog successMsg
+             Right () -> pure ()
