@@ -12,9 +12,9 @@
     --package http-client
     --package http-client-tls
     --package process
-    --package streaming-commons
     --package tar
     --package text
+    --package time
     --package transformers
     --package unordered-containers
     --package witherable
@@ -44,6 +44,8 @@ import           Data.Foldable (for_)
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Text as T
 import           Data.Time.Calendar (Day(..))
+import           Data.Time.Clock (getCurrentTime)
+import           Data.Time.Format
 import qualified Data.Vector as V
 import           Data.Witherable (Witherable(..), forMaybe)
 import           Data.Yaml (decodeFile, encodeFile)
@@ -61,6 +63,7 @@ import           Network.HTTP.Client.TLS
 import           System.Directory
 import           System.Exit (ExitCode(..))
 import           System.FilePath ((</>), (<.>), takeFileName)
+import           System.IO
 import           System.Process
 
 -----
@@ -104,6 +107,9 @@ baseHackageURL = "http://hackage.haskell.org/package"
 
 benchBuildDirPrefix :: FilePath
 benchBuildDirPrefix = ".bench-build"
+
+benchResDirPrefix :: FilePath
+benchResDirPrefix = ".bench-res"
 
 baseStackageURL :: String
 baseStackageURL = "https://www.stackage.org"
@@ -239,20 +245,26 @@ invoke cmd args = do
          ExitSuccess   -> pure ()
          ExitFailure c -> throwError (fullCmd, c)
 
-runBenchmarks :: ShellM ()
-runBenchmarks = do
-    -- TODO REALLY IMPORTANT: Remove hack
-    let stackYamlFile           = "hacky-stack" <.> "yaml"
-        invokeWithYamlFile args = invoke "stack" $ args ++ ["--stack-yaml", stackYamlFile]
+runBenchmarks :: FilePath -> ShellM ()
+runBenchmarks benchResPrefix = do
+    -- TODO REALLY IMPORTANT: Remove hacky-stack.yaml hack
+    let stackYamlFile                  = "hacky-stack" <.> "yaml"
+        invokeWithYamlFile subcmd args = invoke "stack" $ subcmd:["--stack-yaml", stackYamlFile] ++ args
     liftIO $ do
         exists <- doesFileExist stackYamlFile
         unless exists $ writeStackDotYaml stackYamlFile []
 
-    invokeWithYamlFile ["setup"]
+    void $ invokeWithYamlFile "setup" []
     -- TODO: Determine a way to run individual benchmarks
-    invokeWithYamlFile ["bench", "--only-dependencies"]
+    void $ invokeWithYamlFile "bench" ["--only-dependencies"]
     -- TODO: Timeout after, say, 10 minutes
-    invokeWithYamlFile ["bench"]
+    invokeWithYamlFile "bench"
+                       [ "--benchmark-arguments=" ++ unwords
+                         [ "--output", benchResPrefix <.> "html"
+                         , "--csv",    benchResPrefix <.> "csv"
+                         , "--raw",    benchResPrefix <.> "crit"
+                         ]
+                       ]
 
 -- | Run an 'IO' action with the given working directory and restore the
 -- original working directory afterwards, even if the given action fails due
@@ -290,12 +302,21 @@ main = do
     putStrLn "Packages with benchmarks:"
     for_ pkgIdStrs $ \pkgIdStr -> putStrLn ('\t':pkgIdStr)
 
+    t <- getCurrentTime
+    let ft          = formatTime defaultTimeLocale "%Y-%m-%d-%H:%M:%S" t
+        benchResDir = benchResDirPrefix </> targetStr
+
     for_ pkgIdStrs $ \pkgIdStr -> do
         let pkgBuildDir = benchBuildDir </> pkgIdStr
+            pkgResDir   = benchResDir </> ft
+        createDirectoryIfMissing True pkgResDir
+        pkgResDir' <- canonicalizePath pkgResDir
         putStrLn "-------------------------"
         putStrLn $ "Benchmarking " ++ pkgIdStr
         putStrLn $ "Entering " ++ pkgBuildDir
-        res <- withCurrentDirectory pkgBuildDir $ runExceptT runBenchmarks
+        res <- withCurrentDirectory pkgBuildDir
+                 $ runExceptT
+                 $ runBenchmarks $ pkgResDir' </> pkgIdStr
         case res of
              Left (cmd, c) -> do
                  putStrLn $ "ERROR: " ++ cmd ++ " returned exit code " ++ show c

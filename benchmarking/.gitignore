@@ -19,3 +19,4 @@ cabal.sandbox.config
 
 # Original stuff
 .bench-build/
+.bench-res/
