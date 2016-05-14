@@ -4,14 +4,18 @@
     --resolver lts-5.13
     --install-ghc runghc
     --package aeson
+    --package async
     --package bytestring
     --package Cabal
+    --package conduit
+    --package conduit-extra
     --package deepseq
     --package directory
     --package filepath
     --package http-client
     --package http-client-tls
     --package process
+    --package resourcet
     --package tar
     --package text
     --package time
@@ -29,17 +33,24 @@ module Main (main) where
 import qualified Codec.Archive.Tar as Tar
 import qualified Codec.Compression.GZip as GZip
 
+import           Control.Concurrent.Async
 import           Control.DeepSeq (($!!))
 import           Control.Exception (bracket)
-import           Control.Monad (unless, when, void)
+import           Control.Monad
 import           Control.Monad.Except (MonadError(..))
 import           Control.Monad.IO.Class (MonadIO(..))
 import           Control.Monad.Trans.Except (ExceptT, runExceptT)
+import           Control.Monad.Trans.Resource (runResourceT)
 
 import           Data.Aeson.Types (Value(..), (.=), object)
 import           Data.Bool (bool)
+import qualified Data.ByteString.Char8 as BS
 import           Data.ByteString.Lazy (ByteString)
-import qualified Data.ByteString.Lazy.Char8 as L
+import qualified Data.ByteString.Lazy.Char8 as BL
+import           Data.Conduit
+import           Data.Conduit.Binary
+import qualified Data.Conduit.List as CL
+import           Data.Conduit.Process
 import           Data.Foldable (for_)
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Text as T
@@ -51,7 +62,7 @@ import           Data.Witherable (Witherable(..), forMaybe)
 import           Data.Yaml (decodeFile, encodeFile)
 
 import           Distribution.Compat.ReadP
-import           Distribution.Package (Dependency(..), PackageIdentifier(..), PackageName(..))
+import           Distribution.Package (Dependency(..), PackageIdentifier(..))
 import           Distribution.PackageDescription
 import           Distribution.PackageDescription.Parse (ParseResult(..), parsePackageDescription)
 import           Distribution.Text (Text(..), simpleParse)
@@ -64,7 +75,6 @@ import           System.Directory
 import           System.Exit (ExitCode(..))
 import           System.FilePath ((</>), (<.>), takeFileName)
 import           System.IO
-import           System.Process
 
 -----
 -- Taken from stackage-curator
@@ -137,13 +147,10 @@ withProgressYesNo progressStr = withProgressFinish progressStr (bool "No" "Yes")
 
 downloadStackageCabalConfig :: Manager -> FilePath -> IO ()
 downloadStackageCabalConfig m cabalConfigPath = do
-    let cabalConfigURL = baseStackageURL
-                     </> targetSlug stackageTarget
-                     </> "cabal" <.> "config"
-    initialRequest <- parseUrl $ "GET " ++ cabalConfigURL
-    bs <- withProgress ("Downloading " ++ cabalConfigURL) $
+    initialRequest <- parseUrl $ "GET " ++ stackageCabalConfigURL
+    bs <- withProgress ("Downloading " ++ stackageCabalConfigURL) $
         responseBody <$> httpLbs initialRequest m
-    L.writeFile cabalConfigPath bs
+    BL.writeFile cabalConfigPath bs
 
 downloadCabalFile :: Manager -> PackageIdentifier -> IO ByteString
 downloadCabalFile m pkgId = do
@@ -170,9 +177,9 @@ getPkgsWithBenchmarks :: Manager
                       -> [PackageIdentifier]
                       -> IO [String]
 getPkgsWithBenchmarks m benchBuildDir pkgIds = do
-    let stackYamlFile = benchBuildDir </> "stack" <.> "yaml"
+    -- let stackYamlFile = benchBuildDir </> "stack" <.> "yaml"
         -- TODO: Remove hack
-        cacheFile     = benchBuildDir </> ".awful-hacky-cache"
+    let cacheFile     = benchBuildDir </> ".awful-hacky-cache"
     -- TODO: Remove hack
     exists <- doesFileExist cacheFile -- stackYamlFile
     if exists
@@ -184,13 +191,13 @@ getPkgsWithBenchmarks m benchBuildDir pkgIds = do
                     map (\(String s) -> takeFileName $ T.unpack s)
                         (V.toList packages)
               -- TODO: Remove hack
-              Nothing -> error $ "Corrupt " ++ cacheFile {-stackYamlFile-} ++ " file."
+              _ -> error $ "Corrupt " ++ cacheFile {-stackYamlFile-} ++ " file."
 
        else do
          pkgIdStrs <- forMaybe pkgIds $ \pkgId -> do
              cabalFile <- downloadCabalFile m pkgId
              let pkgIdStr = show $ disp pkgId
-                 pkgDescr = case parsePackageDescription (L.unpack cabalFile) of
+                 pkgDescr = case parsePackageDescription (BL.unpack cabalFile) of
                               ParseFailed pe -> error $ show pe
                               ParseOk _ d    -> d
              let benches = condBenchmarks pkgDescr
@@ -233,14 +240,26 @@ writeCacheFile fileLoc pkgIdStrs =
 type ShellM = ExceptT (String, Int) IO
 
 invoke :: FilePath -> [String] -> ShellM ()
-invoke cmd args = do
-    let fullCmd = unwords (cmd:args)
+invoke = invokeCommon $ \cproc -> do
+    (ClosedStream, Inherited, Inherited, procH) <- streamingProcess cproc
+    waitForStreamingProcess procH
+
+invokeTee :: FilePath -> FilePath -> [String] -> ShellM ()
+invokeTee teeFile = invokeCommon $ \cproc -> withFile teeFile WriteMode $ \teeH -> do
+    (ClosedStream, out, err, procH) <- streamingProcess cproc
+    let sink = CL.mapM_ $ liftIO . BS.putStr
+    runConcurrently $
+           Concurrently (runResourceT $ out $$ conduitHandle teeH =$ sink)
+        *> Concurrently (runResourceT $ err $$ conduitHandle teeH =$ sink)
+        *> Concurrently (waitForStreamingProcess procH)
+
+invokeCommon :: (CreateProcess -> IO ExitCode) -> FilePath -> [String] -> ShellM ()
+invokeCommon action cmd args = do
+    let fullCmd    = unwords (cmd:args)
+        createProc = proc cmd args
     ec <- liftIO $ do
-        let createProc = proc cmd args
         putStrLn $ "+ " ++ fullCmd
-        (_, _, _, handle) <- createProcess createProc
-        ec' <- waitForProcess handle
-        pure ec'
+        action createProc
     case ec of
          ExitSuccess   -> pure ()
          ExitFailure c -> throwError (fullCmd, c)
@@ -258,13 +277,15 @@ runBenchmarks benchResPrefix = do
     -- TODO: Determine a way to run individual benchmarks
     void $ invokeWithYamlFile "bench" ["--only-dependencies"]
     -- TODO: Timeout after, say, 10 minutes
-    invokeWithYamlFile "bench"
-                       [ "--benchmark-arguments=" ++ unwords
-                         [ "--output", benchResPrefix <.> "html"
-                         , "--csv",    benchResPrefix <.> "csv"
-                         , "--raw",    benchResPrefix <.> "crit"
-                         ]
-                       ]
+    invokeTee (benchResPrefix <.> "log") "stack"
+        [ "bench"
+        , "--stack-yaml", stackYamlFile
+        , "--benchmark-arguments=" ++ unwords
+            [ "--output", benchResPrefix <.> "html"
+            , "--csv",    benchResPrefix <.> "csv"
+            , "--raw",    benchResPrefix <.> "crit"
+            ]
+        ]
 
 -- | Run an 'IO' action with the given working directory and restore the
 -- original working directory afterwards, even if the given action fails due
