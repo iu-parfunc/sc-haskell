@@ -239,13 +239,16 @@ writeCacheFile fileLoc pkgIdStrs =
 
 type ShellM = ExceptT (String, Int) IO
 
+{-
 invoke :: FilePath -> [String] -> ShellM ()
-invoke = invokeCommon $ \cproc -> do
+invoke = invokeCommon $ \_ cproc -> do
     (ClosedStream, Inherited, Inherited, procH) <- streamingProcess cproc
     waitForStreamingProcess procH
+-}
 
 invokeTee :: FilePath -> FilePath -> [String] -> ShellM ()
-invokeTee teeFile = invokeCommon $ \cproc -> withFile teeFile WriteMode $ \teeH -> do
+invokeTee teeFile = invokeCommon $ \fullCmd cproc -> withFile teeFile AppendMode $ \teeH -> do
+    hPutStrLn teeH $ "+ " ++ fullCmd
     (ClosedStream, out, err, procH) <- streamingProcess cproc
     let sink = CL.mapM_ $ liftIO . BS.putStr
     runConcurrently $
@@ -253,13 +256,13 @@ invokeTee teeFile = invokeCommon $ \cproc -> withFile teeFile WriteMode $ \teeH 
         *> Concurrently (runResourceT $ err $$ conduitHandle teeH =$ sink)
         *> Concurrently (waitForStreamingProcess procH)
 
-invokeCommon :: (CreateProcess -> IO ExitCode) -> FilePath -> [String] -> ShellM ()
+invokeCommon :: (String -> CreateProcess -> IO ExitCode) -> FilePath -> [String] -> ShellM ()
 invokeCommon action cmd args = do
     let fullCmd    = unwords (cmd:args)
         createProc = proc cmd args
     ec <- liftIO $ do
         putStrLn $ "+ " ++ fullCmd
-        action createProc
+        action fullCmd createProc
     case ec of
          ExitSuccess   -> pure ()
          ExitFailure c -> throwError (fullCmd, c)
@@ -268,19 +271,18 @@ runBenchmarks :: FilePath -> ShellM ()
 runBenchmarks benchResPrefix = do
     -- TODO REALLY IMPORTANT: Remove hacky-stack.yaml hack
     let stackYamlFile                  = "hacky-stack" <.> "yaml"
-        invokeWithYamlFile subcmd args = invoke "stack" $ subcmd:["--stack-yaml", stackYamlFile] ++ args
+        teeFile                        = benchResPrefix <.> "log"
+        invokeWithYamlFile subcmd args = invokeTee teeFile "stack" $ subcmd:["--stack-yaml", stackYamlFile] ++ args
     liftIO $ do
         exists <- doesFileExist stackYamlFile
         unless exists $ writeStackDotYaml stackYamlFile []
 
-    void $ invokeWithYamlFile "setup" []
+    invokeWithYamlFile "setup" []
     -- TODO: Determine a way to run individual benchmarks
-    void $ invokeWithYamlFile "bench" ["--only-dependencies"]
+    invokeWithYamlFile "bench" ["--only-dependencies"]
     -- TODO: Timeout after, say, 10 minutes
-    invokeTee (benchResPrefix <.> "log") "stack"
-        [ "bench"
-        , "--stack-yaml", stackYamlFile
-        , "--benchmark-arguments=" ++ unwords
+    invokeWithYamlFile "bench"
+        [ "--benchmark-arguments=" ++ unwords
             [ "--output", benchResPrefix <.> "html"
             , "--csv",    benchResPrefix <.> "csv"
             , "--raw",    benchResPrefix <.> "crit"
@@ -335,10 +337,17 @@ main = do
         putStrLn "-------------------------"
         putStrLn $ "Benchmarking " ++ pkgIdStr
         putStrLn $ "Entering " ++ pkgBuildDir
+        let benchResPrefix = pkgResDir' </> pkgIdStr
+            benchResLog    = benchResPrefix <.> "log"
         res <- withCurrentDirectory pkgBuildDir
                  $ runExceptT
-                 $ runBenchmarks $ pkgResDir' </> pkgIdStr
+                 $ runBenchmarks benchResPrefix
         case res of
              Left (cmd, c) -> do
-                 putStrLn $ "ERROR: " ++ cmd ++ " returned exit code " ++ show c
-             Right () -> putStrLn "It worked!"
+                 let errMsg = "ERROR: " ++ cmd ++ " returned exit code " ++ show c
+                 putStrLn errMsg
+                 appendFile benchResLog errMsg
+             Right () -> do
+                 let successMsg = "Benchmark " ++ pkgIdStr ++ " finished successfully!"
+                 putStrLn successMsg
+                 appendFile benchResLog successMsg
