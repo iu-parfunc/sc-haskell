@@ -7,11 +7,13 @@
     --package async
     --package bytestring
     --package Cabal
+    --package clock
     --package conduit
     --package conduit-extra
     --package deepseq
     --package directory
     --package filepath
+    --package formatting
     --package http-client
     --package http-client-tls
     --package process
@@ -54,7 +56,9 @@ import           Data.Conduit.Process
 import           Data.Foldable (for_)
 import qualified Data.HashMap.Strict as HM
 import           Data.Maybe (fromMaybe)
-import qualified Data.Text as T
+import           Data.Monoid ((<>))
+import qualified Data.Text    as TS
+import qualified Data.Text.IO as TS
 import           Data.Time.Calendar (Day(..))
 import           Data.Time.Clock (getCurrentTime)
 import           Data.Time.Format
@@ -69,9 +73,13 @@ import           Distribution.PackageDescription.Parse (ParseResult(..), parsePa
 import           Distribution.Text (Text(..), simpleParse)
 import           Distribution.Version (isSpecificVersion)
 
+import           Formatting (sformat)
+import           Formatting.Clock (timeSpecs)
+
 import           Network.HTTP.Client
 import           Network.HTTP.Client.TLS
 
+import           System.Clock
 import           System.Directory
 import           System.Environment
 import           System.Exit (ExitCode(..))
@@ -190,7 +198,7 @@ getPkgsWithBenchmarks m benchBuildDir pkgIds = do
          stackYaml <- decodeFile cacheFile -- stackYamlFile
          pure $ case stackYaml of
               Just (Object (HM.lookup "packages" -> Just (Array packages))) ->
-                    map (\(String s) -> takeFileName $ T.unpack s)
+                    map (\(String s) -> takeFileName $ TS.unpack s)
                         (V.toList packages)
               -- TODO: Remove hack
               _ -> error $ "Corrupt " ++ cacheFile {-stackYamlFile-} ++ " file."
@@ -251,12 +259,17 @@ invoke = invokeCommon $ \_ cproc -> do
 invokeTee :: FilePath -> FilePath -> [String] -> ShellM ()
 invokeTee teeFile = invokeCommon $ \fullCmd cproc -> withFile teeFile AppendMode $ \teeH -> do
     hPutStrLn teeH $ "+ " ++ fullCmd
+    startTime <- getTime Monotonic
     (ClosedStream, out, err, procH) <- streamingProcess cproc
     let sink = CL.mapM_ $ liftIO . BS.putStr
-    runConcurrently $
+    ec <- runConcurrently $
            Concurrently (runResourceT $ out $$ conduitHandle teeH =$ sink)
         *> Concurrently (runResourceT $ err $$ conduitHandle teeH =$ sink)
         *> Concurrently (waitForStreamingProcess procH)
+    endTime <- getTime Monotonic
+    let duration = sformat timeSpecs startTime endTime
+    for_ [stdout, teeH] $ \h -> TS.hPutStrLn h ("Total benchmarking time: " <> duration)
+    pure ec
 
 invokeCommon :: (String -> CreateProcess -> IO ExitCode) -> FilePath -> [String] -> ShellM ()
 invokeCommon action cmd args = do
