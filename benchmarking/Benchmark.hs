@@ -345,18 +345,20 @@ main = do
     nodeName <- fromMaybe "unknown" <$> lookupEnv "NODE_NAME"
     let ft          = formatTime defaultTimeLocale "%Y-%m-%d-%H:%M:%S" t
         benchResDir = benchResDirPrefix </> targetStr
-
-    for_ pkgIdStrs $ \pkgIdStr -> do
-        let pkgBuildDir = benchBuildDir </> pkgIdStr
-            pkgResDir   = benchResDir
+        pkgResDir   = benchResDir
                       </> ("jenkinsbuild-" ++ buildNum)
                       </> ("node-" ++ nodeName)
                       </> ft
-        createDirectoryIfMissing True pkgResDir
-        pkgResDir' <- canonicalizePath pkgResDir
+    createDirectoryIfMissing True pkgResDir
+    pkgResDir' <- canonicalizePath pkgResDir
+    putStrLn $ "Logging results in " ++ pkgResDir'
+
+    for_ pkgIdStrs $ \pkgIdStr -> do
+        let pkgBuildDir = benchBuildDir </> pkgIdStr
+        pkgBuildDir' <- canonicalizePath pkgBuildDir
         putStrLn "-------------------------"
         putStrLn $ "Benchmarking " ++ pkgIdStr
-        putStrLn $ "Entering " ++ pkgBuildDir
+        putStrLn $ "Entering " ++ pkgBuildDir'
         let benchResPrefix = pkgResDir' </> pkgIdStr
             benchResLog    = benchResPrefix <.> "log"
         res <- withCurrentDirectory pkgBuildDir
