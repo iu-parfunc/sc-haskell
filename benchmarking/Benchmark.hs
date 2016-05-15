@@ -328,8 +328,8 @@ main = do
     for_ pkgIdStrs $ \pkgIdStr -> putStrLn ('\t':pkgIdStr)
 
     t <- getCurrentTime
-    buildNum <- fromMaybe "numUnknown"  <$> lookupEnv "BUILD_NUMBER"
-    nodeName <- fromMaybe "nodeUnknown" <$> lookupEnv "NODE_NAME"
+    buildNum <- fromMaybe "unknown" <$> lookupEnv "BUILD_NUMBER"
+    nodeName <- fromMaybe "unknown" <$> lookupEnv "NODE_NAME"
     let ft          = formatTime defaultTimeLocale "%Y-%m-%d-%H:%M:%S" t
         benchResDir = benchResDirPrefix </> targetStr
 
