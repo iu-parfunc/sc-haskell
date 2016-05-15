@@ -1,7 +1,7 @@
 #!/usr/bin/env stack
 {- stack
     --no-system-ghc
-    --resolver lts-5.13
+    --resolver lts-5.16
     --install-ghc runghc
     --package aeson
     --package async
