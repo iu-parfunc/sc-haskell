@@ -12,3 +12,7 @@ A survey on the topic of sequentially consistent Haskell.
 
  * 180 bechmark suites among 1770 Stackage packages.
 # haskell-rebuild-base-hello-world
+
+#### [2016.05.15] {Benchmarking script}
+
+* Using the benchmarking script in this repo, 134 Stackage LTS-5.16 repos were found to have at least one benchmark. Of those, 66 ran to successful completion.
