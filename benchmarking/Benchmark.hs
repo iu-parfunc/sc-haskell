@@ -297,10 +297,19 @@ runBenchmarks benchResPrefix = do
     invokeWithYamlFile "bench" ["--only-dependencies"]
     -- TODO: Timeout after, say, 10 minutes
     invokeWithYamlFile "bench"
-        [ "--benchmark-arguments=" ++ unwords
-            [ "--output", benchResPrefix <.> "html"
+        [ "--ghc-options=-rtsopts"
+        , "--benchmark-arguments=" ++ unwords
+            [ "+RTS", "-T", "-RTS"
+            , "--output", benchResPrefix <.> "html"
             , "--csv",    benchResPrefix <.> "csv"
             , "--raw",    benchResPrefix <.> "crit"
+            , "--regress", "allocated:iters"
+            , "--regress", "bytesCopied:iters"
+            , "--regress", "cycles:iters"
+            , "--regress", "numGcs:iters"
+            , "--regress", "mutatorWallSeconds:iters"
+            , "--regress", "gcWallSeconds:iters"
+            , "--regress", "cpuTime:iters"
             ]
         ]
 
