@@ -55,7 +55,6 @@ import qualified Data.Conduit.List as CL
 import           Data.Conduit.Process
 import           Data.Foldable (for_)
 import qualified Data.HashMap.Strict as HM
-import           Data.Maybe (fromMaybe)
 import           Data.Monoid ((<>))
 import qualified Data.Text    as TS
 import qualified Data.Text.IO as TS
@@ -81,7 +80,6 @@ import           Network.HTTP.Client.TLS
 
 import           System.Clock
 import           System.Directory
-import           System.Environment
 import           System.Exit (ExitCode(..))
 import           System.FilePath ((</>), (<.>), takeFileName)
 import           System.IO
@@ -341,14 +339,9 @@ main = do
     for_ pkgIdStrs $ \pkgIdStr -> putStrLn ('\t':pkgIdStr)
 
     t <- getCurrentTime
-    buildNum <- fromMaybe "unknown" <$> lookupEnv "BUILD_NUMBER"
-    nodeName <- fromMaybe "unknown" <$> lookupEnv "NODE_NAME"
     let ft          = formatTime defaultTimeLocale "%Y-%m-%d-%H:%M:%S" t
         benchResDir = benchResDirPrefix </> targetStr
-        pkgResDir   = benchResDir
-                      </> ("jenkinsbuild-" ++ buildNum)
-                      </> ("node-" ++ nodeName)
-                      </> ft
+        pkgResDir   = benchResDir </> ft
     createDirectoryIfMissing True pkgResDir
     pkgResDir' <- canonicalizePath pkgResDir
     putStrLn $ "Logging results in " ++ pkgResDir'
