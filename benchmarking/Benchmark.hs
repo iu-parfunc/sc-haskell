@@ -53,6 +53,7 @@ import           Data.Conduit
 import           Data.Conduit.Binary
 import qualified Data.Conduit.List as CL
 import           Data.Conduit.Process
+import           Data.Either (partitionEithers)
 import           Data.Foldable (for_)
 import qualified Data.HashMap.Strict as HM
 import           Data.Monoid ((<>))
@@ -61,6 +62,7 @@ import qualified Data.Text.IO as TS
 import           Data.Time.Calendar (Day(..))
 import           Data.Time.Clock (getCurrentTime)
 import           Data.Time.Format
+import           Data.Traversable (for)
 import qualified Data.Vector as V
 import           Data.Witherable (Witherable(..), forMaybe)
 import           Data.Yaml (decodeFile, encodeFile)
@@ -334,8 +336,9 @@ main = do
           Just (CabalConfig cc) -> mapMaybe toPackageIdentifier cc
 
     pkgIdStrs <- getPkgsWithBenchmarks manager benchBuildDir pkgIds
+    let numPkgsStr = show$ length pkgIdStrs
     putStrLn "-------------------------"
-    putStrLn "Packages with benchmarks:"
+    putStrLn $ numPkgsStr ++ " packages with benchmarks"
     for_ pkgIdStrs $ \pkgIdStr -> putStrLn ('\t':pkgIdStr)
 
     t <- getCurrentTime
@@ -346,7 +349,7 @@ main = do
     pkgResDir' <- canonicalizePath pkgResDir
     putStrLn $ "Logging results in " ++ pkgResDir'
 
-    for_ pkgIdStrs $ \pkgIdStr -> do
+    results <- for pkgIdStrs $ \pkgIdStr -> do
         let pkgBuildDir = benchBuildDir </> pkgIdStr
         pkgBuildDir' <- canonicalizePath pkgBuildDir
         putStrLn "-------------------------"
@@ -362,4 +365,14 @@ main = do
                  let errMsg = "ERROR: " ++ cmd ++ " returned exit code " ++ show c
                  putStrLn errMsg
                  appendFile benchResLog errMsg
-             Right () -> pure ()
+                 pure $ Left pkgIdStr
+             Right () -> pure $ Right pkgIdStr
+
+    let (successes, failures) = partitionEithers results
+        numSuccessesStr = show $ length successes
+        numFailuresStr  = show $ length failures
+    putStrLn "-------------------------"
+    putStrLn $ numSuccessesStr ++ "/" ++ numPkgsStr ++ " packages succeeded"
+    for_ successes $ \success -> putStrLn ('\t':success)
+    putStrLn $ numFailuresStr   ++ "/" ++ numPkgsStr ++ " packages failed"
+    for_ failures  $ \failure -> putStrLn ('\t':failure)
