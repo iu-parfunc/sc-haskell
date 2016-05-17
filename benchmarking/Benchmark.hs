@@ -377,7 +377,7 @@ main = do
                  pure $ Left pkgIdStr
              Right () -> pure $ Right pkgIdStr
 
-    let (successes, failures) = partitionEithers results
+    let (failures, successes) = partitionEithers results
         numSuccessesStr = show $ length successes
         numFailuresStr  = show $ length failures
     putStrLn "-------------------------"
