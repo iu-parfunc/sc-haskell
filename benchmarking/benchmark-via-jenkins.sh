@@ -11,6 +11,8 @@ fi
 
 RESULTS_DIR=${HOME}/results_backup/benchmark_stackage/${BUILD_TAG}/${NODE_NAME}
 
+module add llvm
+
 ./Benchmark.hs
 mkdir -p ${RESULTS_DIR}
 cp -r .bench-res ${RESULTS_DIR}/
