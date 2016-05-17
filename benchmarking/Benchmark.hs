@@ -302,7 +302,12 @@ runBenchmarks benchResPrefix = do
             [ "+RTS", "-T", "-RTS"
             , "--output", benchResPrefix <.> "html"
             , "--csv",    benchResPrefix <.> "csv"
-            , "--raw",    benchResPrefix <.> "crit"
+            -- Criterion's binary output is quite buggy and has been known to
+            -- crash when writing to file. Until this is fixed, we'll disable
+            -- the use of --raw.
+            -- See https://github.com/iu-parfunc/sc-haskell/issues/8
+            --
+            -- , "--raw",    benchResPrefix <.> "crit"
             , "--regress", "allocated:iters"
             , "--regress", "bytesCopied:iters"
             , "--regress", "cycles:iters"
