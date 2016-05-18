@@ -235,8 +235,9 @@ writeStackDotYaml :: FilePath
                   -> IO ()
 writeStackDotYaml fileLoc _pkgIdStrs =
     let -- packages = "packages" .= map ("." </>) pkgIdStrs
-        resolver = "resolver" .= targetSlug stackageTarget
-        yaml     = object [resolver{-, packages-}]
+        resolver  = "resolver" .= targetSlug stackageTarget
+        skipCheck = "skip-ghc-check" .= "true"
+        yaml      = object [resolver, skipCheck{-, packages-}]
     in encodeFile fileLoc yaml
 
 -- TODO: This is a temporary hack. Remove when Stackage vets benchmarks.
