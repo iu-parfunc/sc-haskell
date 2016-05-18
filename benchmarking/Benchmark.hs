@@ -236,7 +236,7 @@ writeStackDotYaml :: FilePath
 writeStackDotYaml fileLoc _pkgIdStrs =
     let -- packages = "packages" .= map ("." </>) pkgIdStrs
         resolver  = "resolver" .= targetSlug stackageTarget
-        skipCheck = "skip-ghc-check" .= "true"
+        skipCheck = "skip-ghc-check" .= ("true" :: String)
         yaml      = object [resolver, skipCheck{-, packages-}]
     in encodeFile fileLoc yaml
 
