@@ -234,63 +234,62 @@ analyze dir1 dir2 = do
     putStrLn pad
     putStrLn banner
 
---     let printRow :: IO ()
---         printRow = return ()
+    let printRow :: (PrintfArg r, PrintfArg m1, PrintfArg m2, PrintfArg pc)
+                 => String -> r
+                 -> String -> m1
+                 -> String -> m2
+                 -> String -> pc
+                 -> IO ()
+        printRow fmtR r fmtM1 m1 fmtM2 m2 fmtPC pc = do
+            printf   fmtR  r
+            putStr   pad
+            printf   fmtM1 m1
+            putStr   pad
+            printf   fmtM2 m2
+            putStr   pad
+            printf   fmtPC pc
+            putStrLn pad
+
+        printFirst, printSecond :: CSVRow -> IO ()
+        printFirst  (CSVRow r m) = printRow fmtRBNameS  r
+                                            fmtColumn1E m
+                                            fmtColumn2S noResult
+                                            fmtChangeS  noResult
+        printSecond (CSVRow r m) = printRow fmtRBNameS  r
+                                            fmtColumn1S noResult
+                                            fmtColumn2E m
+                                            fmtChangeS  noResult
+
+        printSummary :: String -> Double -> IO ()
+        printSummary n pc = printRow fmtRBNameS  n
+                                     fmtColumn1S ("-----" :: String)
+                                     fmtColumn2S ("-----" :: String)
+                                     fmtChangeF  pc
 
     forM_ rb $ \case
         RBFirst n csvs -> do
             putStrLn n
-            forM_ csvs $ \(CSVRow r m) -> do
-                printf   fmtRBNameS  r
-                putStr   pad
-                printf   fmtColumn1E m
-                putStr   pad
-                printf   fmtColumn2S noResult
-                putStr   pad
-                printf   fmtChangeS  noResult
-                putStrLn pad
+            forM_ csvs printFirst
         RBSecond n csvs -> do
             putStrLn n
-            forM_ csvs $ \(CSVRow r m) -> do
-                printf   fmtRBNameS  r
-                putStr   pad
-                printf   fmtColumn1S noResult
-                putStr   pad
-                printf   fmtColumn2E m
-                putStr   pad
-                printf   fmtChangeS  noResult
-                putStrLn pad
+            forM_ csvs printSecond
         RBBoth n cdiffs -> do
             putStrLn n
             forM_ cdiffs $ \case
-                CDFirst (CSVRow r m) -> do
-                    printf   fmtRBNameS  r
-                    putStr   pad
-                    printf   fmtColumn1E m
-                    putStr   pad
-                    printf   fmtColumn2S noResult
-                    putStr   pad
-                    printf   fmtChangeS  noResult
-                    putStrLn pad
-                CDSecond (CSVRow r m) -> do
-                    printf   fmtRBNameS  r
-                    putStr   pad
-                    printf   fmtColumn1S noResult
-                    putStr   pad
-                    printf   fmtColumn2E m
-                    putStr   pad
-                    printf   fmtChangeS  noResult
-                    putStrLn pad
+                CDFirst  cr -> printFirst  cr
+                CDSecond cr -> printSecond cr
                 CDBoth r m1 m2 pc -> do
-                    printf   fmtRBNameS  r
-                    putStr   pad
-                    printf   fmtColumn1E m1
-                    putStr   pad
-                    printf   fmtColumn2E m2
-                    putStr   pad
-                    printf   fmtChangeF  pc
-                    putStrLn pad
+                    printRow fmtRBNameS  r
+                             fmtColumn1E m1
+                             fmtColumn2E m2
+                             fmtChangeF  pc
 
+    putStrLn banner
+    printSummary "Min"            0.0
+    printSummary "Max"            0.0
+    printSummary "-1 s.d."        0.0
+    printSummary "+1 s.d."        0.0
+    printSummary "Geometric mean" 0.0
 
 main :: IO ()
 main = do
