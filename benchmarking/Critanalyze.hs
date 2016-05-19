@@ -29,7 +29,7 @@ import qualified Data.ByteString.Lazy.Char8 as BL
 import           Data.Csv
 import           Data.Foldable (Foldable(..))
 import           Data.Function
-import           Data.List (nub)
+import           Data.List (nub, sort)
 import           Data.Monoid ((<>))
 import qualified Data.Vector as V
 import           Data.Vector (Vector)
@@ -116,7 +116,7 @@ rbRowNames (RBBoth _ rows) = fmap go rows
 rbRowNames _ = mempty
 
 accrueCsvs :: FilePath -> IO [FilePath]
-accrueCsvs fp = filter ((== ".csv") . takeExtension) <$> listDirectory fp
+accrueCsvs fp = sort . filter ((== ".csv") . takeExtension) <$> listDirectory fp
 
 warnOrphans :: Foldable f => String -> (a -> String) -> FilePath -> f a -> IO ()
 warnOrphans nouns name dir fps = unless (null fps) $ do
@@ -205,8 +205,10 @@ analyze dir1 dir2 = do
     warnOrphanFiles dir2 seconds
 
     rb <- fmap V.fromList . forM csvsDiff $ \case
-        First  fp -> RBFirst  fp . V.fromList <$> decodeCsv (dir1 </> fp)
-        Second fp -> RBSecond fp . V.fromList <$> decodeCsv (dir2 </> fp)
+        First  fp -> RBFirst  (dropExtension fp)
+                   . V.fromList <$> decodeCsv (dir1 </> fp)
+        Second fp -> RBSecond (dropExtension fp)
+                  . V.fromList <$> decodeCsv (dir2 </> fp)
         Both _ fp -> do
             let fp1 = dir1 </> fp
                 fp2 = dir2 </> fp
@@ -217,7 +219,7 @@ analyze dir1 dir2 = do
                 csvRowsCDiff = V.fromList $ map diffToCritanalyzeDiff csvRowsDiff
             warnOrphanRows fp1 firstRows
             warnOrphanRows fp2 secondRows
-            pure $ RBBoth fp csvRowsCDiff
+            pure $ RBBoth (dropExtension fp) csvRowsCDiff
 
     let rbNameLens        = fmap (length . rbName) rb
         rbRowNameLens     = fmap ((+ padding) . length) $ V.concatMap rbRowNames rb
