@@ -47,13 +47,13 @@ import           System.IO
 import           Text.Printf
 
 data CSVRow = CSVRow {
-    crName     ::                !String
-  , crMean     :: {-# UNPACK #-} !Double
-  , crMeanLB   :: {-# UNPACK #-} !Double
-  , crMeanUB   :: {-# UNPACK #-} !Double
-  , crStddev   :: {-# UNPACK #-} !Double
-  , crStddevLB :: {-# UNPACK #-} !Double
-  , crStddevUB :: {-# UNPACK #-} !Double
+     crName     ::                !String
+  ,  crMean     :: {-# UNPACK #-} !Double
+  , _crMeanLB   :: {-# UNPACK #-} !Double
+  , _crMeanUB   :: {-# UNPACK #-} !Double
+  , _crStddev   :: {-# UNPACK #-} !Double
+  , _crStddevLB :: {-# UNPACK #-} !Double
+  , _crStddevUB :: {-# UNPACK #-} !Double
   } deriving (Eq, Generic, Ord, Read, Show)
 instance NFData CSVRow
 
@@ -184,7 +184,7 @@ doubleDecimals :: Int
 doubleDecimals = 3
 
 doubleFormatWidth :: Int
-doubleFormatWidth = max 10 noResultLen
+doubleFormatWidth = max 16 noResultLen
 
 percentDecimals :: Int
 percentDecimals = 1
@@ -222,25 +222,20 @@ analyze dir1 dir2 = do
     let rbNameLens        = fmap (length . rbName) rb
         rbRowNameLens     = fmap ((+ padding) . length) $ V.concatMap rbRowNames rb
         maxRBNameLen      = maximum $ V.cons benchNameLen rbNameLens <> rbRowNameLens
-        column1Width      = max (length dir1) doubleFormatWidth
-        column2Width      = max (length dir2) doubleFormatWidth
         changeColumnWidth = max changeLen percentWidth
 
         bannerPad = replicate padding '-'
         banner    = replicate maxRBNameLen      '-' ++ bannerPad
-                 ++ replicate column1Width      '-' ++ bannerPad
-                 ++ replicate column2Width      '-' ++ bannerPad
+                 ++ replicate doubleFormatWidth '-' ++ bannerPad
+                 ++ replicate doubleFormatWidth '-' ++ bannerPad
                  ++ replicate changeColumnWidth '-' ++ bannerPad
 
-        pad         = replicate padding ' '
-        fmtRBNameS  = "%" ++ show maxRBNameLen ++ "s"
-        fmtColumn1  = "%" ++ show column1Width
-        fmtColumn1S = fmtColumn1 ++ "s"
-        fmtColumn1E = fmtColumn1 ++ '.':show doubleDecimals ++ "e"
-        fmtColumn2  = "%" ++ show column2Width
-        fmtColumn2S = fmtColumn2 ++ "s"
-        fmtColumn2E = fmtColumn2 ++ '.':show doubleDecimals ++ "e"
-        fmtChangeS  = "%"  ++ show changeColumnWidth ++ "s"
+        pad        = replicate padding ' '
+        fmtRBNameS = "%" ++ show maxRBNameLen ++ "s"
+        fmtColumn  = "%" ++ show doubleFormatWidth
+        fmtColumnS = fmtColumn ++ "s"
+        fmtColumnE = fmtColumn ++ '.':show doubleDecimals ++ "e"
+        fmtChangeS = "%"  ++ show changeColumnWidth ++ "s"
         fmtChangeF f = "%" ++ (if f > 0.0 then "+" else "")
                             ++ show (changeColumnWidth - 1)
                             ++ '.':show percentDecimals ++ "f%%"
@@ -250,9 +245,9 @@ analyze dir1 dir2 = do
     putStrLn banner
     printf   fmtRBNameS benchName
     putStr   pad
-    printf   fmtColumn1S dir1
+    printf   fmtColumnS $ take doubleFormatWidth dir1
     putStr   pad
-    printf   fmtColumn2S dir2
+    printf   fmtColumnS $ take doubleFormatWidth dir2
     putStr   pad
     printf   fmtChangeS change
     putStrLn pad
@@ -276,22 +271,22 @@ analyze dir1 dir2 = do
 
         printFirst, printSecond :: CSVRow -> IO ()
         printFirst CSVRow{crName = r, crMean = m}
-            = printRow fmtRBNameS  r
-                       fmtColumn1E m
-                       fmtColumn2S noResult
-                       fmtChangeS  noResult
+            = printRow fmtRBNameS r
+                       fmtColumnE m
+                       fmtColumnS noResult
+                       fmtChangeS noResult
         printSecond CSVRow{crName = r, crMean = m}
-            = printRow fmtRBNameS  r
-                       fmtColumn1S noResult
-                       fmtColumn2E m
-                       fmtChangeS  noResult
+            = printRow fmtRBNameS r
+                       fmtColumnS noResult
+                       fmtColumnE m
+                       fmtChangeS noResult
 
         printSummary :: String -> Double -> IO ()
         printSummary n pc =
             let f = roundToPlace (percent pc) 1
-            in printRow fmtRBNameS  n
-                        fmtColumn1S ("-----" :: String)
-                        fmtColumn2S ("-----" :: String)
+            in printRow fmtRBNameS n
+                        fmtColumnS ("-----" :: String)
+                        fmtColumnS ("-----" :: String)
                         (fmtChangeF f) f
 
     forM_ rb $ \case
@@ -308,9 +303,9 @@ analyze dir1 dir2 = do
                 CDSecond cr -> printSecond cr
                 CDBoth r m1 m2 pc -> do
                     let f = roundToPlace (percent pc) 1
-                    printRow fmtRBNameS  r
-                             fmtColumn1E m1
-                             fmtColumn2E m2
+                    printRow fmtRBNameS r
+                             fmtColumnE m1
+                             fmtColumnE m2
                              (fmtChangeF f) f
 
     let ratios = [ pc | RBBoth _ cdiffs <- rb
