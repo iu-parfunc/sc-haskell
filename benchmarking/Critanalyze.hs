@@ -10,10 +10,13 @@
     --package Diff
     --package directory
     --package filepath
+    --package statistics
+    --package vector
 -}
 
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE MonadComprehensions #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 module Main (main) where
@@ -26,8 +29,13 @@ import qualified Data.ByteString.Lazy as BL
 import           Data.Csv
 import           Data.Foldable (Foldable(..))
 import           Data.Function
+import           Data.Monoid ((<>))
+import qualified Data.Vector as V
+import           Data.Vector (Vector)
 
 import           GHC.Generics
+
+import           Statistics.Sample (geometricMean)
 
 import           System.Directory
 import           System.Environment
@@ -63,7 +71,7 @@ data CritanalyzeDiff
   | CDBoth                !String -- Name
            {-# UNPACK #-} !Double -- Mean 1
            {-# UNPACK #-} !Double -- Mean 2
-           {-# UNPACK #-} !Double -- Percent change
+           {-# UNPACK #-} !Double -- Ratio of mean 2 to mean 1
   deriving (Eq, Generic, Ord, Read, Show)
 instance NFData CritanalyzeDiff
 
@@ -74,20 +82,20 @@ diffToCritanalyzeDiff (Both CSVRow { crName = crn, crMean = crm1 }
                             CSVRow { crMean = crm2 }) = CDBoth crn crm1 crm2 crmpc
   where
     crmpc :: Double
-    crmpc = ((crm2 - crm1) / abs crm1) * 100
+    crmpc = crm2 / crm1
 
 data ReportBlock
   = RBFirst
-      !String   -- Name
-      ![CSVRow] -- Rows
+      !String          -- Name
+      !(Vector CSVRow) -- Rows
 
    | RBSecond
-      !String   -- Name
-      ![CSVRow] -- Rows
+      !String          -- Name
+      !(Vector CSVRow) -- Rows
 
    | RBBoth
-      !String            -- Name
-      ![CritanalyzeDiff] -- Row diffs
+      !String                   -- Name
+      !(Vector CritanalyzeDiff) -- Row diffs
 
   deriving (Eq, Generic, Ord, Read, Show)
 instance NFData ReportBlock
@@ -97,14 +105,14 @@ rbName (RBFirst  n _) = n
 rbName (RBSecond n _) = n
 rbName (RBBoth   n _) = n
 
-rbRowNames :: ReportBlock -> [String]
-rbRowNames (RBBoth _ rows) = map go rows
+rbRowNames :: ReportBlock -> Vector String
+rbRowNames (RBBoth _ rows) = fmap go rows
   where
     go :: CritanalyzeDiff -> String
     go (CDFirst  cr)    = crName cr
     go (CDSecond cr)    = crName cr
     go (CDBoth n _ _ _) = n
-rbRowNames _ = []
+rbRowNames _ = mempty
 
 accrueCsvs :: FilePath -> IO [FilePath]
 accrueCsvs fp = filter ((== ".csv") . takeExtension) <$> listDirectory fp
@@ -173,6 +181,9 @@ percentDecimals = 1
 percentWidth :: Int
 percentWidth = max 10 noResultLen
 
+roundToPlace :: Double -> Int -> Double
+roundToPlace x n = (fromInteger . round $ x * (10^n)) / (10.0^^n)
+
 analyze :: FilePath -> FilePath -> IO ()
 analyze dir1 dir2 = do
     csvs1 <- accrueCsvs dir1
@@ -182,9 +193,9 @@ analyze dir1 dir2 = do
     warnOrphanFiles dir1 firsts
     warnOrphanFiles dir2 seconds
 
-    rb <- forM csvsDiff $ \case
-        First  fp -> RBFirst  fp <$> decodeCsv (dir1 </> fp)
-        Second fp -> RBSecond fp <$> decodeCsv (dir2 </> fp)
+    rb <- fmap V.fromList . forM csvsDiff $ \case
+        First  fp -> RBFirst  fp . V.fromList <$> decodeCsv (dir1 </> fp)
+        Second fp -> RBSecond fp . V.fromList <$> decodeCsv (dir2 </> fp)
         Both _ fp -> do
             let fp1 = dir1 </> fp
                 fp2 = dir2 </> fp
@@ -192,14 +203,14 @@ analyze dir1 dir2 = do
             csvRows2 <- decodeCsv fp2
             let csvRowsDiff = getDiffBy ((==) `on` crName) csvRows1 csvRows2
                 (firstRows, _, secondRows) = partitionDiff csvRowsDiff
-                csvRowsCDiff = map diffToCritanalyzeDiff csvRowsDiff
+                csvRowsCDiff = V.fromList $ map diffToCritanalyzeDiff csvRowsDiff
             warnOrphanRows fp1 firstRows
             warnOrphanRows fp2 secondRows
             pure $ RBBoth fp csvRowsCDiff
 
-    let rbNameLens        = map (length . rbName) rb
-        rbRowNameLens     = map ((+ padding) . length) $ concatMap rbRowNames rb
-        maxRBNameLen      = maximum $ benchNameLen:rbNameLens ++ rbRowNameLens
+    let rbNameLens        = fmap (length . rbName) rb
+        rbRowNameLens     = fmap ((+ padding) . length) $ V.concatMap rbRowNames rb
+        maxRBNameLen      = maximum $ V.cons benchNameLen rbNameLens <> rbRowNameLens
         column1Width      = max (length dir1) doubleFormatWidth
         column2Width      = max (length dir2) doubleFormatWidth
         changeColumnWidth = max changeLen percentWidth
@@ -218,9 +229,11 @@ analyze dir1 dir2 = do
         fmtColumn2  = "%" ++ show column2Width
         fmtColumn2S = fmtColumn2 ++ "s"
         fmtColumn2E = fmtColumn2 ++ '.':show doubleDecimals ++ "e"
-        fmtChangeS  = "%" ++ show changeColumnWidth ++ "s"
-        fmtChangeF  = "%" ++ show (changeColumnWidth - 1)
-                          ++ '.':show percentDecimals ++ "f%%"
+        fmtChangeS  = "%"  ++ show changeColumnWidth ++ "s"
+        fmtChangeF f = "%" ++ (if f > 0.0 then "+" else "")
+                            ++ show (changeColumnWidth - 1)
+                            ++ '.':show percentDecimals ++ "f%%"
+        percent pc = (pc - 1.0) * 100
 
     putStrLn "Critanalyze results (mean)\n"
     putStrLn banner
@@ -261,10 +274,12 @@ analyze dir1 dir2 = do
                                             fmtChangeS  noResult
 
         printSummary :: String -> Double -> IO ()
-        printSummary n pc = printRow fmtRBNameS  n
-                                     fmtColumn1S ("-----" :: String)
-                                     fmtColumn2S ("-----" :: String)
-                                     fmtChangeF  pc
+        printSummary n pc =
+            let f = roundToPlace (percent pc) 1
+            in printRow fmtRBNameS  n
+                        fmtColumn1S ("-----" :: String)
+                        fmtColumn2S ("-----" :: String)
+                        (fmtChangeF f) f
 
     forM_ rb $ \case
         RBFirst n csvs -> do
@@ -279,17 +294,22 @@ analyze dir1 dir2 = do
                 CDFirst  cr -> printFirst  cr
                 CDSecond cr -> printSecond cr
                 CDBoth r m1 m2 pc -> do
+                    let f = roundToPlace (percent pc) 1
                     printRow fmtRBNameS  r
                              fmtColumn1E m1
                              fmtColumn2E m2
-                             fmtChangeF  pc
+                             (fmtChangeF f) f
+
+    let ratios = [ pc | RBBoth _ cdiffs <- rb
+                      , CDBoth _ _ _ pc <- cdiffs ]
+        minRatio     = minimum ratios
+        maxRatio     = maximum ratios
+        geoMeanRatio = geometricMean ratios
 
     putStrLn banner
-    printSummary "Min"            0.0
-    printSummary "Max"            0.0
-    printSummary "-1 s.d."        0.0
-    printSummary "+1 s.d."        0.0
-    printSummary "Geometric mean" 0.0
+    printSummary "Min"            minRatio
+    printSummary "Max"            maxRatio
+    printSummary "Geometric mean" geoMeanRatio
 
 main :: IO ()
 main = do
