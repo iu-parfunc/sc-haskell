@@ -10,7 +10,6 @@
     --package Diff
     --package directory
     --package filepath
-    --package statistics
     --package vector
 -}
 
@@ -35,8 +34,6 @@ import qualified Data.Vector as V
 import           Data.Vector (Vector)
 
 import           GHC.Generics
-
-import           Statistics.Sample (geometricMean)
 
 import           System.Directory
 import           System.Environment
@@ -314,12 +311,23 @@ analyze dir1 dir2 = do
                       , CDBoth _ _ _ pc <- cdiffs ]
         minRatio     = minimum ratios
         maxRatio     = maximum ratios
-        geoMeanRatio = geometricMean ratios
+
+        -- Adapted from nofib-analyse
+        sqr x     = x * x
+        numRatios = fromIntegral (length ratios)
+        logs      = fmap log ratios
+        lbar      = sum logs / numRatios
+        st_devs   = fmap (sqr . (lbar-)) logs
+        dbar      = sum st_devs / numRatios
+        geoMean   = exp lbar
+        sdf       = exp (sqrt dbar)
 
     putStrLn banner
     printSummary "Min"            minRatio
     printSummary "Max"            maxRatio
-    printSummary "Geometric mean" geoMeanRatio
+    printSummary "-1 s.d."        (geoMean / sdf)
+    printSummary "+1 s.d."        (geoMean * sdf)
+    printSummary "Geometric mean" geoMean
 
 main :: IO ()
 main = do
