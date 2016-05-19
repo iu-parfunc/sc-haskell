@@ -25,10 +25,11 @@ import           Control.DeepSeq
 import           Control.Monad
 
 import           Data.Algorithm.Diff
-import qualified Data.ByteString.Lazy as BL
+import qualified Data.ByteString.Lazy.Char8 as BL
 import           Data.Csv
 import           Data.Foldable (Foldable(..))
 import           Data.Function
+import           Data.List (nub)
 import           Data.Monoid ((<>))
 import qualified Data.Vector as V
 import           Data.Vector (Vector)
@@ -48,22 +49,22 @@ import           Text.Printf
 data CSVRow = CSVRow {
     crName     ::                !String
   , crMean     :: {-# UNPACK #-} !Double
---   , crMeanLB   :: {-# UNPACK #-} !Double
---   , crMeanUB   :: {-# UNPACK #-} !Double
---   , crStddev   :: {-# UNPACK #-} !Double
---   , crStddevLB :: {-# UNPACK #-} !Double
---   , crStddevUB :: {-# UNPACK #-} !Double
+  , crMeanLB   :: {-# UNPACK #-} !Double
+  , crMeanUB   :: {-# UNPACK #-} !Double
+  , crStddev   :: {-# UNPACK #-} !Double
+  , crStddevLB :: {-# UNPACK #-} !Double
+  , crStddevUB :: {-# UNPACK #-} !Double
   } deriving (Eq, Generic, Ord, Read, Show)
 instance NFData CSVRow
 
 instance FromNamedRecord CSVRow where
     parseNamedRecord r = CSVRow <$> r .: "Name"
                                 <*> r .: "Mean"
---                                 <*> r .: "MeanLB"
---                                 <*> r .: "MeanUB"
---                                 <*> r .: "Stddev"
---                                 <*> r .: "StddevLB"
---                                 <*> r .: "StddevUB"
+                                <*> r .: "MeanLB"
+                                <*> r .: "MeanUB"
+                                <*> r .: "Stddev"
+                                <*> r .: "StddevLB"
+                                <*> r .: "StddevUB"
 
 data CritanalyzeDiff
   = CDFirst  !CSVRow
@@ -78,8 +79,8 @@ instance NFData CritanalyzeDiff
 diffToCritanalyzeDiff :: Diff CSVRow -> CritanalyzeDiff
 diffToCritanalyzeDiff (First  cr) = CDFirst  cr
 diffToCritanalyzeDiff (Second cr) = CDSecond cr
-diffToCritanalyzeDiff (Both CSVRow { crName = crn, crMean = crm1 }
-                            CSVRow { crMean = crm2 }) = CDBoth crn crm1 crm2 crmpc
+diffToCritanalyzeDiff (Both CSVRow{crName = crn, crMean = crm1}
+                            CSVRow{crMean = crm2}) = CDBoth crn crm1 crm2 crmpc
   where
     crmpc :: Double
     crmpc = crm2 / crm1
@@ -133,8 +134,18 @@ warnOrphanRows = warnOrphans "rows" crName
 
 decodeCsv :: FilePath -> IO [CSVRow]
 decodeCsv fp = do
-    csvData <- BL.readFile fp
-    pure $ case decodeByName $!! csvData of
+    csvData <- BL.unpack <$> BL.readFile fp
+    -- HACK ALERT: Sometimes, criterion writes into its .csv files multiple
+    -- headers of the form:
+    --
+    --   Name,Mean,MeanLB,MeanUB,Stddev,StddevLB,StddevUB
+    --
+    -- cassava only checks for this once at the beginning, so if it pops up again
+    -- at a later point in the file, parsing will fail. To avoid this pitall, we
+    -- remove duplicate lines from the file. This should only nab lines that look
+    -- like the above, since every other row is preceded with a unique label.
+    let csvData' = BL.pack . unlines . nub . lines $ csvData
+    pure $ case decodeByName $!! csvData' of
          Left msg     -> error msg
          Right (_, v) -> toList $!! v
 
@@ -264,14 +275,16 @@ analyze dir1 dir2 = do
             putStrLn pad
 
         printFirst, printSecond :: CSVRow -> IO ()
-        printFirst  (CSVRow r m) = printRow fmtRBNameS  r
-                                            fmtColumn1E m
-                                            fmtColumn2S noResult
-                                            fmtChangeS  noResult
-        printSecond (CSVRow r m) = printRow fmtRBNameS  r
-                                            fmtColumn1S noResult
-                                            fmtColumn2E m
-                                            fmtChangeS  noResult
+        printFirst CSVRow{crName = r, crMean = m}
+            = printRow fmtRBNameS  r
+                       fmtColumn1E m
+                       fmtColumn2S noResult
+                       fmtChangeS  noResult
+        printSecond CSVRow{crName = r, crMean = m}
+            = printRow fmtRBNameS  r
+                       fmtColumn1S noResult
+                       fmtColumn2E m
+                       fmtChangeS  noResult
 
         printSummary :: String -> Double -> IO ()
         printSummary n pc =
