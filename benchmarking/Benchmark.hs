@@ -231,12 +231,20 @@ getPkgsWithBenchmarks m benchBuildDir pkgIds = do
          pure pkgIdStrs
 
 writeStackDotYaml :: FilePath
+                  -> FilePath
                   -> [String]
                   -> IO ()
-writeStackDotYaml fileLoc _pkgIdStrs =
+writeStackDotYaml mountDir fileLoc _pkgIdStrs =
     let -- packages = "packages" .= map ("." </>) pkgIdStrs
-        resolver = "resolver" .= targetSlug stackageTarget
-        yaml     = object [resolver{-, packages-}]
+        ts       = targetSlug stackageTarget
+        resolver = "resolver" .= ts
+        docker   = "docker" .= object
+                     [ "enable"   .= True
+                     , "repo"     .= ("fpco/stack-build:" <> ts)
+                     , "set-user" .= True
+                     , "mount"    .= [mountDir]
+                     ]
+        yaml = object [resolver, docker {-, packages-}]
     in encodeFile fileLoc yaml
 
 -- TODO: This is a temporary hack. Remove when Stackage vets benchmarks.
@@ -274,7 +282,7 @@ invokeTee teeFile = invokeCommon $ \fullCmd cproc -> withFile teeFile AppendMode
 invokeCommon :: (String -> CreateProcess -> IO ExitCode) -> FilePath -> [String] -> ShellM ()
 invokeCommon action cmd args = do
     let fullCmd    = unwords (cmd:args)
-        createProc = proc cmd args
+        createProc = shell fullCmd
     ec <- liftIO $ do
         putStrLn $ "+ " ++ fullCmd
         action fullCmd createProc
@@ -282,15 +290,13 @@ invokeCommon action cmd args = do
          ExitSuccess   -> pure ()
          ExitFailure c -> throwError (fullCmd, c)
 
-runBenchmarks :: FilePath -> ShellM ()
-runBenchmarks benchResPrefix = do
+runBenchmarks :: FilePath -> FilePath -> ShellM ()
+runBenchmarks mountDir benchResPrefix = do
     -- TODO REALLY IMPORTANT: Remove hacky-stack.yaml hack
     let stackYamlFile                  = "hacky-stack" <.> "yaml"
         teeFile                        = benchResPrefix <.> "log"
         invokeWithYamlFile subcmd args = invokeTee teeFile "stack" $ subcmd:["--stack-yaml", stackYamlFile] ++ args
-    liftIO $ do
-        exists <- doesFileExist stackYamlFile
-        unless exists $ writeStackDotYaml stackYamlFile []
+    liftIO $ writeStackDotYaml mountDir stackYamlFile []
 
     invokeWithYamlFile "setup" []
     -- TODO: Determine a way to run individual benchmarks
@@ -298,24 +304,24 @@ runBenchmarks benchResPrefix = do
     -- TODO: Timeout after, say, 10 minutes
     invokeWithYamlFile "bench"
         [ "--ghc-options=-rtsopts"
-        , "--benchmark-arguments=" ++ unwords
+        , "--benchmark-arguments='" ++ unwords
             [ "+RTS", "-T", "-RTS"
-            , "--output", benchResPrefix <.> "html"
-            , "--csv",    benchResPrefix <.> "csv"
+            , "--output="  ++ benchResPrefix <.> "html"
+            , "--csv="     ++ benchResPrefix <.> "csv"
             -- Criterion's binary output is quite buggy and has been known to
             -- crash when writing to file. Until this is fixed, we'll disable
             -- the use of --raw.
             -- See https://github.com/iu-parfunc/sc-haskell/issues/8
             --
-            -- , "--raw",    benchResPrefix <.> "crit"
-            , "--regress", "allocated:iters"
-            , "--regress", "bytesCopied:iters"
-            , "--regress", "cycles:iters"
-            , "--regress", "numGcs:iters"
-            , "--regress", "mutatorWallSeconds:iters"
-            , "--regress", "gcWallSeconds:iters"
-            , "--regress", "cpuTime:iters"
-            ]
+            -- , "--raw=" ++ benchResPrefix <.> "crit"
+            , "--regress=" ++ "allocated:iters"
+            , "--regress=" ++ "bytesCopied:iters"
+            , "--regress=" ++ "cycles:iters"
+            , "--regress=" ++ "numGcs:iters"
+            , "--regress=" ++ "mutatorWallSeconds:iters"
+            , "--regress=" ++ "gcWallSeconds:iters"
+            , "--regress=" ++ "cpuTime:iters"
+            ] ++ "'"
         ]
 
 -- | Run an 'IO' action with the given working directory and restore the
@@ -371,9 +377,10 @@ main = do
         putStrLn $ "Entering " ++ pkgBuildDir'
         let benchResPrefix = pkgResDir' </> pkgIdStr
             benchResLog    = benchResPrefix <.> "log"
+        mountDir <- getCurrentDirectory
         res <- withCurrentDirectory pkgBuildDir
                  $ runExceptT
-                 $ runBenchmarks benchResPrefix
+                 $ runBenchmarks mountDir benchResPrefix
         case res of
              Left (cmd, c) -> do
                  let errMsg = "ERROR: " ++ cmd ++ " returned exit code " ++ show c
