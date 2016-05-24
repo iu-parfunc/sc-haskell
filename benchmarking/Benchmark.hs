@@ -239,10 +239,11 @@ writeStackDotYaml mountDir fileLoc _pkgIdStrs =
         ts       = targetSlug stackageTarget
         resolver = "resolver" .= ts
         docker   = "docker" .= object
-                     [ "enable"   .= True
-                     , "repo"     .= ("fpco/stack-build:" <> ts)
-                     , "set-user" .= True
-                     , "mount"    .= [mountDir]
+                     [ "enable"    .= True
+                     , "repo"      .= ("fpco/stack-build:" <> ts)
+                     , "auto-pull" .= True
+                     , "set-user"  .= True
+                     , "mount"     .= [mountDir]
                      ]
         yaml = object [resolver, docker {-, packages-}]
     in encodeFile fileLoc yaml
