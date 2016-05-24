@@ -9,6 +9,8 @@ if [ "${NODE_NAME}" == "" ]; then
   NODE_NAME="node-unknown"
 fi
 
+WORK_DIR=`pwd`
+TMP_WORK_DIR=`mktemp -d /tmp/workdirXXXXXXXXXX`
 RESULTS_DIR=${HOME}/results_backup/benchmark_stackage/${BUILD_TAG}/${NODE_NAME}
 
 # /opt/modules/Modules/3.2.10/bin/modulecmd bash add llvm
@@ -18,6 +20,9 @@ RESULTS_DIR=${HOME}/results_backup/benchmark_stackage/${BUILD_TAG}/${NODE_NAME}
 # LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/usr/lib:$LD_LIBRARY_PATH
 # PKG_INCLUDE_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
 # PATH=$PATH:/usr/bin
+
+cp -a $WORK_DIR/. $TMP_WORK_DIR/
+cd $TMP_WORK_DIR
 
 ./Benchmark.hs
 mkdir -p ${RESULTS_DIR}
