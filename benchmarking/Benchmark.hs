@@ -321,6 +321,8 @@ runBenchmarks mountDir benchResPrefix = do
             , "--regress=" ++ "mutatorWallSeconds:iters"
             , "--regress=" ++ "gcWallSeconds:iters"
             , "--regress=" ++ "cpuTime:iters"
+            -- Try to run for longer to reduce noise
+            , "-L", "20"
             ] ++ "'"
         ]
 
