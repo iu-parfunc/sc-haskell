@@ -126,10 +126,10 @@ baseHackageURL :: String
 baseHackageURL = "http://hackage.haskell.org/package"
 
 benchBuildDirPrefix :: FilePath
-benchBuildDirPrefix = ".bench-build"
+benchBuildDirPrefix = "bench-build"
 
 benchResDirPrefix :: FilePath
-benchResDirPrefix = ".bench-res"
+benchResDirPrefix = "bench-res"
 
 baseStackageURL :: String
 baseStackageURL = "https://www.stackage.org"
