@@ -12,10 +12,12 @@
     --package conduit-extra
     --package deepseq
     --package directory
+    --package extra
     --package filepath
     --package formatting
     --package http-client
     --package http-client-tls
+    --package optparse-generic
     --package process
     --package resourcet
     --package tar
@@ -28,6 +30,8 @@
     --package zlib
 -}
 
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ViewPatterns #-}
 module Main (main) where
@@ -56,6 +60,8 @@ import           Data.Conduit.Process
 import           Data.Either (partitionEithers)
 import           Data.Foldable (for_)
 import qualified Data.HashMap.Strict as HM
+import           Data.List.Extra (chunksOf)
+import           Data.Maybe (fromMaybe)
 import           Data.Monoid ((<>))
 import qualified Data.Text    as TS
 import qualified Data.Text.IO as TS
@@ -77,11 +83,15 @@ import           Distribution.Version (isSpecificVersion)
 import           Formatting (sformat)
 import           Formatting.Clock (timeSpecs)
 
+import           GHC.Generics (Generic)
+
+import           Options.Generic (ParseRecord, getRecord)
+
 import           Network.HTTP.Client
 import           Network.HTTP.Client.TLS
 
 import           System.Clock
-import           System.Directory
+import           System.Directory.Extra
 import           System.Exit (ExitCode(..))
 import           System.FilePath ((</>), (<.>), takeFileName)
 import           System.IO
@@ -91,7 +101,7 @@ import           System.IO
 
 data Target = TargetNightly !Day
             | TargetLts !Int !Int
-    deriving Show
+    deriving (Eq, Ord, Read, Show)
 
 targetSlug :: Target -> String
 targetSlug (TargetNightly day) = "nightly-" ++ show day
@@ -230,17 +240,18 @@ getPkgsWithBenchmarks m benchBuildDir pkgIds = do
          -- writeStackDotYaml stackYamlFile pkgIdStrs
          pure pkgIdStrs
 
-writeStackDotYaml :: FilePath
+writeStackDotYaml :: Maybe String
+                  -> FilePath
                   -> FilePath
                   -> [String]
                   -> IO ()
-writeStackDotYaml mountDir fileLoc _pkgIdStrs =
+writeStackDotYaml dockerfile mountDir fileLoc _pkgIdStrs =
     let -- packages = "packages" .= map ("." </>) pkgIdStrs
         ts       = targetSlug stackageTarget
         resolver = "resolver" .= ts
         docker   = "docker" .= object
                      [ "enable"    .= True
-                     , "repo"      .= ("fpco/stack-build:" <> ts)
+                     , "repo"      .= fromMaybe ("fpco/stack-build:" <> ts) dockerfile
                      , "auto-pull" .= True
                      , "set-user"  .= True
                      , "mount"     .= [mountDir]
@@ -291,13 +302,13 @@ invokeCommon action cmd args = do
          ExitSuccess   -> pure ()
          ExitFailure c -> throwError (fullCmd, c)
 
-runBenchmarks :: FilePath -> FilePath -> ShellM ()
-runBenchmarks mountDir benchResPrefix = do
+runBenchmarks :: Maybe String -> FilePath -> FilePath -> ShellM ()
+runBenchmarks dockerfile mountDir benchResPrefix = do
     -- TODO REALLY IMPORTANT: Remove hacky-stack.yaml hack
     let stackYamlFile                  = "hacky-stack" <.> "yaml"
         teeFile                        = benchResPrefix <.> "log"
         invokeWithYamlFile subcmd args = invokeTee teeFile "stack" $ subcmd:["--stack-yaml", stackYamlFile] ++ args
-    liftIO $ writeStackDotYaml mountDir stackYamlFile []
+    liftIO $ writeStackDotYaml dockerfile mountDir stackYamlFile []
 
     invokeWithYamlFile "setup" []
     -- TODO: Determine a way to run individual benchmarks
@@ -327,22 +338,26 @@ runBenchmarks mountDir benchResPrefix = do
             ] ++ "'"
         ]
 
--- | Run an 'IO' action with the given working directory and restore the
--- original working directory afterwards, even if the given action fails due
--- to an exception.
---
--- The operation may fail with the same exceptions as 'getCurrentDirectory'
--- and 'setCurrentDirectory'.
-withCurrentDirectory :: FilePath  -- ^ Directory to execute in
-                     -> IO a      -- ^ Action to be executed
-                     -> IO a
-withCurrentDirectory dir action =
-  bracket getCurrentDirectory setCurrentDirectory $ \ _ -> do
-    setCurrentDirectory dir
-    action
+data CmdArgs = CmdArgs
+    { target     :: Maybe String -- TODO: This could perhaps be formatted better
+    , dockerfile :: Maybe String
+    , slice      :: Maybe Int
+    , numSlices  :: Maybe Int
+    } deriving (Eq, Ord, Read, Show, Generic, ParseRecord)
 
 main :: IO ()
 main = do
+    cmdArgs <- getRecord "Stackage benchmarking script"
+    print cmdArgs
+    doIt cmdArgs
+
+doIt :: CmdArgs -> IO ()
+doIt cmdArgs = do
+    let myRatio :: Maybe (Int, Int)
+        myRatio = case (slice cmdArgs, numSlices cmdArgs) of
+          (Just s, Just ns) -> Just (s, ns)
+          _                 -> Nothing
+
     manager <- newManager tlsManagerSettings
 
     let targetStr     = targetSlug stackageTarget
@@ -383,7 +398,7 @@ main = do
         mountDir <- getCurrentDirectory
         res <- withCurrentDirectory pkgBuildDir
                  $ runExceptT
-                 $ runBenchmarks mountDir benchResPrefix
+                 $ runBenchmarks (dockerfile cmdArgs) mountDir benchResPrefix
         case res of
              Left (cmd, c) -> do
                  let errMsg = "ERROR: " ++ cmd ++ " returned exit code " ++ show c

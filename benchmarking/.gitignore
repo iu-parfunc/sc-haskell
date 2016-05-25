@@ -18,5 +18,5 @@ cabal.sandbox.config
 .stack-work/
 
 # Original stuff
-.bench-build/
-.bench-res/
+bench-build/
+bench-res/
