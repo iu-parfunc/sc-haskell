@@ -1,4 +1,4 @@
-FROM fpco/stack-build:lts-5
+FROM fpco/stack-build:lts-5.16
 
 MAINTAINER Michael Vollmer <mike@recurial.com>
 
@@ -12,7 +12,7 @@ RUN git clone --quiet --recursive git://git.haskell.org/ghc.git
 
 WORKDIR /root/ghc
 
-ENV SUBMOD_SHA ed6d7d35af6c33269375ea96a64c76e4bcca7a82
+ENV SUBMOD_SHA 7721bc9dbc1b4f32fa8af2308a51778cf8fab798
 
 ENV GHC_PREFIX /opt/ghc
 
