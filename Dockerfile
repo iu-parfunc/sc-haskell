@@ -1,4 +1,4 @@
-1;4205;0cFROM fpco/stack-build:lts-5
+FROM fpco/stack-build:lts-5.16
 
 MAINTAINER Michael Vollmer <mike@recurial.com>
 
