@@ -26,4 +26,4 @@ cd $TMP_WORK_DIR
 
 ./Benchmark.hs
 mkdir -p ${RESULTS_DIR}
-cp -r .bench-res ${RESULTS_DIR}/
+cp -a .bench-res/. ${RESULTS_DIR}/
