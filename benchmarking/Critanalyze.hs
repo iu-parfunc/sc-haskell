@@ -28,7 +28,7 @@ import qualified Data.ByteString.Lazy.Char8 as BL
 import           Data.Csv
 import           Data.Foldable (Foldable(..))
 import           Data.Function
-import           Data.List (nub, sort)
+import           Data.List (nub, sortOn)
 import           Data.Monoid ((<>))
 import qualified Data.Vector as V
 import           Data.Vector (Vector)
@@ -113,7 +113,7 @@ rbRowNames (RBBoth _ rows) = fmap go rows
 rbRowNames _ = mempty
 
 accrueCsvs :: FilePath -> IO [FilePath]
-accrueCsvs fp = sort . filter ((== ".csv") . takeExtension) <$> listDirectory fp
+accrueCsvs fp = sortOn takeFileName . filter ((== ".csv") . takeExtension) <$> getDirectoryContentsRecursive fp
 
 warnOrphans :: Foldable f => String -> (a -> String) -> FilePath -> f a -> IO ()
 warnOrphans nouns name dir fps = unless (null fps) $ do
@@ -124,7 +124,7 @@ warnOrphans nouns name dir fps = unless (null fps) $ do
     putStrLn "\n"
 
 warnOrphanFiles :: FilePath -> [FilePath] -> IO ()
-warnOrphanFiles = warnOrphans "files" id
+warnOrphanFiles = warnOrphans "files" takeFileName
 
 warnOrphanRows :: FilePath -> [CSVRow] -> IO ()
 warnOrphanRows = warnOrphans "rows" crName
@@ -194,17 +194,17 @@ roundToPlace x n = (fromInteger . round $ x * (10^n)) / (10.0^^n)
 
 analyze :: FilePath -> FilePath -> IO ()
 analyze dir1 dir2 = do
-    csvs1 <- accrueCsvs dir1
-    csvs2 <- accrueCsvs dir2
-    let csvsDiff             = getDiff csvs1 csvs2
+    csvs1 <- force <$> accrueCsvs dir1
+    csvs2 <- force <$> accrueCsvs dir2
+    let csvsDiff             = getDiffBy ((==) `on` takeFileName) csvs1 csvs2
         (firsts, _, seconds) = partitionDiff csvsDiff
     warnOrphanFiles dir1 firsts
     warnOrphanFiles dir2 seconds
 
     rb <- fmap V.fromList . forM csvsDiff $ \case
-        First  fp -> RBFirst  (dropExtension fp)
+        First  fp -> RBFirst  (dropExtension $ takeFileName fp)
                    . V.fromList <$> decodeCsv (dir1 </> fp)
-        Second fp -> RBSecond (dropExtension fp)
+        Second fp -> RBSecond (dropExtension $ takeFileName fp)
                   . V.fromList <$> decodeCsv (dir2 </> fp)
         Both _ fp -> do
             let fp1 = dir1 </> fp
@@ -216,7 +216,7 @@ analyze dir1 dir2 = do
                 csvRowsCDiff = V.fromList $ map diffToCritanalyzeDiff csvRowsDiff
             warnOrphanRows fp1 firstRows
             warnOrphanRows fp2 secondRows
-            pure $ RBBoth (dropExtension fp) csvRowsCDiff
+            pure $ RBBoth (dropExtension $ takeFileName fp) csvRowsCDiff
 
     let rbNameLens        = fmap (length . rbName) rb
         rbRowNameLens     = fmap ((+ padding) . length) $ V.concatMap rbRowNames rb
@@ -347,7 +347,31 @@ exitIfFakeDir dir = do
 usage :: String
 usage = "./Critanalyze <directory1> <directory2>"
 
-listDirectory :: FilePath -> IO [FilePath]
-listDirectory path =
-  (filter f) <$> (getDirectoryContents path)
-  where f filename = filename /= "." && filename /= ".."
+-- Taken from tar
+getDirectoryContentsRecursive :: FilePath -> IO [FilePath]
+getDirectoryContentsRecursive dir0 =
+  fmap tail (recurseDirectories dir0 [""])
+
+recurseDirectories :: FilePath -> [FilePath] -> IO [FilePath]
+recurseDirectories _    []         = return []
+recurseDirectories base (dir:dirs) = do
+  (files, dirs') <- collect [] [] =<< getDirectoryContents (base </> dir)
+
+  files' <- recurseDirectories base (dirs' ++ dirs)
+  return (dir : files ++ files')
+
+  where
+    collect files dirs' []              = return (reverse files, reverse dirs')
+    collect files dirs' (entry:entries) | ignore entry
+                                        = collect files dirs' entries
+    collect files dirs' (entry:entries) = do
+      let dirEntry  = dir </> entry
+          dirEntry' = addTrailingPathSeparator dirEntry
+      isDirectory <- doesDirectoryExist (base </> dirEntry)
+      if isDirectory
+        then collect files (dirEntry':dirs') entries
+        else collect (dirEntry:files) dirs' entries
+
+    ignore ['.']      = True
+    ignore ['.', '.'] = True
+    ignore _          = False
