@@ -27,7 +27,8 @@ cd $TMP_WORK_DIR
 if [[ "${NODE_NUMBER}" != "" && "${TOTAL_NODES}" != "" ]]; then
   ./Benchmark.hs --slice=${NODE_NUMBER} --numSlices=${TOTAL_NODES}
 else
-  ./Benmarks.hs
+  echo "WARNING: Not running in parallel!"
+  ./Benchmark.hs
 fi
 
 mkdir -p ${RESULTS_DIR}
