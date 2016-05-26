@@ -24,6 +24,11 @@ RESULTS_DIR=${HOME}/results_backup/benchmark_stackage/${BUILD_TAG}/${NODE_NAME}
 cp -a $WORK_DIR/. $TMP_WORK_DIR/
 cd $TMP_WORK_DIR
 
-./Benchmark.hs
+if [[ "${NODE_NUMBER}" != "" && "${TOTAL_NODES}" != "" ]]; then
+  ./Benchmark.hs --slice=${NODE_NUMBER} --numSlices=${TOTAL_NODES}
+else
+  ./Benmarks.hs
+fi
+
 mkdir -p ${RESULTS_DIR}
 cp -a .bench-res ${RESULTS_DIR}/

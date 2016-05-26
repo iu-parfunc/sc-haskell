@@ -20,6 +20,7 @@
     --package optparse-generic
     --package process
     --package resourcet
+    --package safe
     --package tar
     --package text
     --package time
@@ -42,7 +43,7 @@ import qualified Codec.Compression.GZip as GZip
 import           Control.Concurrent.Async
 import           Control.DeepSeq (($!!))
 import           Control.Exception (bracket)
-import           Control.Monad
+import           Control.Monad.Extra
 import           Control.Monad.Except (MonadError(..))
 import           Control.Monad.IO.Class (MonadIO(..))
 import           Control.Monad.Trans.Except (ExceptT, runExceptT)
@@ -61,7 +62,7 @@ import           Data.Either (partitionEithers)
 import           Data.Foldable (for_)
 import qualified Data.HashMap.Strict as HM
 import           Data.List.Extra (chunksOf)
-import           Data.Maybe (fromMaybe)
+import           Data.Maybe (fromMaybe, isJust)
 import           Data.Monoid ((<>))
 import qualified Data.Text    as TS
 import qualified Data.Text.IO as TS
@@ -89,6 +90,8 @@ import           Options.Generic (ParseRecord, getRecord)
 
 import           Network.HTTP.Client
 import           Network.HTTP.Client.TLS
+
+import           Safe (atDef)
 
 import           System.Clock
 import           System.Directory.Extra
@@ -313,7 +316,7 @@ runBenchmarks dockerfile mountDir benchResPrefix = do
     invokeWithYamlFile "setup" []
     -- TODO: Determine a way to run individual benchmarks
     invokeWithYamlFile "bench" ["--only-dependencies"]
-    -- TODO: Timeout after, say, 10 minutes
+    -- TODO: Timeout after, say, 10 minutes of inactivity
     invokeWithYamlFile "bench"
         [ "--ghc-options=-rtsopts"
         , "--benchmark-arguments='" ++ unwords
@@ -341,14 +344,13 @@ runBenchmarks dockerfile mountDir benchResPrefix = do
 data CmdArgs = CmdArgs
     { target     :: Maybe String -- TODO: This could perhaps be formatted better
     , dockerfile :: Maybe String
-    , slice      :: Maybe Int
+    , slice      :: Maybe Int -- TODO: Require slice and numSlices be given together
     , numSlices  :: Maybe Int
     } deriving (Eq, Ord, Read, Show, Generic, ParseRecord)
 
 main :: IO ()
 main = do
     cmdArgs <- getRecord "Stackage benchmarking script"
-    print cmdArgs
     doIt cmdArgs
 
 doIt :: CmdArgs -> IO ()
@@ -373,16 +375,33 @@ doIt cmdArgs = do
           Nothing -> error "Parse error"
           Just (CabalConfig cc) -> mapMaybe toPackageIdentifier cc
 
-    pkgIdStrs <- getPkgsWithBenchmarks manager benchBuildDir pkgIds
-    let numPkgsStr = show$ length pkgIdStrs
+    pkgIdStrs' <- getPkgsWithBenchmarks manager benchBuildDir pkgIds
+    let numPkgs' = length pkgIdStrs'
+        pkgIdStrs = case myRatio of
+          Just (s, ns) -> let numPkgs'' = fromIntegral numPkgs'
+                              ns'       = fromIntegral ns
+                              chunkSize = ceiling (numPkgs'' / ns')
+                              chunks    = chunksOf chunkSize pkgIdStrs'
+                          in atDef [] chunks (s-1)
+          Nothing -> pkgIdStrs'
+
+    let numPkgsStr  = show $ length pkgIdStrs
+        numPkgsStr' = show numPkgs'
     putStrLn "-------------------------"
-    putStrLn $ numPkgsStr ++ " packages with benchmarks"
-    for_ pkgIdStrs $ \pkgIdStr -> putStrLn ('\t':pkgIdStr)
+    putStrLn $ numPkgsStr' ++ " packages with benchmarks"
+    for_ pkgIdStrs' $ putStrLn . ('\t':)
+    whenJust myRatio $ \(s, ns) -> do
+        putStrLn $ "Given slice " ++ show s ++ " of " ++ show ns
+                ++ " slices of packages, consisting of " ++ numPkgsStr ++ " packages:"
+        for_ pkgIdStrs $ putStrLn . ('\t':)
 
     t <- getCurrentTime
-    let ft          = formatTime defaultTimeLocale "%Y-%m-%d-%H:%M:%S" t
-        benchResDir = benchResDirPrefix </> targetStr
-        pkgResDir   = benchResDir </> ft
+    let ft           = formatTime defaultTimeLocale "%Y-%m-%d-%H:%M:%S" t
+        benchResDir  = benchResDirPrefix </> targetStr
+        benchResDir' = case myRatio of
+                            Just (s, ns) -> benchResDir </> show s++"-of-"++show ns
+                            Nothing      -> benchResDir
+        pkgResDir    = benchResDir' </> ft
     createDirectoryIfMissing True pkgResDir
     pkgResDir' <- canonicalizePath pkgResDir
     putStrLn $ "Logging results in " ++ pkgResDir'
@@ -407,11 +426,12 @@ doIt cmdArgs = do
                  pure $ Left pkgIdStr
              Right () -> pure $ Right pkgIdStr
 
-    let (failures, successes) = partitionEithers results
-        numSuccessesStr = show $ length successes
-        numFailuresStr  = show $ length failures
-    putStrLn "-------------------------"
-    putStrLn $ numSuccessesStr ++ "/" ++ numPkgsStr ++ " packages succeeded"
-    for_ successes $ \success -> putStrLn ('\t':success)
-    putStrLn $ numFailuresStr   ++ "/" ++ numPkgsStr ++ " packages failed"
-    for_ failures  $ \failure -> putStrLn ('\t':failure)
+    when (isJust myRatio) $ do
+        let (failures, successes) = partitionEithers results
+            numSuccessesStr = show $ length successes
+            numFailuresStr  = show $ length failures
+        putStrLn "-------------------------"
+        putStrLn $ numSuccessesStr ++ "/" ++ numPkgsStr ++ " packages succeeded"
+        for_ successes $ \success -> putStrLn ('\t':success)
+        putStrLn $ numFailuresStr   ++ "/" ++ numPkgsStr ++ " packages failed"
+        for_ failures  $ \failure -> putStrLn ('\t':failure)
