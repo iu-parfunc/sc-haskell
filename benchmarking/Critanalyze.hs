@@ -120,8 +120,7 @@ warnOrphans nouns name dir fps = unless (null fps) $ do
     hPutStrLn stderr $ "warning: The following "
                      ++ nouns ++ " in " ++ dir
                      ++ " have no counterpart!"
-    forM_ fps $ putStr . ('\t':) . name
-    putStrLn "\n"
+    forM_ fps $ hPutStrLn stderr . ('\t':) . name
 
 warnOrphanFiles :: FilePath -> [FilePath] -> IO ()
 warnOrphanFiles = warnOrphans "files" takeFileName
@@ -206,17 +205,17 @@ analyze dir1 dir2 = do
                    . V.fromList <$> decodeCsv (dir1 </> fp)
         Second fp -> RBSecond (dropExtension $ takeFileName fp)
                   . V.fromList <$> decodeCsv (dir2 </> fp)
-        Both _ fp -> do
-            let fp1 = dir1 </> fp
-                fp2 = dir2 </> fp
-            csvRows1 <- decodeCsv fp1
-            csvRows2 <- decodeCsv fp2
+        Both fp1 fp2 -> do
+            let fp1' = dir1 </> fp1
+                fp2' = dir2 </> fp2
+            csvRows1 <- decodeCsv fp1'
+            csvRows2 <- decodeCsv fp2'
             let csvRowsDiff = getDiffBy ((==) `on` crName) csvRows1 csvRows2
                 (firstRows, _, secondRows) = partitionDiff csvRowsDiff
                 csvRowsCDiff = V.fromList $ map diffToCritanalyzeDiff csvRowsDiff
-            warnOrphanRows fp1 firstRows
-            warnOrphanRows fp2 secondRows
-            pure $ RBBoth (dropExtension $ takeFileName fp) csvRowsCDiff
+            warnOrphanRows fp1' firstRows
+            warnOrphanRows fp2' secondRows
+            pure $ RBBoth (dropExtension $ takeFileName fp1) csvRowsCDiff
 
     let rbNameLens        = fmap (length . rbName) rb
         rbRowNameLens     = fmap ((+ padding) . length) $ V.concatMap rbRowNames rb
