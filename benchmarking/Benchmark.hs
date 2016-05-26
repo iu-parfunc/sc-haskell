@@ -396,12 +396,9 @@ doIt cmdArgs = do
         for_ pkgIdStrs $ putStrLn . ('\t':)
 
     t <- getCurrentTime
-    let ft           = formatTime defaultTimeLocale "%Y-%m-%d-%H:%M:%S" t
-        benchResDir  = benchResDirPrefix </> targetStr
-        benchResDir' = case myRatio of
-                            Just (s, ns) -> benchResDir </> show s++"-of-"++show ns
-                            Nothing      -> benchResDir
-        pkgResDir    = benchResDir' </> ft
+    let ft          = formatTime defaultTimeLocale "%Y-%m-%d-%H:%M:%S" t
+        benchResDir = benchResDirPrefix </> targetStr
+        pkgResDir   = benchResDir </> ft
     createDirectoryIfMissing True pkgResDir
     pkgResDir' <- canonicalizePath pkgResDir
     putStrLn $ "Logging results in " ++ pkgResDir'
