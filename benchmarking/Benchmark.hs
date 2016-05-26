@@ -423,7 +423,7 @@ doIt cmdArgs = do
                  pure $ Left pkgIdStr
              Right () -> pure $ Right pkgIdStr
 
-    when (isJust myRatio) $ do
+    unless (null results) $ do
         let (failures, successes) = partitionEithers results
             numSuccessesStr = show $ length successes
             numFailuresStr  = show $ length failures
