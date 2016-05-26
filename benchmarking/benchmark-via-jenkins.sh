@@ -32,4 +32,4 @@ else
 fi
 
 mkdir -p ${RESULTS_DIR}
-cp -a .bench-res ${RESULTS_DIR}/
+cp -a bench-res ${RESULTS_DIR}/
