@@ -12,7 +12,7 @@ RUN git clone --quiet --recursive git://git.haskell.org/ghc.git
 
 WORKDIR /root/ghc
 
-ENV SUBMOD_SHA 7721bc9dbc1b4f32fa8af2308a51778cf8fab798
+ENV SUBMOD_SHA 855d9a722c3df22a4209bdc30ccfd8893cfa6448
 
 ENV GHC_PREFIX /opt/ghc
 
