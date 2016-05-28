@@ -49,7 +49,7 @@ import           Control.Monad.IO.Class (MonadIO(..))
 import           Control.Monad.Trans.Except (ExceptT, runExceptT)
 import           Control.Monad.Trans.Resource (runResourceT)
 
-import           Data.Aeson.Types (Value(..), (.=), object)
+import           Data.Aeson.Types (Value(..), (.=), object, toJSON)
 import           Data.Bool (bool)
 import qualified Data.ByteString.Char8 as BS
 import           Data.ByteString.Lazy (ByteString)
@@ -72,7 +72,7 @@ import           Data.Time.Format
 import           Data.Traversable (for)
 import qualified Data.Vector as V
 import           Data.Witherable (Witherable(..), forMaybe)
-import           Data.Yaml (decodeFile, encodeFile)
+import           Data.Yaml (array, decodeFile, encodeFile)
 
 import           Distribution.Compat.ReadP
 import           Distribution.Package (Dependency(..), PackageIdentifier(..))
@@ -252,6 +252,17 @@ writeStackDotYaml dockerfile mountDir fileLoc _pkgIdStrs =
     let -- packages = "packages" .= map ("." </>) pkgIdStrs
         ts       = targetSlug stackageTarget
         resolver = "resolver" .= ts
+        packages = "packages" .= array
+                     [ toJSON ("." :: String)
+                     , object
+                         [ "location" .= object
+                             [ "git"    .= ("https://github.com/iu-parfunc/criterion" :: String)
+                             , "commit" .= ("875200f3f80c71147531c7c1e1e041bc3e77af8e" :: String)
+                             ]
+                         , "extra-dep" .= True
+                         ]
+                     ]
+        extraDeps = "extra-deps" .= array [toJSON ("criterion-1.1.1.0" :: String)]
         docker   = "docker" .= object
                      [ "enable"    .= True
                      , "repo"      .= fromMaybe ("fpco/stack-build:" <> ts) dockerfile
@@ -259,7 +270,7 @@ writeStackDotYaml dockerfile mountDir fileLoc _pkgIdStrs =
                      , "set-user"  .= True
                      , "mount"     .= [mountDir]
                      ]
-        yaml = object [resolver, docker {-, packages-}]
+        yaml = object [resolver, docker, packages, extraDeps]
     in encodeFile fileLoc yaml
 
 -- TODO: This is a temporary hack. Remove when Stackage vets benchmarks.
@@ -311,7 +322,12 @@ runBenchmarks dockerfile mountDir benchResPrefix = do
     let stackYamlFile                  = "hacky-stack" <.> "yaml"
         teeFile                        = benchResPrefix <.> "log"
         invokeWithYamlFile subcmd args = invokeTee teeFile "stack" $ subcmd:["--stack-yaml", stackYamlFile] ++ args
-    liftIO $ writeStackDotYaml dockerfile mountDir stackYamlFile []
+        reportFiles = map (benchResPrefix <.>) ["html", "csv", "crit", "json"]
+    liftIO $ do
+        writeStackDotYaml dockerfile mountDir stackYamlFile []
+        for_ reportFiles $ \f -> do
+            exists <- doesFileExist f
+            when exists $ removeFile f
 
     invokeWithYamlFile "setup" []
     -- TODO: Determine a way to run individual benchmarks
@@ -323,12 +339,8 @@ runBenchmarks dockerfile mountDir benchResPrefix = do
             [ "+RTS", "-T", "-RTS"
             , "--output="  ++ benchResPrefix <.> "html"
             , "--csv="     ++ benchResPrefix <.> "csv"
-            -- Criterion's binary output is quite buggy and has been known to
-            -- crash when writing to file. Until this is fixed, we'll disable
-            -- the use of --raw.
-            -- See https://github.com/iu-parfunc/sc-haskell/issues/8
-            --
-            -- , "--raw=" ++ benchResPrefix <.> "crit"
+            , "--raw="     ++ benchResPrefix <.> "crit"
+            , "--json="    ++ benchResPrefix <.> "json"
             , "--regress=" ++ "allocated:iters"
             , "--regress=" ++ "bytesCopied:iters"
             , "--regress=" ++ "cycles:iters"
