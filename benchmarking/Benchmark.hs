@@ -257,7 +257,7 @@ writeStackDotYaml dockerfile mountDir fileLoc _pkgIdStrs =
                      , object
                          [ "location" .= object
                              [ "git"    .= ("https://github.com/iu-parfunc/criterion" :: String)
-                             , "commit" .= ("875200f3f80c71147531c7c1e1e041bc3e77af8e" :: String)
+                             , "commit" .= ("85a2b173d733348fc51772faeb3bacee39a69732" :: String)
                              ]
                          , "extra-dep" .= True
                          ]
@@ -339,7 +339,7 @@ runBenchmarks dockerfile mountDir benchResPrefix = do
             [ "+RTS", "-T", "-RTS"
             , "--output="  ++ benchResPrefix <.> "html"
             , "--csv="     ++ benchResPrefix <.> "csv"
-            , "--raw="     ++ benchResPrefix <.> "crit"
+            -- , "--raw="     ++ benchResPrefix <.> "crit"
             , "--json="    ++ benchResPrefix <.> "json"
             , "--regress=" ++ "allocated:iters"
             , "--regress=" ++ "bytesCopied:iters"
