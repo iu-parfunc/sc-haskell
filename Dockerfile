@@ -22,6 +22,7 @@ RUN git remote add fork https://github.com/iu-parfunc/ghc.git && \
     git fetch fork && \
     git checkout ${SUBMOD_SHA} && \
     git reset --hard && git clean -dfx && \
+    git submodule sync && \
     git submodule update --init --recursive && \
     mkdir -p ${GHC_PREFIX} && \
     sed -e 's/#BuildFlavour = quick/BuildFlavour = quick/' \
