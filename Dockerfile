@@ -2,6 +2,7 @@ FROM fpco/stack-build:lts-5.16
 
 MAINTAINER Michael Vollmer <mike@recurial.com>
 
+# Note: this needs to change to LLVM 3.7 for GHC 8.0:
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get -y update && apt-get -y upgrade && \
     apt-get -y install llvm-3.6
@@ -25,11 +26,14 @@ RUN git remote add fork https://github.com/iu-parfunc/ghc.git && \
     git submodule sync && \
     git submodule update --init --recursive && \
     mkdir -p ${GHC_PREFIX} && \
-    sed -e 's/#BuildFlavour = quick/BuildFlavour = quick/' \
+    sed -e 's/#BuildFlavour = perf/BuildFlavour = perf/' \
         -e 's/#V=0/V=0/' mk/build.mk.sample > mk/build.mk && \
     ./boot && ./configure --quiet --prefix ${GHC_PREFIX} && \
     make -j2 && make install && \
     rm -rf /root/ghc
+
+# Nuke the original copy of GHC 7.10 to avoid confusion:
+RUN rm -rf /opt/stackage/lts-5/ghc
 
 ENV PATH ${GHC_PREFIX}/bin:${PATH}
 WORKDIR /root
