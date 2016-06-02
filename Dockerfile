@@ -5,9 +5,9 @@ MAINTAINER Michael Vollmer <mike@recurial.com>
 # Note: this needs to change to LLVM 3.7 for GHC 8.0:
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get -y update && apt-get -y upgrade && \
-    apt-get -y install llvm-3.6 && \
-    update-alternatives --install /usr/bin/opt opt /usr/bin/opt-3.6 50 && \
-    update-alternatives --install /usr/bin/llc llc /usr/bin/llc-3.6 50
+    apt-get -y install llvm-3.5 && \
+    update-alternatives --install /usr/bin/opt opt /usr/bin/opt-3.5 50 && \
+    update-alternatives --install /usr/bin/llc llc /usr/bin/llc-3.5 50
 
 WORKDIR /root
 
