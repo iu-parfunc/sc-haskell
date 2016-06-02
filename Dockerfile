@@ -5,7 +5,7 @@ MAINTAINER Michael Vollmer <mike@recurial.com>
 # Note: this needs to change to LLVM 3.7 for GHC 8.0:
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get remove llvm-3.4 libllvm3.4 llvm-3.4-runtime
+RUN apt-get -y remove llvm-3.4 libllvm3.4 llvm-3.4-runtime
 RUN apt-get -y update && apt-get -y upgrade && \
     apt-get -y install llvm-3.5 && \
     update-alternatives --install /usr/bin/opt opt /usr/bin/opt-3.5 50 && \
@@ -21,7 +21,7 @@ ENV SUBMOD_SHA b5c93fc54f48beebbf5319b4b950a1ab1f3d9966
 
 ENV GHC_PREFIX /opt/ghc
 
-# Squish this into one giant command to try to keep the intermediate 
+# Squish this into one giant command to try to keep the intermediate
 # build data out of the AUFS file system.
 RUN git remote add fork https://github.com/iu-parfunc/ghc.git && \
     git fetch fork && \
