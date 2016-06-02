@@ -4,6 +4,8 @@ MAINTAINER Michael Vollmer <mike@recurial.com>
 
 # Note: this needs to change to LLVM 3.7 for GHC 8.0:
 ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get remove llvm-3.4 libllvm3.4 llvm-3.4-runtime
 RUN apt-get -y update && apt-get -y upgrade && \
     apt-get -y install llvm-3.5 && \
     update-alternatives --install /usr/bin/opt opt /usr/bin/opt-3.5 50 && \
