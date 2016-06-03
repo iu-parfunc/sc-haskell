@@ -30,8 +30,7 @@ RUN git remote add fork https://github.com/iu-parfunc/ghc.git && \
     git submodule sync && \
     git submodule update --init --recursive && \
     mkdir -p ${GHC_PREFIX} && \
-    sed -e 's/#BuildFlavour = perf/BuildFlavour = perf/' \
-        -e 's/#V=0/V=0/' mk/build.mk.sample > mk/build.mk && \
+    cp mk/build.mk.sample mk/build.mk && \
     ./boot && ./configure --quiet --prefix ${GHC_PREFIX} && \
     make -j2 && make install && \
     rm -rf /root/ghc
