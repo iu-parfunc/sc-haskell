@@ -10,7 +10,7 @@ if [ "${NODE_NAME}" == "" ]; then
 fi
 
 if [ "${DOCKER_IMAGE}" != "" ]; then
-  OTHER_ARGS="--dockerfile=\"${DOCKER_IMAGE}\""
+  OTHER_ARGS="--dockerfile=${DOCKER_IMAGE}"
 else
   OTHER_ARGS=""
 fi
