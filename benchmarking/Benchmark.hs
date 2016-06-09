@@ -42,7 +42,7 @@ import qualified Codec.Compression.GZip as GZip
 
 import           Control.Concurrent.Async
 import           Control.DeepSeq (($!!))
-import           Control.Exception (bracket)
+import           Control.Exception.Extra (bracket, retry)
 import           Control.Monad.Extra
 import           Control.Monad.Except (MonadError(..))
 import           Control.Monad.IO.Class (MonadIO(..))
@@ -175,11 +175,14 @@ withProgressFinish progressStr finishStr action = do
 withProgressYesNo :: String -> IO Bool -> IO Bool
 withProgressYesNo progressStr = withProgressFinish progressStr (bool "No" "Yes")
 
+httpRetry :: Request -> Manager -> IO (Response ByteString)
+httpRetry r = retry 10 . httpLbs r
+
 downloadStackageCabalConfig :: Manager -> FilePath -> IO ()
 downloadStackageCabalConfig m cabalConfigPath = do
     initialRequest <- parseUrl $ "GET " ++ stackageCabalConfigURL
     bs <- withProgress ("Downloading " ++ stackageCabalConfigURL) $
-        responseBody <$> httpLbs initialRequest m
+        responseBody <$> httpRetry initialRequest m
     BL.writeFile cabalConfigPath bs
 
 downloadCabalFile :: Manager -> PackageIdentifier -> IO ByteString
@@ -189,14 +192,14 @@ downloadCabalFile m pkgId = do
         cabalURL = baseHackageURL </> pkgIdStr </> pkgStr <.> "cabal"
     initialRequest <- parseUrl $ "GET " ++ cabalURL
     withProgress ("Downloading " ++ cabalURL) $
-        responseBody <$> httpLbs initialRequest m
+        responseBody <$> httpRetry initialRequest m
 
 extractPkgTarball :: Manager -> FilePath -> String -> IO ()
 extractPkgTarball m benchBuildDir pkgIdStr = do
     let cabalTarURL = baseHackageURL </> pkgIdStr </> pkgIdStr <.> "tar" <.> "gz"
     initialRequest <- parseUrl $ "GET " ++ cabalTarURL
     tarBytesCompressed <- withProgress ("Downloading " ++ cabalTarURL) $
-        responseBody <$> httpLbs initialRequest m
+        responseBody <$> httpRetry initialRequest m
     withProgress ("Unpacking to " ++ benchBuildDir </> pkgIdStr) $ do
         let tarBytesDecompressed = GZip.decompress tarBytesCompressed
             tarball              = Tar.read tarBytesDecompressed
@@ -384,7 +387,7 @@ installHSBencherFusion m unpkDir = do
     unlessM (doesDirectoryExist hsbencherDir) $ do
       initialRequest <- parseUrl $ "GET " ++ hsbencherURL
       withProgress ("Downloading " ++ hsbencherURL) $ do
-          bytes <- httpLbs initialRequest m
+          bytes <- httpRetry initialRequest m
           for_ bytes $ BL.writeFile hsbencherTarballName
       putStrLn "Proceeding to install HSBencher"
       res <- runExceptT $ do
