@@ -370,7 +370,7 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
                 , "--variant=" ++ fromMaybe ("fpco/stack-build:" ++ resolver)
                                             dockerfile
                 , "--custom=PACKAGE,"    ++ unPackageName (pkgName pkgId)
-                , "--custom=PACKAGEVER," ++ show (pkgVersion pkgId)
+                , "--custom=PACKAGEVER," ++ show (disp $ pkgVersion pkgId)
                 , "--custom=RESOLVER,"   ++ resolver
                 , "--json"
                 , benchResPrefix <.> "json"
