@@ -342,7 +342,7 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
     -- TODO: Determine a way to run individual benchmarks
     invokeWithYamlFile "bench" ["--only-dependencies"]
     -- TODO: Timeout after, say, 10 minutes of inactivity
-    {-invokeWithYamlFile "bench"
+    invokeWithYamlFile "bench"
         [ "--ghc-options=-rtsopts"
         , "--benchmark-arguments='" ++ unwords
             [ "+RTS", "-T", "-RTS"
@@ -360,7 +360,7 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
             -- Try to run for longer to reduce noise
             , "-L", "20"
             ] ++ "'"
-            ]-}
+        ]
     let resolver = targetSlug stackageTarget
         pkgId  = case simpleParse pkgIdStr of
                       Just p  -> p
