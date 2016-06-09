@@ -464,7 +464,9 @@ doIt cmdArgs = do
 
     t <- getCurrentTime
     let ft          = formatTime defaultTimeLocale "%Y-%m-%d-%H:%M:%S" t
-        benchResDir = benchResDirPrefix </> targetStr
+        ts          = targetSlug stackageTarget
+        resolver    = fromMaybe ("fpco/stack-build:" ++ ts) (dockerfile cmdArgs)
+        benchResDir = benchResDirPrefix </> resolver </> targetStr
         pkgResDir   = benchResDir </> ft
     createDirectoryIfMissing True pkgResDir
     pkgResDir' <- canonicalizePath pkgResDir
