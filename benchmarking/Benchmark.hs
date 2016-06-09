@@ -34,6 +34,7 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE ViewPatterns #-}
 module Main (main) where
 
@@ -42,7 +43,7 @@ import qualified Codec.Compression.GZip as GZip
 
 import           Control.Concurrent.Async
 import           Control.DeepSeq (($!!))
-import           Control.Exception.Extra (bracket, retry)
+import           Control.Exception.Extra (bracket, catch, retry)
 import           Control.Monad.Extra
 import           Control.Monad.Except (MonadError(..))
 import           Control.Monad.IO.Class (MonadIO(..))
@@ -198,12 +199,14 @@ extractPkgTarball :: Manager -> FilePath -> String -> IO ()
 extractPkgTarball m benchBuildDir pkgIdStr = do
     let cabalTarURL = baseHackageURL </> pkgIdStr </> pkgIdStr <.> "tar" <.> "gz"
     initialRequest <- parseUrl $ "GET " ++ cabalTarURL
-    tarBytesCompressed <- withProgress ("Downloading " ++ cabalTarURL) $
-        responseBody <$> httpRetry initialRequest m
-    withProgress ("Unpacking to " ++ benchBuildDir </> pkgIdStr) $ do
-        let tarBytesDecompressed = GZip.decompress tarBytesCompressed
-            tarball              = Tar.read tarBytesDecompressed
-        Tar.unpack benchBuildDir tarball
+    let loop = do
+          tarBytesCompressed <- withProgress ("Downloading " ++ cabalTarURL) $
+            responseBody <$> httpRetry initialRequest m
+          withProgress ("Unpacking to " ++ benchBuildDir </> pkgIdStr) $ do
+            let tarBytesDecompressed = GZip.decompress tarBytesCompressed
+                tarball              = Tar.read tarBytesDecompressed
+            Tar.unpack benchBuildDir tarball `catch` \(e :: Tar.FormatError) -> loop
+    loop
 
 getPkgsWithBenchmarks :: Manager
                       -> FilePath
