@@ -46,7 +46,7 @@ import           Control.Exception (bracket)
 import           Control.Monad.Extra
 import           Control.Monad.Except (MonadError(..))
 import           Control.Monad.IO.Class (MonadIO(..))
-import           Control.Monad.Trans.Except (ExceptT, runExceptT)
+import           Control.Monad.Trans.Except (ExceptT(..), runExceptT)
 import           Control.Monad.Trans.Resource (runResourceT)
 
 import           Data.Aeson.Types (Value(..), (.=), object, toJSON)
@@ -75,7 +75,7 @@ import           Data.Witherable (Witherable(..), forMaybe)
 import           Data.Yaml (array, decodeFile, encodeFile)
 
 import           Distribution.Compat.ReadP
-import           Distribution.Package (Dependency(..), PackageIdentifier(..))
+import           Distribution.Package (Dependency(..), PackageIdentifier(..), PackageName(..))
 import           Distribution.PackageDescription
 import           Distribution.PackageDescription.Parse (ParseResult(..), parsePackageDescription)
 import           Distribution.Text (Text(..), simpleParse)
@@ -154,6 +154,13 @@ stackageCabalConfigURL :: String
 stackageCabalConfigURL =  baseStackageURL
                       </> targetSlug stackageTarget
                       </> "cabal" <.> "config"
+
+hsbencherURL :: String
+hsbencherURL = "https://github.com/iu-parfunc/HSBencher/archive"
+           </> hsbencherSHA <.> "tar" <.> "gz"
+
+hsbencherSHA :: String
+hsbencherSHA = "1b699fc6fda4e0ec40c668f2841fd7da6c18abe5"
 
 withProgress :: String -> IO a -> IO a
 withProgress progressStr = withProgressFinish progressStr (const "Done!")
@@ -256,8 +263,8 @@ writeStackDotYaml dockerfile mountDir fileLoc _pkgIdStrs =
                      [ toJSON ("." :: String)
                      , object
                          [ "location" .= object
-                             [ "git"    .= ("https://github.com/iu-parfunc/criterion" :: String)
-                             , "commit" .= ("85a2b173d733348fc51772faeb3bacee39a69732" :: String)
+                             [ "git"    .= ("https://github.com/bos/criterion" :: String)
+                             , "commit" .= ("fa26f39a187f422adbb513ea459ee2700301f804" :: String)
                              ]
                          , "extra-dep" .= True
                          ]
@@ -283,12 +290,10 @@ writeCacheFile fileLoc pkgIdStrs =
 
 type ShellM = ExceptT (String, Int) IO
 
-{-
 invoke :: FilePath -> [String] -> ShellM ()
 invoke = invokeCommon $ \_ cproc -> do
     (ClosedStream, Inherited, Inherited, procH) <- streamingProcess cproc
     waitForStreamingProcess procH
--}
 
 invokeTee :: FilePath -> FilePath -> [String] -> ShellM ()
 invokeTee teeFile = invokeCommon $ \fullCmd cproc -> withFile teeFile AppendMode $ \teeH -> do
@@ -316,8 +321,13 @@ invokeCommon action cmd args = do
          ExitSuccess   -> pure ()
          ExitFailure c -> throwError (fullCmd, c)
 
-runBenchmarks :: Maybe String -> FilePath -> FilePath -> ShellM ()
-runBenchmarks dockerfile mountDir benchResPrefix = do
+runBenchmarks :: FilePath -- hsbencher-fusion-upload-criterion
+              -> String -- Package + version
+              -> Maybe String
+              -> FilePath
+              -> FilePath
+              -> ShellM ()
+runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
     -- TODO REALLY IMPORTANT: Remove hacky-stack.yaml hack
     let stackYamlFile                  = "hacky-stack" <.> "yaml"
         teeFile                        = benchResPrefix <.> "log"
@@ -326,19 +336,18 @@ runBenchmarks dockerfile mountDir benchResPrefix = do
     liftIO $ do
         writeStackDotYaml dockerfile mountDir stackYamlFile []
         for_ reportFiles $ \f -> do
-            exists <- doesFileExist f
-            when exists $ removeFile f
+            whenM (doesFileExist f) $ removeFile f
 
     invokeWithYamlFile "setup" []
     -- TODO: Determine a way to run individual benchmarks
     invokeWithYamlFile "bench" ["--only-dependencies"]
     -- TODO: Timeout after, say, 10 minutes of inactivity
-    invokeWithYamlFile "bench"
+    {-invokeWithYamlFile "bench"
         [ "--ghc-options=-rtsopts"
         , "--benchmark-arguments='" ++ unwords
             [ "+RTS", "-T", "-RTS"
             , "--output="  ++ benchResPrefix <.> "html"
-            , "--csv="     ++ benchResPrefix <.> "csv"
+            -- , "--csv="     ++ benchResPrefix <.> "csv"
             -- , "--raw="     ++ benchResPrefix <.> "crit"
             , "--json="    ++ benchResPrefix <.> "json"
             , "--regress=" ++ "allocated:iters"
@@ -351,7 +360,44 @@ runBenchmarks dockerfile mountDir benchResPrefix = do
             -- Try to run for longer to reduce noise
             , "-L", "20"
             ] ++ "'"
-        ]
+            ]-}
+    let resolver = targetSlug stackageTarget
+        pkgId  = case simpleParse pkgIdStr of
+                      Just p  -> p
+                      Nothing -> error $ "Ill-formatted PackageIdentifier: " ++ pkgIdStr
+    invoke hfuc [ "--noupload"
+                , "--csv=" ++ benchResPrefix <.> "csv"
+                , "--variant=" ++ fromMaybe ("fpco/stack-build:" ++ resolver)
+                                            dockerfile
+                , "--custom=PACKAGE,"    ++ unPackageName (pkgName pkgId)
+                , "--custom=PACKAGEVER," ++ show (pkgVersion pkgId)
+                , "--custom=RESOLVER,"   ++ resolver
+                , "--json"
+                , benchResPrefix <.> "json"
+                ]
+
+installHSBencherFusion :: Manager -> FilePath -> IO FilePath
+installHSBencherFusion m unpkDir = do
+    let hsbencherFileName    = "HSBencher-" ++ hsbencherSHA
+        hsbencherTarballName = hsbencherFileName <.> "tar" <.> "gz"
+        hsbencherDir         = unpkDir </> hsbencherFileName
+    unlessM (doesDirectoryExist hsbencherDir) $ do
+      initialRequest <- parseUrl $ "GET " ++ hsbencherURL
+      withProgress ("Downloading " ++ hsbencherURL) $ do
+          bytes <- httpLbs initialRequest m
+          for_ bytes $ BL.writeFile hsbencherTarballName
+      putStrLn "Proceeding to install HSBencher"
+      res <- runExceptT $ do
+          invoke "tar" ["-xvf", hsbencherTarballName]
+          res' <- liftIO $ withCurrentDirectory hsbencherDir $ do
+            runExceptT $ invoke "stack" ["install", "hsbencher-fusion"]
+          ExceptT $ pure res'
+      case res of
+           Left (cmd, c) ->
+             let errMsg = "ERROR: " ++ cmd ++ " returned exit code " ++ show c
+             in error errMsg
+           Right () -> pure ()
+    pure $ hsbencherDir </> "bin" </> "hsbencher-fusion-upload-criterion"
 
 data CmdArgs = CmdArgs
     { target     :: Maybe String -- TODO: This could perhaps be formatted better
@@ -373,14 +419,17 @@ doIt cmdArgs = do
           _                 -> Nothing
 
     manager <- newManager tlsManagerSettings
+    curDir  <- getCurrentDirectory
+
+    hfuc <- installHSBencherFusion manager curDir
 
     let targetStr     = targetSlug stackageTarget
         benchBuildDir = benchBuildDirPrefix </> targetStr
     createDirectoryIfMissing True benchBuildDir
 
     let cabalConfigFile = benchBuildDir </> "cabal" <.> "config"
-    exists <- doesFileExist cabalConfigFile
-    unless exists $ downloadStackageCabalConfig manager cabalConfigFile
+    unlessM (doesFileExist cabalConfigFile) $
+        downloadStackageCabalConfig manager cabalConfigFile
 
     cnf <- readFile cabalConfigFile
     let pkgIds = case simpleParse $!! cnf :: Maybe CabalConfig of
@@ -423,10 +472,10 @@ doIt cmdArgs = do
         putStrLn $ "Entering " ++ pkgBuildDir'
         let benchResPrefix = pkgResDir' </> pkgIdStr
             benchResLog    = benchResPrefix <.> "log"
-        mountDir <- getCurrentDirectory
+            mountDir       = curDir
         res <- withCurrentDirectory pkgBuildDir
                  $ runExceptT
-                 $ runBenchmarks (dockerfile cmdArgs) mountDir benchResPrefix
+                 $ runBenchmarks hfuc pkgIdStr (dockerfile cmdArgs) mountDir benchResPrefix
         case res of
              Left (cmd, c) -> do
                  let errMsg = "ERROR: " ++ cmd ++ " returned exit code " ++ show c
