@@ -177,7 +177,7 @@ withProgressYesNo :: String -> IO Bool -> IO Bool
 withProgressYesNo progressStr = withProgressFinish progressStr (bool "No" "Yes")
 
 httpRetry :: Request -> Manager -> IO (Response ByteString)
-httpRetry r = retry 10 . httpLbs r
+httpRetry r = retry 9999 . httpLbs r
 
 downloadStackageCabalConfig :: Manager -> FilePath -> IO ()
 downloadStackageCabalConfig m cabalConfigPath = do
