@@ -44,43 +44,41 @@ import           System.IO
 import           Text.Printf
 
 data CSVRow = CSVRow {
-     crName     ::                !String
-  ,  crMean     :: {-# UNPACK #-} !Double
-  , _crMeanLB   :: {-# UNPACK #-} !Double
-  , _crMeanUB   :: {-# UNPACK #-} !Double
-  , _crStddev   :: {-# UNPACK #-} !Double
-  , _crStddevLB :: {-# UNPACK #-} !Double
-  , _crStddevUB :: {-# UNPACK #-} !Double
+    crProgname :: !String
+  , crCPUTime  :: {-# UNPACK #-} !Double
+  , crRSqrTime :: {-# UNPACK #-} !Double
   } deriving (Eq, Generic, Ord, Read, Show)
 instance NFData CSVRow
 
 instance FromNamedRecord CSVRow where
-    parseNamedRecord r = CSVRow <$> r .: "Name"
-                                <*> r .: "Mean"
-                                <*> r .: "MeanLB"
-                                <*> r .: "MeanUB"
-                                <*> r .: "Stddev"
-                                <*> r .: "StddevLB"
-                                <*> r .: "StddevUB"
+    parseNamedRecord r = CSVRow <$> r .: "PROGNAME"
+                                <*> r .: "CPUTIME"
+                                <*> r .: "RSQR_TIME_FIT"
 
 data CritanalyzeDiff
   = CDFirst  !CSVRow
   | CDSecond !CSVRow
   | CDBoth                !String -- Name
-           {-# UNPACK #-} !Double -- Mean 1
-           {-# UNPACK #-} !Double -- Mean 2
-           {-# UNPACK #-} !Double -- Ratio of mean 2 to mean 1
+           {-# UNPACK #-} !Double -- CPU time 1
+           {-# UNPACK #-} !Double -- R^2 time 1
+           {-# UNPACK #-} !Double -- CPU time 2
+           {-# UNPACK #-} !Double -- R^2 time 2
+           {-# UNPACK #-} !Double -- Ratio of CPU time 2 to CPU time 1
   deriving (Eq, Generic, Ord, Read, Show)
 instance NFData CritanalyzeDiff
 
 diffToCritanalyzeDiff :: Diff CSVRow -> CritanalyzeDiff
 diffToCritanalyzeDiff (First  cr) = CDFirst  cr
 diffToCritanalyzeDiff (Second cr) = CDSecond cr
-diffToCritanalyzeDiff (Both CSVRow{crName = crn, crMean = crm1}
-                            CSVRow{crMean = crm2}) = CDBoth crn crm1 crm2 crmpc
+diffToCritanalyzeDiff (Both CSVRow{ crProgname = crpn
+                                  , crCPUTime  = crct1
+                                  , crRSqrTime = crrst1 }
+                            CSVRow{ crCPUTime  = crct2
+                                  , crRSqrTime = crrst2 })
+    = CDBoth crpn crct1 crrst1 crct2 crrst2 crmpc
   where
     crmpc :: Double
-    crmpc = crm2 / crm1
+    crmpc = crct2 / crct1
 
 data ReportBlock
   = RBFirst
@@ -107,9 +105,9 @@ rbRowNames :: ReportBlock -> Vector String
 rbRowNames (RBBoth _ rows) = fmap go rows
   where
     go :: CritanalyzeDiff -> String
-    go (CDFirst  cr)    = crName cr
-    go (CDSecond cr)    = crName cr
-    go (CDBoth n _ _ _) = n
+    go (CDFirst  cr)        = crProgname cr
+    go (CDSecond cr)        = crProgname cr
+    go (CDBoth n _ _ _ _ _) = n
 rbRowNames _ = mempty
 
 accrueCsvs :: FilePath -> IO [FilePath]
@@ -126,22 +124,12 @@ warnOrphanFiles :: FilePath -> [FilePath] -> IO ()
 warnOrphanFiles = warnOrphans "files" takeFileName
 
 warnOrphanRows :: FilePath -> [CSVRow] -> IO ()
-warnOrphanRows = warnOrphans "rows" crName
+warnOrphanRows = warnOrphans "rows" crProgname
 
 decodeCsv :: FilePath -> IO [CSVRow]
 decodeCsv fp = do
-    csvData <- BL.unpack <$> BL.readFile fp
-    -- HACK ALERT: Sometimes, criterion writes into its .csv files multiple
-    -- headers of the form:
-    --
-    --   Name,Mean,MeanLB,MeanUB,Stddev,StddevLB,StddevUB
-    --
-    -- cassava only checks for this once at the beginning, so if it pops up again
-    -- at a later point in the file, parsing will fail. To avoid this pitall, we
-    -- remove duplicate lines from the file. This should only nab lines that look
-    -- like the above, since every other row is preceded with a unique label.
-    let csvData' = BL.pack . unlines . nub . lines $ csvData
-    pure $ case decodeByName $!! csvData' of
+    csvData <- BL.readFile fp
+    pure $ case decodeByName $!! csvData of
          Left msg     -> error msg
          Right (_, v) -> toList $!! v
 
@@ -210,7 +198,7 @@ analyze dir1 dir2 = do
                 fp2' = dir2 </> fp2
             csvRows1 <- decodeCsv fp1'
             csvRows2 <- decodeCsv fp2'
-            let csvRowsDiff = getDiffBy ((==) `on` crName) csvRows1 csvRows2
+            let csvRowsDiff = getDiffBy ((==) `on` crProgname) csvRows1 csvRows2
                 (firstRows, _, secondRows) = partitionDiff csvRowsDiff
                 csvRowsCDiff = V.fromList $ map diffToCritanalyzeDiff csvRowsDiff
             warnOrphanRows fp1' firstRows
@@ -239,7 +227,7 @@ analyze dir1 dir2 = do
                             ++ '.':show percentDecimals ++ "f%%"
         percent pc = (pc - 1.0) * 100
 
-    putStrLn "Critanalyze results (mean)\n"
+    putStrLn "Critanalyze results (OLS CPU time)\n"
     putStrLn banner
     printf   fmtRBNameS benchName
     putStr   pad
@@ -268,12 +256,12 @@ analyze dir1 dir2 = do
             putStrLn pad
 
         printFirst, printSecond :: CSVRow -> IO ()
-        printFirst CSVRow{crName = r, crMean = m}
+        printFirst CSVRow{crProgname = r, crCPUTime = m}
             = printRow fmtRBNameS r
                        fmtColumnE m
                        fmtColumnS noResult
                        fmtChangeS noResult
-        printSecond CSVRow{crName = r, crMean = m}
+        printSecond CSVRow{crProgname = r, crCPUTime = m}
             = printRow fmtRBNameS r
                        fmtColumnS noResult
                        fmtColumnE m
@@ -299,7 +287,7 @@ analyze dir1 dir2 = do
             forM_ cdiffs $ \case
                 CDFirst  cr -> printFirst  cr
                 CDSecond cr -> printSecond cr
-                CDBoth r m1 m2 pc -> do
+                CDBoth r m1 _ m2 _ pc -> do
                     let f = roundToPlace (percent pc) 1
                     printRow fmtRBNameS r
                              fmtColumnE m1
@@ -307,7 +295,9 @@ analyze dir1 dir2 = do
                              (fmtChangeF f) f
 
     let ratios = [ pc | RBBoth _ cdiffs <- rb
-                      , CDBoth _ _ _ pc <- cdiffs ]
+                      , CDBoth _ _ rs1 _ rs2 pc <- cdiffs
+                      , rs1 >= 0.95 && rs2 >= 0.95
+                      ]
         minRatio     = minimum ratios
         maxRatio     = maximum ratios
 
