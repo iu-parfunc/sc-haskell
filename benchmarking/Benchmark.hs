@@ -97,7 +97,7 @@ import           Safe (atDef)
 import           System.Clock
 import           System.Directory.Extra
 import           System.Exit (ExitCode(..))
-import           System.FilePath ((</>), (<.>), takeFileName)
+import           System.FilePath ((</>), (<.>), takeFileName, takeDirectory)
 import           System.IO
 
 -----
@@ -177,7 +177,7 @@ withProgressYesNo :: String -> IO Bool -> IO Bool
 withProgressYesNo progressStr = withProgressFinish progressStr (bool "No" "Yes")
 
 httpRetry :: Request -> Manager -> IO (Response ByteString)
-httpRetry r = retry 1000 . httpLbs r
+httpRetry r = retry 10 . httpLbs r
 
 downloadStackageCabalConfig :: Manager -> FilePath -> IO ()
 downloadStackageCabalConfig m cabalConfigPath = do
@@ -215,9 +215,15 @@ getPkgsWithBenchmarks :: Manager
 getPkgsWithBenchmarks m benchBuildDir pkgIds = do
     -- let stackYamlFile = benchBuildDir </> "stack" <.> "yaml"
         -- TODO: Remove hack
-    let cacheFile     = benchBuildDir </> ".awful-hacky-cache"
+    let ts            = targetSlug stackageTarget
+        cacheFileName = ".cached-" ++ ts
+        cacheFile1    = (takeDirectory . takeDirectory) benchBuildDir </> cacheFileName
     -- TODO: Remove hack
-    exists <- doesFileExist cacheFile -- stackYamlFile
+    exists1 <- doesFileExist cacheFile1 -- stackYamlFile
+    let cacheFile = if exists1
+                      then cacheFile1
+                      else benchBuildDir </> cacheFileName
+    exists <- doesFileExist cacheFile
     if exists
        then do
          -- TODO: Remove hack
@@ -242,19 +248,22 @@ getPkgsWithBenchmarks m benchBuildDir pkgIds = do
                 else do
                   putStrLn $ pkgIdStr ++ " has benchmarks, they are:"
                   for_ benches $ \p -> putStrLn ('\t':fst p)
-
-                  let pkgBuildDir = benchBuildDir </> pkgIdStr
-                  dirExists <- withProgressYesNo ("Checking if " ++ pkgBuildDir ++ " exists") $
-                      doesDirectoryExist pkgBuildDir
-                  unless dirExists $
-                      extractPkgTarball m benchBuildDir pkgIdStr
-
                   pure (Just pkgIdStr)
 
          -- TODO: Remove hack
          writeCacheFile cacheFile pkgIdStrs
          -- writeStackDotYaml stackYamlFile pkgIdStrs
          pure pkgIdStrs
+
+downloadPkgTarballs :: Manager
+                    -> FilePath
+                    -> [String]
+                    -> IO ()
+downloadPkgTarballs m benchBuildDir pkgIdStrs = for_ pkgIdStrs $ \pkgIdStr -> do
+    let pkgBuildDir = benchBuildDir </> pkgIdStr
+    dirExists <- withProgressYesNo ("Checking if " ++ pkgBuildDir ++ " exists") $
+        doesDirectoryExist pkgBuildDir
+    unless dirExists $ extractPkgTarball m benchBuildDir pkgIdStr
 
 writeStackDotYaml :: Maybe String
                   -> FilePath
@@ -451,6 +460,8 @@ doIt cmdArgs = do
                               chunks    = chunksOf chunkSize pkgIdStrs'
                           in atDef [] chunks (s-1)
           Nothing -> pkgIdStrs'
+
+    downloadPkgTarballs manager benchBuildDir pkgIdStrs
 
     let numPkgsStr  = show $ length pkgIdStrs
         numPkgsStr' = show numPkgs'
