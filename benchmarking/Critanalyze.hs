@@ -11,6 +11,8 @@
     --package directory
     --package filepath
     --package vector
+    --package vector-algorithms
+    --package witherable
 -}
 
 {-# LANGUAGE DeriveGeneric #-}
@@ -22,16 +24,20 @@ module Main (main) where
 
 import           Control.DeepSeq
 import           Control.Monad
+import           Control.Monad.ST (runST)
 
 import           Data.Algorithm.Diff
 import qualified Data.ByteString.Lazy.Char8 as BL
 import           Data.Csv
 import           Data.Foldable (Foldable(..))
 import           Data.Function
-import           Data.List (nub, sortOn)
+import           Data.List (sortOn)
 import           Data.Monoid ((<>))
+import           Data.Ord (comparing)
 import qualified Data.Vector as V
 import           Data.Vector (Vector)
+import qualified Data.Vector.Algorithms.Merge as VM (sortBy)
+import           Data.Witherable (Witherable(mapMaybe))
 
 import           GHC.Generics
 
@@ -109,6 +115,27 @@ rbRowNames (RBBoth _ rows) = fmap go rows
     go (CDSecond cr)        = crProgname cr
     go (CDBoth n _ _ _ _ _) = n
 rbRowNames _ = mempty
+
+sortRowBlocks :: Vector ReportBlock -> Vector CritanalyzeDiff
+sortRowBlocks v = fmap (\(a,b,c,d,e,f) -> CDBoth a b c d e f) $ runST $ do
+    v' <- V.unsafeThaw $ V.concatMap onlyBoth v
+    VM.sortBy (comparing sxth) v'
+    V.unsafeFreeze v'
+  where
+    sxth :: (a, b, c, d, e, f) -> f
+    sxth (_, _, _, _, _, f) = f
+
+    onlyBoth :: ReportBlock -> Vector (String, Double, Double, Double, Double, Double)
+    onlyBoth (RBBoth n rows) = mapMaybe onlyBoth' rows
+          {- fmap (\(a,b,c,d,e,f) -> CDBoth a b c d e f) $ runST $ do
+        v <- V.unsafeThaw $ mapMaybe onlyBoth rows
+        VM.sortBy (comparing sxth) v
+        V.unsafeFreeze v -}
+      where
+        onlyBoth' :: CritanalyzeDiff -> Maybe (String, Double, Double, Double, Double, Double)
+        onlyBoth' (CDBoth n' d1 d2 d3 d4 d5) = Just (n </> n', d1, d2, d3, d4, d5)
+        onlyBoth' _                          = Nothing
+    onlyBoth _ = mempty
 
 accrueCsvs :: FilePath -> IO [FilePath]
 accrueCsvs fp = sortOn takeFileName . filter ((== ".csv") . takeExtension) <$> getDirectoryContentsRecursive fp
