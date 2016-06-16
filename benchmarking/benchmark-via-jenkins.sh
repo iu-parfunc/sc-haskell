@@ -16,7 +16,7 @@ else
 fi
 
 WORK_DIR=`pwd`
-TMP_WORK_DIR=`mktemp -d /tmp/workdirXXXXXXXXXX`
+TMP_WORK_DIR=`mktemp -d /home.local/docker/docker/workdirXXXXXXXXXX`
 RESULTS_DIR=${HOME}/results_backup/benchmark_stackage/jenkins-build-${BUILD_NUMBER}/${DOCKER_IMAGE}/label=${NODE_NAME}/NODE_NUMBER=${NODE_NUMBER}
 
 # /opt/modules/Modules/3.2.10/bin/modulecmd bash add llvm
