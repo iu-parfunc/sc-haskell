@@ -283,16 +283,24 @@ analyze dir1 dir2 = do
             putStrLn pad
 
         printFirst, printSecond :: CSVRow -> IO ()
-        printFirst CSVRow{crProgname = r, crCPUTime = m}
-            = printRow fmtRBNameS r
-                       fmtColumnE m
-                       fmtColumnS noResult
-                       fmtChangeS noResult
-        printSecond CSVRow{crProgname = r, crCPUTime = m}
-            = printRow fmtRBNameS r
-                       fmtColumnS noResult
-                       fmtColumnE m
-                       fmtChangeS noResult
+        printFirst (CSVRow { crProgname = r
+                           , crCPUTime = m
+                           , crRSqrTime = rsq
+                           })
+            = when (rsq >= rSqrThresh) $
+                printRow fmtRBNameS r
+                         fmtColumnE m
+                         fmtColumnS noResult
+                         fmtChangeS noResult
+        printSecond (CSVRow { crProgname = r
+                            , crCPUTime = m
+                            , crRSqrTime = rsq
+                            })
+            = when (rsq >= rSqrThresh) $
+                printRow fmtRBNameS r
+                         fmtColumnS noResult
+                         fmtColumnE m
+                         fmtChangeS noResult
 
         printSummary :: String -> Double -> IO ()
         printSummary n pc =
@@ -314,7 +322,8 @@ analyze dir1 dir2 = do
             forM_ cdiffs $ \case
                 CDFirst  cr -> printFirst  cr
                 CDSecond cr -> printSecond cr
-                CDBoth r m1 _ m2 _ pc -> do
+                CDBoth r m1 rs1 m2 rs2 pc ->
+                  when (rs1 >= rSqrThresh && rs2 >= rSqrThresh) $ do
                     let f = roundToPlace (percent pc) 1
                     printRow fmtRBNameS r
                              fmtColumnE m1
@@ -323,7 +332,7 @@ analyze dir1 dir2 = do
 
     let ratios = [ pc | RBBoth _ cdiffs <- rb
                       , CDBoth _ _ rs1 _ rs2 pc <- cdiffs
-                      , rs1 >= 0.95 && rs2 >= 0.95
+                      , rs1 >= rSqrThresh && rs2 >= rSqrThresh
                       ]
         minRatio     = minimum ratios
         maxRatio     = maximum ratios
@@ -344,6 +353,9 @@ analyze dir1 dir2 = do
     printSummary "-1 s.d."        (geoMean / sdf)
     printSummary "+1 s.d."        (geoMean * sdf)
     printSummary "Geometric mean" geoMean
+
+rSqrThresh :: Double
+rSqrThresh = 0.95
 
 main :: IO ()
 main = do
