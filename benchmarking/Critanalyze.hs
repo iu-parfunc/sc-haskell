@@ -266,7 +266,29 @@ analyze dir1 dir2 = do
     putStrLn pad
     putStrLn banner
 
-    let printRow :: (PrintfArg r, PrintfArg m1, PrintfArg m2, PrintfArg pc)
+    let ratios = [ pc | RBBoth _ cdiffs <- rb
+                      , CDBoth _ _ rs1 _ rs2 pc <- cdiffs
+                      , rs1 >= rSqrThresh && rs2 >= rSqrThresh
+                      ]
+        minRatio  = minimum ratios
+        maxRatio  = maximum ratios
+        -- Adapted from nofib-analyse
+        sqr x     = x * x
+        numRatios = fromIntegral (length ratios)
+        logs      = fmap log ratios
+        lbar      = sum logs / numRatios
+        st_devs   = fmap (sqr . (lbar-)) logs
+        dbar      = sum st_devs / numRatios
+        geoMean   = exp lbar
+        sdf       = exp (sqrt dbar)
+        m3StdDev  = geoMean / (sdf^3)
+        m2StdDev  = geoMean / (sdf^2)
+        m1StdDev  = geoMean /  sdf
+        p1StdDev  = geoMean *  sdf
+        p2StdDev  = geoMean * (sdf^2)
+        p3StdDev  = geoMean * (sdf^3)
+
+        printRow :: (PrintfArg r, PrintfArg m1, PrintfArg m2, PrintfArg pc)
                  => String -> r
                  -> String -> m1
                  -> String -> m2
@@ -330,28 +352,15 @@ analyze dir1 dir2 = do
                              fmtColumnE m2
                              (fmtChangeF f) f
 
-    let ratios = [ pc | RBBoth _ cdiffs <- rb
-                      , CDBoth _ _ rs1 _ rs2 pc <- cdiffs
-                      , rs1 >= rSqrThresh && rs2 >= rSqrThresh
-                      ]
-        minRatio     = minimum ratios
-        maxRatio     = maximum ratios
-
-        -- Adapted from nofib-analyse
-        sqr x     = x * x
-        numRatios = fromIntegral (length ratios)
-        logs      = fmap log ratios
-        lbar      = sum logs / numRatios
-        st_devs   = fmap (sqr . (lbar-)) logs
-        dbar      = sum st_devs / numRatios
-        geoMean   = exp lbar
-        sdf       = exp (sqrt dbar)
-
     putStrLn banner
     printSummary "Min"            minRatio
     printSummary "Max"            maxRatio
-    printSummary "-1 s.d."        (geoMean / sdf)
-    printSummary "+1 s.d."        (geoMean * sdf)
+    printSummary "-3 s.d."        m3StdDev
+    printSummary "-2 s.d."        m2StdDev
+    printSummary "-1 s.d."        m1StdDev
+    printSummary "+1 s.d."        p1StdDev
+    printSummary "+2 s.d."        p2StdDev
+    printSummary "+3 s.d."        p3StdDev
     printSummary "Geometric mean" geoMean
 
 rSqrThresh :: Double
