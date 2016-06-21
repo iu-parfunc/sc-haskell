@@ -10,5 +10,8 @@ RUN wget https://raw.githubusercontent.com/iu-parfunc/sc-haskell/bf2559bc0d4fd62
 
 WORKDIR /
 
-ENTRYPOINT ln -fs /root/lorem-ipsum.txt /dev/urandom && \
-            faketime -f '2008-12-24 08:15:42' bash
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/bin/bash"]
