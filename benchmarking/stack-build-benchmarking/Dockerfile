@@ -1,17 +1,13 @@
 FROM fpco/stack-build:lts-5.16
 MAINTAINER Ryan Scott
 
-WORKDIR /root
-
 RUN apt-get update && apt-get install -y \
      faketime
 
-RUN wget https://raw.githubusercontent.com/iu-parfunc/sc-haskell/bf2559bc0d4fd628ba3e05fb91ca25d8788fdba3/benchmarking/lorem-ipsum.txt
+ADD lorem-ipsum.txt /root/lorem-ipsum.txt
 
-WORKDIR /
+ADD entrypoint.sh /root/entrypoint.sh
+RUN chmod +x /root/entrypoint.sh
 
-ADD entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/root/entrypoint.sh"]
 CMD ["/bin/bash"]
