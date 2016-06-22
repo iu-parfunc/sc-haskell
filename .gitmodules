@@ -1,0 +1,3 @@
+[submodule "stackage-bench-hacks"]
+	path = benchmarking/stackage-bench-hacks
+	url = git@github.com:iu-parfunc/stackage-bench-hacks.git
