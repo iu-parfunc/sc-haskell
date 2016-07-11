@@ -64,3 +64,9 @@ extra-package-dbs: []
 # 
 # Allow a newer minor version of GHC than the snapshot specifies
 # compiler-check: newer-minor
+
+docker:
+  enable: true
+#  image: parfunc/sc-haskell:v0.3
+  image: fpco/stack-build:lts-5.16
+
