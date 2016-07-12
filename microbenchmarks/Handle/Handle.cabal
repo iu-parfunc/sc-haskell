@@ -20,7 +20,7 @@ cabal-version:       >=1.10
 executable Handle-useless 
   main-is:             Main.hs
   build-depends:       base >=4.8,
-                       criterion,
+                       criterion, directory,
                        knob,
                        bytestring,
                        unix
@@ -30,7 +30,7 @@ benchmark Handle
   main-is:             Main.hs
   type: exitcode-stdio-1.0
   build-depends:       base >=4.8,
-                       criterion,
+                       criterion, directory,
                        knob,
                        bytestring,
                        unix
