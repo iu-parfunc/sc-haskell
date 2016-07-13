@@ -49,10 +49,10 @@ main = do
   (f,h) <- mkstemp "/tmp/test.txt"
   -- hClose h
   defaultMain
-   [ bench "in-mem put-N get-N lines"    $ Benchmarkable (void . test01 . fromIntegral)
-   , bench "from-disk put-N get-N lines" $ Benchmarkable (       test02 h . fromIntegral)
-   , bench "in-mem put-1000 get-1000"    $ whnfIO $ void $ test01 1000
-   , bench "from-disk put-1000 get-1000" $ whnfIO $ test02 h 1000
+   [ bench "in-mem/put-N_get-N_lines"    $ Benchmarkable (void . test01 . fromIntegral)
+   , bench "from-disk/put-N_get-N_lines" $ Benchmarkable (       test02 h . fromIntegral)
+   , bench "in-mem/put-1000_get-1000"    $ whnfIO $ void $ test01 1000
+   , bench "from-disk/put-1000_get-1000" $ whnfIO $ test02 h 1000
    ]
   I.putStrLn $ "Removing temp file: "++ f
   removeFile f
