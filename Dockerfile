@@ -20,7 +20,10 @@ WORKDIR /root/ghc
 # wip/sc-ghc-7.10 branch:
 # ENV SUBMOD_SHA 2e98e616dc217b92dd19eeb1f781271e440aad5a
 # same branch, update version to 7.10.4, sc-haskell release v0.4:
-ENV SUBMOD_SHA 71694066e532731c04a4a37e56b7590f555a01e8
+# ENV SUBMOD_SHA 71694066e532731c04a4a37e56b7590f555a01e8
+
+# v0.4-opt, with the Handle barrier elision:
+ENV SUBMOD_SHA 012e9df498d87cfd1134948348378a56c7020eae
 
 ENV GHC_PREFIX /opt/ghc
 
