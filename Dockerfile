@@ -17,10 +17,10 @@ RUN git clone --quiet --recursive git://git.haskell.org/ghc.git
 
 WORKDIR /root/ghc
 
-# wip/sc-ghc-7.10 branch:
-# ENV SUBMOD_SHA 2e98e616dc217b92dd19eeb1f781271e440aad5a
+# wip/sc-ghc-7.10-dbg branch:
+# ENV SUBMOD_SHA 7bc4fd6c3346914bc5c2c16f4f86e519acf5c2e5
 # same branch, update version to 7.10.4, sc-haskell release v0.4:
-ENV SUBMOD_SHA 71694066e532731c04a4a37e56b7590f555a01e8
+ENV SUBMOD_SHA 7bc4fd6c3346914bc5c2c16f4f86e519acf5c2e5
 
 ENV GHC_PREFIX /opt/ghc
 
