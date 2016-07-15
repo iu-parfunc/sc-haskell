@@ -272,6 +272,9 @@ writeStackDotYaml :: Maybe String
                   -> IO ()
 writeStackDotYaml dockerfile mountDir fileLoc _pkgIdStrs =
     let -- packages = "packages" .= map ("." </>) pkgIdStrs
+
+        skipGhcCheck = "skip-ghc-check" .= True
+
         ts       = targetSlug stackageTarget
         resolver = "resolver" .= ts
         packages = "packages" .= array
@@ -292,7 +295,7 @@ writeStackDotYaml dockerfile mountDir fileLoc _pkgIdStrs =
                      , "set-user"  .= True
                      , "mount"     .= [mountDir]
                      ]
-        yaml = object [resolver, docker, packages, extraDeps]
+        yaml = object [resolver, docker, packages, extraDeps, skipGhcCheck]
     in encodeFile fileLoc yaml
 
 -- TODO: This is a temporary hack. Remove when Stackage vets benchmarks.
