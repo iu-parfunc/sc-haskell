@@ -364,6 +364,7 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
         [ "--ghc-options='-rtsopts -eventlog'"
         , "--benchmark-arguments='" ++ unwords
             [ "+RTS", "-T", "-lu-s-g-p", "-RTS"
+            {-
             , "--output="  ++ benchResPrefix <.> "html"
             -- , "--csv="     ++ benchResPrefix <.> "csv"
             -- , "--raw="     ++ benchResPrefix <.> "crit"
@@ -375,8 +376,8 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
             , "--regress=" ++ "mutatorWallSeconds:iters"
             , "--regress=" ++ "gcWallSeconds:iters"
             , "--regress=" ++ "cpuTime:iters"
-
-            , "--iters", "1"
+            -}
+            , "--iters=1"
             -- Try to run for longer to reduce noise
             -- , "-L", "20"
             ] ++ "'"
