@@ -382,6 +382,7 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
             -- , "-L", "20"
             ] ++ "'"
         ]
+{-
     let resolver = targetSlug stackageTarget
         pkgId  = case simpleParse pkgIdStr of
                       Just p  -> p
@@ -396,6 +397,7 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
                 , "--json"
                 , benchResPrefix <.> "json"
                 ]
+-}
 
 installHSBencherFusion :: Manager -> FilePath -> IO FilePath
 installHSBencherFusion m unpkDir = do
