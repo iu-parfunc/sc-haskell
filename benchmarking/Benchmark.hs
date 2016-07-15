@@ -376,7 +376,7 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
             , "--regress=" ++ "gcWallSeconds:iters"
             , "--regress=" ++ "cpuTime:iters"
 
-            , "--iters=1"
+            , "--iters", "1"
             -- Try to run for longer to reduce noise
             -- , "-L", "20"
             ] ++ "'"
