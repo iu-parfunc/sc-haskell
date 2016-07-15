@@ -382,6 +382,10 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
             -- , "-L", "20"
             ] ++ "'"
         ]
+
+    invoke "mkdir" ["-p", benchResPrefix]
+    invoke "cp" ["*.eventlog", benchResPrefix]
+
 {-
     let resolver = targetSlug stackageTarget
         pkgId  = case simpleParse pkgIdStr of
