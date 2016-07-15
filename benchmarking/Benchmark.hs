@@ -347,7 +347,7 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
     let stackYamlFile                  = "hacky-stack" <.> "yaml"
         teeFile                        = benchResPrefix <.> "log"
         invokeWithYamlFile subcmd args = invokeTee teeFile "stack" $ subcmd:["--stack-yaml", stackYamlFile] ++ args
-        reportFiles = map (benchResPrefix <.>) ["html", "csv", "crit", "json"]
+        reportFiles = map (benchResPrefix <.>) ["html", "csv", "crit", "json", "eventlog"]
     liftIO $ do
         writeStackDotYaml dockerfile mountDir stackYamlFile []
         for_ reportFiles $ \f -> do
@@ -358,9 +358,9 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
     invokeWithYamlFile "bench" ["--only-dependencies"]
     -- TODO: Timeout after, say, 10 minutes of inactivity
     invokeWithYamlFile "bench"
-        [ "--ghc-options=-rtsopts"
+        [ "--ghc-options='-rtsopts -eventlog'"
         , "--benchmark-arguments='" ++ unwords
-            [ "+RTS", "-T", "-RTS"
+            [ "+RTS", "-T", "-lu-s-g-p", "-RTS"
             , "--output="  ++ benchResPrefix <.> "html"
             -- , "--csv="     ++ benchResPrefix <.> "csv"
             -- , "--raw="     ++ benchResPrefix <.> "crit"
@@ -372,8 +372,10 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
             , "--regress=" ++ "mutatorWallSeconds:iters"
             , "--regress=" ++ "gcWallSeconds:iters"
             , "--regress=" ++ "cpuTime:iters"
+
+            , "--iters=1"
             -- Try to run for longer to reduce noise
-            , "-L", "20"
+            -- , "-L", "20"
             ] ++ "'"
         ]
     let resolver = targetSlug stackageTarget
