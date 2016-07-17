@@ -18,7 +18,8 @@ RUN git clone --quiet --recursive git://git.haskell.org/ghc.git
 WORKDIR /root/ghc
 
 # wip/sc-ghc-7.10-no-opt-dbg branch:
-ENV SUBMOD_SHA 871e125242527138deb40a4b087cd1307ff7f512
+# [2016.07.16] Second attempt 0cbec5f521820bd8c88719055c28b0ee88a0439b
+ENV SUBMOD_SHA 0cbec5f521820bd8c88719055c28b0ee88a0439b
 
 ENV GHC_PREFIX /opt/ghc
 
