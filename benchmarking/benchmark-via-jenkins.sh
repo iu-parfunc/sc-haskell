@@ -16,7 +16,12 @@ else
 fi
 
 WORK_DIR=`pwd`
-DOCKER_DIR=/home.local/docker/docker
+
+# For swarm only, right now
+# DOCKER_DIR=/home.local/docker/docker
+
+DOCKER_DIR=/tmp
+
 TMP_WORK_DIR=`mktemp -d ${DOCKER_DIR}/workdirXXXXXXXXXX`
 RESULTS_DIR=${HOME}/results_backup/benchmark_stackage/jenkins-build-${BUILD_NUMBER}/${DOCKER_IMAGE}/label=${NODE_NAME}/NODE_NUMBER=${NODE_NUMBER}
 
