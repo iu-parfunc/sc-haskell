@@ -1,3 +1,6 @@
 [submodule "stackage-bench-hacks"]
 	path = benchmarking/stackage-bench-hacks
 	url = git@github.com:iu-parfunc/stackage-bench-hacks.git
+[submodule "microbenchmarks/isoref-sketch"]
+	path = microbenchmarks/isoref-sketch
+	url = git@github.com:iu-parfunc/isoref-sketch.git
