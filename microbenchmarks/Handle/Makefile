@@ -1,9 +1,24 @@
 
+all: report_sc-v0.4.html report_sc-v0.4-dbg.html report_sc-v0.4-opt.html report_sc-v0.4-opt-dbg.html report_stock.html
 
-all: report_sc.html report_stock.html
+report_sc-v0.4.html:
+	stack docker pull --docker-image=parfunc/sc-haskell:v0.4
+	stack --docker --docker-image=parfunc/sc-haskell:v0.4 bench --benchmark-arguments="-o $@ --csv report_sc-v0.4.csv"
 
-report_sc.html:
-	stack --docker --docker-image=parfunc/sc-haskell:v0.3 bench --benchmark-arguments="-o report_sc.html"
+report_sc-v0.4-dbg.html:
+	stack docker pull --docker-image=parfunc/sc-haskell:v0.4-dbg
+	stack --docker --docker-image=parfunc/sc-haskell:v0.4-dbg bench --benchmark-arguments="-o $@ --csv report_sc-v0.4-dbg.csv"
+	mv Handle.eventlog Handle_sc-v0.4-dbg.eventlog
+
+report_sc-v0.4-opt.html:
+	stack docker pull --docker-image=parfunc/sc-haskell:v0.4-opt
+	stack --docker --docker-image=parfunc/sc-haskell:v0.4-opt bench --benchmark-arguments="-o $@ --csv report_sc-v0.4-opt.csv"
+
+report_sc-v0.4-opt-dbg.html:
+	stack docker pull --docker-image=parfunc/sc-haskell:v0.4-opt-dbg
+	stack --docker --docker-image=parfunc/sc-haskell:v0.4-opt-dbg bench --benchmark-arguments="-o $@ --csv report_sc-v0.4-opt-dbg.csv"
+	mv Handle.eventlog Handle_sc-v0.4-opt-dbg.eventlog
 
 report_stock.html:
-	stack --docker --docker-image=fpco/stack-build:lts-5.16 bench --benchmark-arguments="-o report_stock.html"
+	stack docker pull --docker-image=fpco/stack-build:lts-5.16
+	stack --docker --docker-image=fpco/stack-build:lts-5.16 bench --benchmark-arguments="-o $@ --csv report_stock.csv"
