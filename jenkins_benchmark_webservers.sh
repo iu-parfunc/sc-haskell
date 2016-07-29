@@ -4,8 +4,7 @@
 
 set -xe
 
-rm -rf ./FrameworkBenchmarks
-git clone --recursive git@github.com:iu-parfunc/FrameworkBenchmarks
+git clone git@github.com:iu-parfunc/FrameworkBenchmarks || echo ok
 cd ./FrameworkBenchmarks
 
 COMMIT=`git rev-parse --verify HEAD`
