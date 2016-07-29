@@ -16,6 +16,7 @@
 #  name: custom-snapshot
 #  location: "./custom-snapshot.yaml"
 resolver: lts-5.16
+# resolver: ghc-7.10.4
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -48,7 +49,8 @@ flags: {}
 extra-package-dbs: []
 
 # Control whether we use the GHC we find on the path
-system-ghc: false
+system-ghc: true
+install-ghc: false
 # 
 # Require a specific version of stack, using version ranges
 # require-stack-version: -any # Default
@@ -65,10 +67,12 @@ system-ghc: false
 # Allow a newer minor version of GHC than the snapshot specifies
 compiler: ghc-7.10.4
 compiler-check: match-exact
+# compiler-check: newer-minor
 
 # This is turned on in the Makefile:
 docker:
   enable: false
-  image: parfunc/sc-haskell:v0.3
+  image: parfunc/sc-haskell:v0.5
+#  image: parfunc/sc-haskell:v0.3
 #  image: fpco/stack-build:lts-5.16
 
