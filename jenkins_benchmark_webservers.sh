@@ -23,7 +23,8 @@ vagrant ssh -- "cd FrameworkBenchmarks; git remote add fork git@github.com:iu-pa
 vagrant ssh -- "cd FrameworkBenchmarks; git checkout $COMMIT"
 vagrant ssh -- "cd FrameworkBenchmarks; git clean -fxd"
 
-vagrant ssh -- "cd FrameworkBenchmarks; time toolset/run-tests.py --mode benchmark --test snap"
+# vagrant ssh -- "cd FrameworkBenchmarks; time toolset/run-tests.py --mode benchmark --test snap"
+echo "cd FrameworkBenchmarks; time toolset/run-tests.py --mode benchmark --test snap" | vagrant ssh 
 vagrant ssh -- cp -a FrameworkBenchmarks/results /vagrant/$DEST/
 
 DESTDIR="$HOME/results_backup/"
