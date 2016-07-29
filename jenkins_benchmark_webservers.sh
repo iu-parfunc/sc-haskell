@@ -10,22 +10,25 @@ cd ./FrameworkBenchmarks
 COMMIT=`git rev-parse --verify HEAD`
 
 DEST=`hostname -s`_`date "+%s"`
-
-# [crest-team@c-swarm ~/local/FrameworkBenchmarks/deployment/vagrant-production] (sc-v0.4)
-# $ vagrant ssh -- "cd FrameworkBenchmarks; ./test"
+mkdir -p ./$DEST/
 
 cd deployment/vagrant-production
 vagrant up
 
+tests=" wai yesod spock snap "
 
 vagrant ssh -- "cd FrameworkBenchmarks; git remote add fork git@github.com:iu-parfunc/FrameworkBenchmarks" || echo ok
 
 vagrant ssh -- "cd FrameworkBenchmarks; git checkout $COMMIT"
 vagrant ssh -- "cd FrameworkBenchmarks; git clean -fxd"
 
-# vagrant ssh -- "cd FrameworkBenchmarks; time toolset/run-tests.py --mode benchmark --test snap"
-echo "cd FrameworkBenchmarks; time toolset/run-tests.py --mode benchmark --test snap" | vagrant ssh 
-vagrant ssh -- cp -a FrameworkBenchmarks/results /vagrant/$DEST/
+for test in $tests; do 
+  vagrant ssh -- rm -rf FrameworkBenchmarks/results
+
+  # vagrant ssh -- "cd FrameworkBenchmarks; time toolset/run-tests.py --mode benchmark --test snap"
+  echo "cd FrameworkBenchmarks; time toolset/run-tests.py --mode benchmark --test $test" | vagrant ssh
+  vagrant ssh -- cp -a FrameworkBenchmarks/results /vagrant/$DEST/$test/
+done
 
 DESTDIR="$HOME/results_backup/TechEmpower/"
 
