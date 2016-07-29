@@ -70,9 +70,9 @@ compiler-check: match-exact
 # compiler-check: newer-minor
 
 # This is turned on in the Makefile:
-docker:
-  enable: false
-  image: parfunc/sc-haskell:v0.5
+#docker:
+#  enable: false
+#  image: parfunc/sc-haskell:v0.5
 #  image: parfunc/sc-haskell:v0.3
 #  image: fpco/stack-build:lts-5.16
 
