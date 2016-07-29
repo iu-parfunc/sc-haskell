@@ -26,3 +26,6 @@ report_sc-v0.4-opt-dbg.html:
 report_stock.html:
 	stack docker pull --docker-image=fpco/stack-build:lts-5.16
 	stack --docker --docker-image=fpco/stack-build:lts-5.16 bench --benchmark-arguments="-o $@ --csv report_stock.csv"
+
+distclean:
+	rm -f report*.html report*.csv
