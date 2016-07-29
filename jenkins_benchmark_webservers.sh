@@ -27,7 +27,7 @@ vagrant ssh -- "cd FrameworkBenchmarks; git clean -fxd"
 echo "cd FrameworkBenchmarks; time toolset/run-tests.py --mode benchmark --test snap" | vagrant ssh 
 vagrant ssh -- cp -a FrameworkBenchmarks/results /vagrant/$DEST/
 
-DESTDIR="$HOME/results_backup/"
+DESTDIR="$HOME/results_backup/TechEmpower/"
 
 if ! [ -e $DESTDIR ]; then
     mkdir -p $DESTDIR
