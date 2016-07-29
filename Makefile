@@ -6,12 +6,13 @@ NAME2= parfunc/sc-haskell:$(VER)-dbg
 NAME3= parfunc/sc-haskell:$(VER)-opt
 NAME4= parfunc/sc-haskell:$(VER)-opt-dbg
 
+dockall: dock1 dock2 dock3 dock4
+pushall: push1 push2 push3 push4
+
 # Build four different docker images
 # ================================================================================
 
-# docker: dock1 dock2
-
-dockerfiles: Dockerfile Dockerfile_dbg
+dockerfiles: Dockerfile Dockerfile_dbg Dockerfile_opt Dockerfile_opt_dbg
 
 # * wip/sc-ghc-7.10 branch: 2e98e616dc217b92dd19eeb1f781271e440aad5a
 # * same branch, update version to 7.10.4, sc-haskell release v0.4:
@@ -57,8 +58,6 @@ dock3: Dockerfile_opt
 dock3: Dockerfile_opt_dbg
 	docker build -t $(NAME4) -f Dockerfile_opt_dbg .
 	docker run -it $(NAME4) /usr/bin/ghc --version
-
-# push: push1 push2
 
 push1:
 	docker push $(NAME1)
