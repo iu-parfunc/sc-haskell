@@ -17,10 +17,10 @@ dockerfiles: Dockerfile Dockerfile_dbg
 # * same branch, update version to 7.10.4, sc-haskell release v0.4:
 #    0.4 at 71694066e532731c04a4a37e56b7590f555a01e8 was actually broken,
 #    because it was really "-opt".  I.e. it lacked the Handle barriers.
-# * Update to 0.5:
+# * Update to 0.5: af0814d28605f91139fde71ed1db1a1f03aae582
+#   - To do so, kick (just) Handle out of the trusted codebase, make it use fences.
 Dockerfile:
-#	sed 's/REPLACE_ME_WITH_SHA//' Dockerfile.in > $@
-
+	sed 's/REPLACE_ME_WITH_SHA/af0814d28605f91139fde71ed1db1a1f03aae582/' Dockerfile.in > $@
 
 # wip/sc-ghc-7.10-no-opt-dbg branch:
 # [2016.07.16] Second attempt 0cbec5f521820bd8c88719055c28b0ee88a0439b
