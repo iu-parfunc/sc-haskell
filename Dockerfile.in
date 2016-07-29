@@ -34,7 +34,7 @@ RUN git remote add fork https://github.com/iu-parfunc/ghc.git && \
     mkdir -p ${GHC_PREFIX} && \
     cp mk/build.mk.sample mk/build.mk && \
     ./boot && ./configure --quiet --prefix ${GHC_PREFIX} && \
-    make -j2 && make install && \
+    make -j && make install && \
     rm -rf /root/ghc
 
 # Nuke the original copy of GHC 7.10 to avoid confusion:
