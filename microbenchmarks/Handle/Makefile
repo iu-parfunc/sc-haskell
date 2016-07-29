@@ -24,8 +24,9 @@ report_sc-v0.4-opt-dbg.html:
 	mv Handle.eventlog Handle_sc-v0.4-opt-dbg.eventlog
 
 report_stock.html:
-	stack docker pull --docker-image=fpco/stack-build:lts-5.16
-	stack --docker --docker-image=fpco/stack-build:lts-5.16 bench --benchmark-arguments="-o $@ --csv report_stock.csv"
+#	stack docker pull --docker-image=fpco/stack-build:lts-5.16
+	docker run -it fpco/stack-build:lts-5.16 ghc --version
+	stack --compiler=ghc-7.10.3 --docker --docker-image=fpco/stack-build:lts-5.16 bench --benchmark-arguments="-o $@ --csv report_stock.csv"
 
 distclean:
 	rm -f report*.html report*.csv
