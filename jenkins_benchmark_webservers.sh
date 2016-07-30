@@ -4,6 +4,8 @@
 
 set -xe
 
+ITERS=10
+
 git clone git@github.com:iu-parfunc/FrameworkBenchmarks || echo ok
 cd ./FrameworkBenchmarks
 
@@ -19,15 +21,17 @@ tests=" wai yesod spock snap "
 vagrant ssh -- "cd FrameworkBenchmarks; git remote add fork git@github.com:iu-parfunc/FrameworkBenchmarks" || echo ok
 
 vagrant ssh -- "cd FrameworkBenchmarks; git checkout $COMMIT"
-vagrant ssh -- "cd FrameworkBenchmarks; git clean -fxd"
+vagrant ssh -- "cd FrameworkBenchmarks; sudo git clean -fxd"
 
+for ((i=0; i < $ITERS; i++)); do 
+echo "Running iteration $i"
 for test in $tests; do 
   vagrant ssh -- rm -rf FrameworkBenchmarks/results
   mkdir -p ./$DEST/$test
 
-  # vagrant ssh -- "cd FrameworkBenchmarks; time toolset/run-tests.py --mode benchmark --test snap"
   echo "cd FrameworkBenchmarks; time toolset/run-tests.py --mode benchmark --test $test" | vagrant ssh
   vagrant ssh -- cp -a FrameworkBenchmarks/results /vagrant/$DEST/$test/
+done
 done
 
 DESTDIR="$HOME/results_backup/TechEmpower/"
