@@ -10,7 +10,6 @@ cd ./FrameworkBenchmarks
 COMMIT=`git rev-parse --verify HEAD`
 
 DEST=`hostname -s`_`date "+%s"`
-mkdir -p ./$DEST/
 
 cd deployment/vagrant-production
 vagrant up
@@ -24,6 +23,7 @@ vagrant ssh -- "cd FrameworkBenchmarks; git clean -fxd"
 
 for test in $tests; do 
   vagrant ssh -- rm -rf FrameworkBenchmarks/results
+  mkdir -p ./$DEST/$test
 
   # vagrant ssh -- "cd FrameworkBenchmarks; time toolset/run-tests.py --mode benchmark --test snap"
   echo "cd FrameworkBenchmarks; time toolset/run-tests.py --mode benchmark --test $test" | vagrant ssh
