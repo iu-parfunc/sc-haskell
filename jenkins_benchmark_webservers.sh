@@ -27,11 +27,15 @@ mkdir -p $HOME/local/.vagrant.d
 
 DEST=`hostname -s`_`date "+%s"`
 
+git checkout $COMMIT
 cd deployment/vagrant-production
 vagrant up
 
 tests=" wai yesod spock snap "
 
+# HACK: We haven't stopped the vagrant provisioner from pointing this
+# repository BACK at the parent of our fork.  We let it happen and
+# then force it back:
 vagrant ssh -- "cd FrameworkBenchmarks; git remote add fork git@github.com:iu-parfunc/FrameworkBenchmarks" || echo ok
 
 vagrant ssh -- "cd FrameworkBenchmarks; git checkout $COMMIT"
