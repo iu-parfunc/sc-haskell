@@ -12,7 +12,7 @@ cd ./FrameworkBenchmarks
 # Which commit in FrameworkBenchmarks depends on which mode we're in:
 if [ "$VARIANT" == stock-ghc ]; then
     COMMIT=180d44e1064abc6fe8c703b05e065c0564e6ee05
-elif [ "$VARIANT" == stock-ghc ]; then
+elif [ "$VARIANT" == sc-v0.4 ]; then
     # This should test all four Haskell implementations with SC GHC v0.4:
     COMMIT=79eaca80914499230ea4b1b61a38af6d09187803
 elif [ "$VARIANT" == HEAD ]; then
