@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# A temporary script for the purpose of COUNTING the per-getline barriers in the benchmark.
+
 set -xe
 
 rm -f *.eventlog; 
@@ -13,3 +15,5 @@ stack --docker --docker-image=$IMG bench --benchmark-arguments="--iters 1 from-d
 
 ds *.eventlog
 ghc-events show Handle.eventlog | grep Barrier | tail
+# [2016.07.31] This is printing "" barriers currently.
+# "" of them are already there in the -opt-dbg version.

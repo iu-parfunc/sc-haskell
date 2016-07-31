@@ -1,33 +1,36 @@
 
-all: report_sc-v0.4.html report_sc-v0.4-dbg.html report_sc-v0.4-opt.html report_sc-v0.4-opt-dbg.html report_stock.html
+VER=v0.5
 
-dbg: report_sc-v0.4-dbg.html report_sc-v0.4-opt-dbg.html 
+
+all: report_sc-$(VER).html report_sc-$(VER)-dbg.html report_sc-$(VER)-opt.html report_sc-$(VER)-opt-dbg.html report_stock.html
+
+dbg: report_sc-$(VER)-dbg.html report_sc-$(VER)-opt-dbg.html 
 
 ITERS=10000
 
-report_sc-v0.4.html:
+report_sc-$(VER).html:
 #	stack docker pull --docker-image=parfunc/sc-haskell:v0.4
-	docker run -it parfunc/sc-haskell:v0.4 ghc --version
-	stack --docker --docker-image=parfunc/sc-haskell:v0.4 bench --benchmark-arguments="-o $@ --csv report_sc-v0.4.csv"
+	docker run -it parfunc/sc-haskell:$(VER) ghc --version
+	stack --docker --docker-image=parfunc/sc-haskell:$(VER) bench --benchmark-arguments="-o $@ --csv report_sc-$(VER).csv"
 
-report_sc-v0.4-dbg.html:
-#	stack docker pull --docker-image=parfunc/sc-haskell:v0.4-dbg
-	docker run -it parfunc/sc-haskell:v0.4-dbg ghc --version
-# Ludicrous problem with argument parsing: -o $@ --csv report_sc-v0.4-dbg.csv 
-	stack --docker --docker-image=parfunc/sc-haskell:v0.4-dbg bench --benchmark-arguments="-n$(ITERS)"
-	mv Handle.eventlog Handle_sc-v0.4-dbg.eventlog
+report_sc-$(VER)-dbg.html:
+#	stack docker pull --docker-image=parfunc/sc-haskell:$(VER)-dbg
+	docker run -it parfunc/sc-haskell:$(VER)-dbg ghc --version
+# Ludicrous problem with argument parsing: -o $@ --csv report_sc-$(VER)-dbg.csv 
+	stack --docker --docker-image=parfunc/sc-haskell:$(VER)-dbg bench --benchmark-arguments="-n$(ITERS)"
+	mv Handle.eventlog Handle_sc-$(VER)-dbg.eventlog
 
-report_sc-v0.4-opt.html:
-#	stack docker pull --docker-image=parfunc/sc-haskell:v0.4-opt
-	docker run -it parfunc/sc-haskell:v0.4-opt ghc --version
-	stack --docker --docker-image=parfunc/sc-haskell:v0.4-opt bench --benchmark-arguments="-o $@ --csv report_sc-v0.4-opt.csv"
+report_sc-$(VER)-opt.html:
+#	stack docker pull --docker-image=parfunc/sc-haskell:$(VER)-opt
+	docker run -it parfunc/sc-haskell:$(VER)-opt ghc --version
+	stack --docker --docker-image=parfunc/sc-haskell:$(VER)-opt bench --benchmark-arguments="-o $@ --csv report_sc-$(VER)-opt.csv"
 
-report_sc-v0.4-opt-dbg.html:
-#	stack docker pull --docker-image=parfunc/sc-haskell:v0.4-opt-dbg
-	docker run -it parfunc/sc-haskell:v0.4-opt-dbg ghc --version
-# same problem: -o $@ --csv report_sc-v0.4-opt-dbg.csv 
-	stack --docker --docker-image=parfunc/sc-haskell:v0.4-opt-dbg bench --benchmark-arguments="-n$(ITERS)"
-	mv Handle.eventlog Handle_sc-v0.4-opt-dbg.eventlog
+report_sc-$(VER)-opt-dbg.html:
+#	stack docker pull --docker-image=parfunc/sc-haskell:$(VER)-opt-dbg
+	docker run -it parfunc/sc-haskell:$(VER)-opt-dbg ghc --version
+# same problem: -o $@ --csv report_sc-$(VER)-opt-dbg.csv 
+	stack --docker --docker-image=parfunc/sc-haskell:$(VER)-opt-dbg bench --benchmark-arguments="-n$(ITERS)"
+	mv Handle.eventlog Handle_sc-$(VER)-opt-dbg.eventlog
 
 report_stock.html:
 #	stack docker pull --docker-image=fpco/stack-build:lts-5.16
