@@ -15,7 +15,7 @@ if [ "$VARIANT" == stock-ghc ]; then
 elif [ "$VARIANT" == stock-ghc ]; then
     # This should test all four Haskell implementations with SC GHC v0.4:
     COMMIT=79eaca80914499230ea4b1b61a38af6d09187803
-elif [ "$VARIANT" == HEAD ]
+elif [ "$VARIANT" == HEAD ]; then
     COMMIT=`git rev-parse --verify HEAD`
 else
     echo "ERROR: VARIANT env var unset.  Should be stock-ghc, sc-v0.4, or HEAD "
