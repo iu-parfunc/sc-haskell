@@ -22,6 +22,9 @@ else
     exit 1
 fi
 
+# Parochial concerns.  We symlink to this, but on some worker machines it may not exist:
+mkdir -p $HOME/local/.vagrant.d
+
 DEST=`hostname -s`_`date "+%s"`
 
 cd deployment/vagrant-production
