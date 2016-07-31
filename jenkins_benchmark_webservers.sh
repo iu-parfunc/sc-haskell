@@ -29,6 +29,11 @@ DEST=`hostname -s`_`date "+%s"`
 
 git checkout $COMMIT
 cd deployment/vagrant-production
+
+hostname
+vagrant --version
+VBoxManage list vms
+VBoxManage list runningvms
 vagrant up
 
 tests=" wai yesod spock snap "
