@@ -40,9 +40,8 @@ if ! [ -e $DESTDIR ]; then
     mkdir -p $DESTDIR
 fi
 
-if ! [ "$BUILD_TAG" == "" ]; then
-    DESTDIR+="$BUILD_TAG/"
-fi
+# if ! [ "$BUILD_TAG" == "" ]; then DESTDIR+="$BUILD_TAG/"; fi
+if ! [ "$BUILD_NUMBER" == "" ]; then DESTDIR+="jenkins_build${BUILD_NUMBER}/"; fi
 
 DESTDIR+="$DEST/"
 mkdir -p "$DESTDIR"
