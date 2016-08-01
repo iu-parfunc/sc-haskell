@@ -42,7 +42,7 @@ tests=" wai yesod spock snap "
 # repository BACK at the parent of our fork.  We let it happen and
 # then force it back:
 vagrant ssh -- "cd FrameworkBenchmarks; git remote add fork git@github.com:iu-parfunc/FrameworkBenchmarks" || echo ok
-vagrant ssh -- "cd FrameworkBenchmarks; git fetch fork"
+vagrant ssh -- "cd FrameworkBenchmarks; git fetch fork" || echo ok
 vagrant ssh -- "cd FrameworkBenchmarks; git checkout $COMMIT"
 vagrant ssh -- "cd FrameworkBenchmarks; sudo git clean -fxd"
 
