@@ -69,7 +69,8 @@ for ((i=0; i < $ITERS; i++)); do
   echo "------------------------------------------"
   echo ""
   set -x
-  for test in $tests; do 
+  for test in $tests; do
+    # NOTE: we blast the results but we do NOT blast the `.stack-work` directories:
     vagrant ssh -- rm -rf FrameworkBenchmarks/results
     mkdir -p ./$DEST/$test
 

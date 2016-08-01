@@ -1,5 +1,4 @@
 
-
 [2016.07.24] {First TechEmpower / snap run}
 ----------------------------------------
 
@@ -62,3 +61,26 @@ Here are all the writes:
     snap-server-0.9.5.1/test/suite/Snap/Internal/Http/Server/TimeoutManager/Tests.hs:66:    h <- TM.register (writeIORef ref 1) mgr
 
 
+[2016.08.01] {Grabbing SC results}
+----------------------------------
+
+It's running now, with results going here:
+
+    /u/crest-team/results_backup/TechEmpower/sc-v0.4/c-swarm_1470024513//
+
+And here: c-swarm_1470042361
+
+I was running these manually.  So I did something delicate and issued
+a sleep cemmand then the second batch (c-swarm_1470042361).  But the
+first command took longer than I expected, finishing at 4:26am.
+
+The first measurement of the second command came in at 5:13am.  The
+question is how long it took it to build the VM and start the second batch.
+
+I issued my sleep for 220 minutes at around 1:30am before going to
+sleep.  Thus it should have run waited until 5:10 to run.  This means
+that it cleared the 4:26 finish time, and the results should not
+interfere with eachother.
+
+Ugh it's at 9 hrs now and I think it was a 12 hour reservation.  3
+hours to finish.
