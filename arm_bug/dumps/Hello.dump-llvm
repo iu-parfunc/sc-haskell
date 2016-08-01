@@ -1,0 +1,3563 @@
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.372276 UTC
+
+target datalayout = "e-m:e-i64:64-i128:128-n32:64-S128"
+target triple = "aarch64-unknown-linux-gnu"
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.373365 UTC
+
+declare ccc i8* @memcpy$def(i8*, i8*, i64)
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.374217 UTC
+
+declare ccc i8* @memmove$def(i8*, i8*, i64)
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.375067 UTC
+
+declare ccc i8* @memset$def(i8*, i64, i64)
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.375897 UTC
+
+declare ccc i64 @newSpark$def(i8*, i8*)
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.376945 UTC
+
+!0 = metadata !{metadata !"top", i8* null}
+!1 = metadata !{metadata !"stack", metadata !0}
+!2 = metadata !{metadata !"heap", metadata !0}
+!3 = metadata !{metadata !"rx", metadata !2}
+!4 = metadata !{metadata !"base", metadata !0}
+!5 = metadata !{metadata !"other", metadata !0}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.381449 UTC
+
+%__stginit_Main_struct = type <{}>
+@__stginit_Main$def = internal global %__stginit_Main_struct<{}>
+@__stginit_Main = alias i8* bitcast (%__stginit_Main_struct* @__stginit_Main$def to i8*)
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.417954 UTC
+
+%rnV_closure_struct = type <{i64}>
+%rnV_info_struct = type <{i64, i64, i64, i64}>
+@rnV_closure$def = internal global %rnV_closure_struct<{i64 ptrtoint (i8* @rnV_info to i64)}>
+@rnV_closure = alias internal i8* bitcast (%rnV_closure_struct* @rnV_closure$def to i8*)
+@rnV_info$def = internal global %rnV_info_struct<{i64 ptrtoint (void ()* @rnV_entry$def to i64), i64 0, i64 15, i64 4294967301}>
+@rnV_info = alias internal i8* bitcast (%rnV_info_struct* @rnV_info$def to i8*)
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.427955 UTC
+
+@rnV_entry = alias internal i8* bitcast (void ()* @rnV_entry$def to i8*)
+define internal ccc void @rnV_entry$def() align 8 nounwind
+{
+c1cS:
+  %lB1 = alloca i64, i32 1
+  %lc1cR = alloca i64, i32 1
+  %ln1cX = ptrtoint i8* @MainCapability to i64
+  %ln1cY = add i64 %ln1cX, 856
+  %ln1cZ = inttoptr i64 %ln1cY to i64*
+  %ln1d0 = load i64* %ln1cZ, !tbaa !5
+  %ln1d1 = inttoptr i64 %ln1d0 to i64*
+  %ln1d2 = load i64* %ln1d1, !tbaa !5
+  store i64 %ln1d2, i64* %lB1
+  br label %c1cU
+c1cU:
+  %ln1d3 = ptrtoint i8* @MainCapability to i64
+  %ln1d4 = add i64 %ln1d3, 872
+  %ln1d5 = ptrtoint i8* @MainCapability to i64
+  %ln1d6 = add i64 %ln1d5, 872
+  %ln1d7 = inttoptr i64 %ln1d6 to i64*
+  %ln1d8 = load i64* %ln1d7, !tbaa !5
+  %ln1d9 = add i64 %ln1d8, 16
+  %ln1da = inttoptr i64 %ln1d4 to i64*
+  store i64 %ln1d9, i64* %ln1da, !tbaa !5
+  %ln1db = ptrtoint i8* @MainCapability to i64
+  %ln1dc = add i64 %ln1db, 872
+  %ln1dd = inttoptr i64 %ln1dc to i64*
+  %ln1de = load i64* %ln1dd, !tbaa !5
+  %ln1df = ptrtoint i8* @MainCapability to i64
+  %ln1dg = add i64 %ln1df, 880
+  %ln1dh = inttoptr i64 %ln1dg to i64*
+  %ln1di = load i64* %ln1dh, !tbaa !5
+  %ln1dj = icmp ugt i64 %ln1de, %ln1di
+  br i1 %ln1dj, label %c1cW, label %c1cV
+c1cV:
+  %ln1dk = ptrtoint i8* @MainCapability to i64
+  %ln1dl = add i64 %ln1dk, 872
+  %ln1dm = inttoptr i64 %ln1dl to i64*
+  %ln1dn = load i64* %ln1dm, !tbaa !5
+  %ln1do = add i64 %ln1dn, -8
+  %ln1dp = ptrtoint i8* @Main_Foo_con_info to i64
+  %ln1dq = inttoptr i64 %ln1do to i64*
+  store i64 %ln1dp, i64* %ln1dq, !tbaa !5
+  %ln1dr = ptrtoint i8* @MainCapability to i64
+  %ln1ds = add i64 %ln1dr, 872
+  %ln1dt = inttoptr i64 %ln1ds to i64*
+  %ln1du = load i64* %ln1dt, !tbaa !5
+  %ln1dv = load i64* %lB1
+  %ln1dw = inttoptr i64 %ln1du to i64*
+  store i64 %ln1dv, i64* %ln1dw, !tbaa !5
+  %ln1dx = ptrtoint i8* @MainCapability to i64
+  %ln1dy = add i64 %ln1dx, 872
+  %ln1dz = inttoptr i64 %ln1dy to i64*
+  %ln1dA = load i64* %ln1dz, !tbaa !5
+  %ln1dB = add i64 %ln1dA, -7
+  store i64 %ln1dB, i64* %lc1cR
+  %ln1dC = ptrtoint i8* @MainCapability to i64
+  %ln1dD = add i64 %ln1dC, 24
+  %ln1dE = load i64* %lc1cR
+  %ln1dF = inttoptr i64 %ln1dD to i64*
+  store i64 %ln1dE, i64* %ln1dF, !tbaa !5
+  %ln1dG = ptrtoint i8* @MainCapability to i64
+  %ln1dH = add i64 %ln1dG, 856
+  %ln1dI = ptrtoint i8* @MainCapability to i64
+  %ln1dJ = add i64 %ln1dI, 856
+  %ln1dK = inttoptr i64 %ln1dJ to i64*
+  %ln1dL = load i64* %ln1dK, !tbaa !5
+  %ln1dM = add i64 %ln1dL, 8
+  %ln1dN = inttoptr i64 %ln1dH to i64*
+  store i64 %ln1dM, i64* %ln1dN, !tbaa !5
+  %ln1dO = ptrtoint i8* @MainCapability to i64
+  %ln1dP = add i64 %ln1dO, 856
+  %ln1dQ = inttoptr i64 %ln1dP to i64*
+  %ln1dR = load i64* %ln1dQ, !tbaa !5
+  %ln1dS = inttoptr i64 %ln1dR to i64*
+  %ln1dT = load i64* %ln1dS, !tbaa !5
+  %ln1dU = inttoptr i64 %ln1dT to i64*
+  %ln1dV = load i64* %ln1dU, !tbaa !5
+  %ln1dW = inttoptr i64 %ln1dV to void ()*
+  tail call ccc void ()* %ln1dW( ) nounwind
+  ret void
+c1cW:
+  %ln1dX = ptrtoint i8* @MainCapability to i64
+  %ln1dY = add i64 %ln1dX, 928
+  %ln1dZ = inttoptr i64 %ln1dY to i64*
+  store i64 16, i64* %ln1dZ, !tbaa !5
+  br label %c1cT
+c1cT:
+  %ln1e0 = ptrtoint i8* @MainCapability to i64
+  %ln1e1 = add i64 %ln1e0, 24
+  %ln1e2 = ptrtoint %rnV_closure_struct* @rnV_closure$def to i64
+  %ln1e3 = inttoptr i64 %ln1e1 to i64*
+  store i64 %ln1e2, i64* %ln1e3, !tbaa !5
+  %ln1e4 = ptrtoint i8* @MainCapability to i64
+  %ln1e5 = add i64 %ln1e4, 16
+  %ln1e6 = inttoptr i64 %ln1e5 to i64*
+  %ln1e7 = load i64* %ln1e6, !tbaa !5
+  %ln1e8 = inttoptr i64 %ln1e7 to void ()*
+  tail call ccc void ()* %ln1e8( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.653304 UTC
+
+%r18d_closure_struct = type <{i64, i64}>
+%s1bK_info_struct = type <{i64, i64, i64, i64}>
+%c1eB_str_struct = type <{[5 x i8]}>
+%s1bH_info_struct = type <{i64, i64, i64, i64}>
+%s1bI_info_struct = type <{i64, i64, i64, i64}>
+%s1bL_info_struct = type <{i64, i64, i64, i64}>
+%s1bG_info_struct = type <{i64, i64, i64, i64}>
+%r18d_info_struct = type <{i64, i64, i64, i64, i64}>
+%c1ed_info_struct = type <{i64, i64, i64, i64}>
+@r18d_closure$def = internal global %r18d_closure_struct<{i64 ptrtoint (i8* @r18d_info to i64), i64 0}>
+@r18d_closure = alias internal i8* bitcast (%r18d_closure_struct* @r18d_closure$def to i8*)
+@s1bK_info$def = internal global %s1bK_info_struct<{i64 ptrtoint (void ()* @s1bK_entry$def to i64), i64 1, i64 4294967313, i64 ptrtoint (i8* @S1f3_srt to i64)}>
+@s1bK_info = alias internal i8* bitcast (%s1bK_info_struct* @s1bK_info$def to i8*)
+@c1eB_str$def = internal constant %c1eB_str_struct<{[5 x i8] [i8 70, i8 111, i8 111, i8 32, i8 0]}>
+@c1eB_str = alias internal i8* bitcast (%c1eB_str_struct* @c1eB_str$def to i8*)
+@s1bH_info$def = internal global %s1bH_info_struct<{i64 ptrtoint (void ()* @s1bH_entry$def to i64), i64 0, i64 4294967312, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 8)}>
+@s1bH_info = alias internal i8* bitcast (%s1bH_info_struct* @s1bH_info$def to i8*)
+@s1bI_info$def = internal global %s1bI_info_struct<{i64 ptrtoint (void ()* @s1bI_entry$def to i64), i64 0, i64 12884901904, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 8)}>
+@s1bI_info = alias internal i8* bitcast (%s1bI_info_struct* @s1bI_info$def to i8*)
+@s1bL_info$def = internal global %s1bL_info_struct<{i64 ptrtoint (void ()* @s1bL_entry$def to i64), i64 1, i64 64424509457, i64 ptrtoint (i8* @S1f3_srt to i64)}>
+@s1bL_info = alias internal i8* bitcast (%s1bL_info_struct* @s1bL_info$def to i8*)
+@s1bG_info$def = internal global %s1bG_info_struct<{i64 ptrtoint (void ()* @s1bG_entry$def to i64), i64 1, i64 4294967313, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 32)}>
+@s1bG_info = alias internal i8* bitcast (%s1bG_info_struct* @s1bG_info$def to i8*)
+@r18d_info$def = internal global %r18d_info_struct<{i64 ptrtoint (void ()* @r18d_entry$def to i64), i64 0, i64 545460846607, i64 8589934607, i64 ptrtoint (i8* @S1f3_srt to i64)}>
+@r18d_info = alias internal i8* bitcast (%r18d_info_struct* @r18d_info$def to i8*)
+@c1ed_info$def = internal global %c1ed_info_struct<{i64 ptrtoint (void ()* @c1ed_entry$def to i64), i64 130, i64 270582939680, i64 ptrtoint (i8* @S1f3_srt to i64)}>
+@c1ed_info = alias internal i8* bitcast (%c1ed_info_struct* @c1ed_info$def to i8*)
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.667686 UTC
+
+@s1bK_entry = alias internal i8* bitcast (void ()* @s1bK_entry$def to i8*)
+define internal ccc void @s1bK_entry$def() align 8 nounwind
+{
+c1eq:
+  %ls1bK = alloca i64, i32 1
+  %ls1bE = alloca i64, i32 1
+  %ln1f4 = ptrtoint i8* @MainCapability to i64
+  %ln1f5 = add i64 %ln1f4, 24
+  %ln1f6 = inttoptr i64 %ln1f5 to i64*
+  %ln1f7 = load i64* %ln1f6, !tbaa !5
+  store i64 %ln1f7, i64* %ls1bK
+  %ln1f8 = ptrtoint i8* @MainCapability to i64
+  %ln1f9 = add i64 %ln1f8, 856
+  %ln1fa = inttoptr i64 %ln1f9 to i64*
+  %ln1fb = load i64* %ln1fa, !tbaa !5
+  %ln1fc = add i64 %ln1fb, 8
+  %ln1fd = sub i64 %ln1fc, 56
+  %ln1fe = ptrtoint i8* @MainCapability to i64
+  %ln1ff = add i64 %ln1fe, 864
+  %ln1fg = inttoptr i64 %ln1ff to i64*
+  %ln1fh = load i64* %ln1fg, !tbaa !5
+  %ln1fi = icmp ult i64 %ln1fd, %ln1fh
+  br i1 %ln1fi, label %c1er, label %c1es
+c1es:
+  %ln1fj = ptrtoint i8* @MainCapability to i64
+  %ln1fk = add i64 %ln1fj, 856
+  %ln1fl = inttoptr i64 %ln1fk to i64*
+  %ln1fm = load i64* %ln1fl, !tbaa !5
+  %ln1fn = add i64 %ln1fm, -16
+  %ln1fo = ptrtoint i8* @stg_upd_frame_info to i64
+  %ln1fp = inttoptr i64 %ln1fn to i64*
+  store i64 %ln1fo, i64* %ln1fp, !tbaa !5
+  %ln1fq = ptrtoint i8* @MainCapability to i64
+  %ln1fr = add i64 %ln1fq, 856
+  %ln1fs = inttoptr i64 %ln1fr to i64*
+  %ln1ft = load i64* %ln1fs, !tbaa !5
+  %ln1fu = add i64 %ln1ft, -8
+  %ln1fv = load i64* %ls1bK
+  %ln1fw = inttoptr i64 %ln1fu to i64*
+  store i64 %ln1fv, i64* %ln1fw, !tbaa !5
+  %ln1fx = load i64* %ls1bK
+  %ln1fy = add i64 %ln1fx, 16
+  %ln1fz = inttoptr i64 %ln1fy to i64*
+  %ln1fA = load i64* %ln1fz, !tbaa !5
+  store i64 %ln1fA, i64* %ls1bE
+  %ln1fB = ptrtoint i8* @MainCapability to i64
+  %ln1fC = add i64 %ln1fB, 856
+  %ln1fD = inttoptr i64 %ln1fC to i64*
+  %ln1fE = load i64* %ln1fD, !tbaa !5
+  %ln1fF = add i64 %ln1fE, -48
+  %ln1fG = ptrtoint i8* @base_GHCziShow_zdfShowInt_closure to i64
+  %ln1fH = inttoptr i64 %ln1fF to i64*
+  store i64 %ln1fG, i64* %ln1fH, !tbaa !5
+  %ln1fI = ptrtoint i8* @MainCapability to i64
+  %ln1fJ = add i64 %ln1fI, 856
+  %ln1fK = inttoptr i64 %ln1fJ to i64*
+  %ln1fL = load i64* %ln1fK, !tbaa !5
+  %ln1fM = add i64 %ln1fL, -40
+  %ln1fN = ptrtoint i8* @stg_ap_pp_info to i64
+  %ln1fO = inttoptr i64 %ln1fM to i64*
+  store i64 %ln1fN, i64* %ln1fO, !tbaa !5
+  %ln1fP = ptrtoint i8* @MainCapability to i64
+  %ln1fQ = add i64 %ln1fP, 856
+  %ln1fR = inttoptr i64 %ln1fQ to i64*
+  %ln1fS = load i64* %ln1fR, !tbaa !5
+  %ln1fT = add i64 %ln1fS, -32
+  %ln1fU = ptrtoint i8* @stg_INTLIKE_closure to i64
+  %ln1fV = add i64 %ln1fU, 433
+  %ln1fW = inttoptr i64 %ln1fT to i64*
+  store i64 %ln1fV, i64* %ln1fW, !tbaa !5
+  %ln1fX = ptrtoint i8* @MainCapability to i64
+  %ln1fY = add i64 %ln1fX, 856
+  %ln1fZ = inttoptr i64 %ln1fY to i64*
+  %ln1g0 = load i64* %ln1fZ, !tbaa !5
+  %ln1g1 = add i64 %ln1g0, -24
+  %ln1g2 = load i64* %ls1bE
+  %ln1g3 = inttoptr i64 %ln1g1 to i64*
+  store i64 %ln1g2, i64* %ln1g3, !tbaa !5
+  %ln1g4 = ptrtoint i8* @MainCapability to i64
+  %ln1g5 = add i64 %ln1g4, 856
+  %ln1g6 = ptrtoint i8* @MainCapability to i64
+  %ln1g7 = add i64 %ln1g6, 856
+  %ln1g8 = inttoptr i64 %ln1g7 to i64*
+  %ln1g9 = load i64* %ln1g8, !tbaa !5
+  %ln1ga = add i64 %ln1g9, -48
+  %ln1gb = inttoptr i64 %ln1g5 to i64*
+  store i64 %ln1ga, i64* %ln1gb, !tbaa !5
+  %ln1gc = bitcast i8* @base_GHCziShow_showsPrec_entry to void ()*
+  tail call ccc void ()* %ln1gc( ) nounwind
+  ret void
+c1er:
+  %ln1gd = ptrtoint i8* @MainCapability to i64
+  %ln1ge = add i64 %ln1gd, 24
+  %ln1gf = load i64* %ls1bK
+  %ln1gg = inttoptr i64 %ln1ge to i64*
+  store i64 %ln1gf, i64* %ln1gg, !tbaa !5
+  %ln1gh = ptrtoint i8* @MainCapability to i64
+  %ln1gi = add i64 %ln1gh, 8
+  %ln1gj = inttoptr i64 %ln1gi to i64*
+  %ln1gk = load i64* %ln1gj, !tbaa !5
+  %ln1gl = inttoptr i64 %ln1gk to void ()*
+  tail call ccc void ()* %ln1gl( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.686648 UTC
+
+@s1bH_entry = alias internal i8* bitcast (void ()* @s1bH_entry$def to i8*)
+define internal ccc void @s1bH_entry$def() align 8 nounwind
+{
+c1eC:
+  %ls1bH = alloca i64, i32 1
+  %ln1gm = ptrtoint i8* @MainCapability to i64
+  %ln1gn = add i64 %ln1gm, 24
+  %ln1go = inttoptr i64 %ln1gn to i64*
+  %ln1gp = load i64* %ln1go, !tbaa !5
+  store i64 %ln1gp, i64* %ls1bH
+  %ln1gq = ptrtoint i8* @MainCapability to i64
+  %ln1gr = add i64 %ln1gq, 856
+  %ln1gs = inttoptr i64 %ln1gr to i64*
+  %ln1gt = load i64* %ln1gs, !tbaa !5
+  %ln1gu = add i64 %ln1gt, 8
+  %ln1gv = sub i64 %ln1gu, 32
+  %ln1gw = ptrtoint i8* @MainCapability to i64
+  %ln1gx = add i64 %ln1gw, 864
+  %ln1gy = inttoptr i64 %ln1gx to i64*
+  %ln1gz = load i64* %ln1gy, !tbaa !5
+  %ln1gA = icmp ult i64 %ln1gv, %ln1gz
+  br i1 %ln1gA, label %c1eD, label %c1eE
+c1eE:
+  %ln1gB = ptrtoint i8* @MainCapability to i64
+  %ln1gC = add i64 %ln1gB, 856
+  %ln1gD = inttoptr i64 %ln1gC to i64*
+  %ln1gE = load i64* %ln1gD, !tbaa !5
+  %ln1gF = add i64 %ln1gE, -16
+  %ln1gG = ptrtoint i8* @stg_upd_frame_info to i64
+  %ln1gH = inttoptr i64 %ln1gF to i64*
+  store i64 %ln1gG, i64* %ln1gH, !tbaa !5
+  %ln1gI = ptrtoint i8* @MainCapability to i64
+  %ln1gJ = add i64 %ln1gI, 856
+  %ln1gK = inttoptr i64 %ln1gJ to i64*
+  %ln1gL = load i64* %ln1gK, !tbaa !5
+  %ln1gM = add i64 %ln1gL, -8
+  %ln1gN = load i64* %ls1bH
+  %ln1gO = inttoptr i64 %ln1gM to i64*
+  store i64 %ln1gN, i64* %ln1gO, !tbaa !5
+  %ln1gP = ptrtoint i8* @MainCapability to i64
+  %ln1gQ = add i64 %ln1gP, 24
+  %ln1gR = ptrtoint i8* @ghczmprim_GHCziCString_unpackCStringzh_closure to i64
+  %ln1gS = inttoptr i64 %ln1gQ to i64*
+  store i64 %ln1gR, i64* %ln1gS, !tbaa !5
+  %ln1gT = ptrtoint i8* @MainCapability to i64
+  %ln1gU = add i64 %ln1gT, 856
+  %ln1gV = inttoptr i64 %ln1gU to i64*
+  %ln1gW = load i64* %ln1gV, !tbaa !5
+  %ln1gX = add i64 %ln1gW, -24
+  %ln1gY = ptrtoint %c1eB_str_struct* @c1eB_str$def to i64
+  %ln1gZ = inttoptr i64 %ln1gX to i64*
+  store i64 %ln1gY, i64* %ln1gZ, !tbaa !5
+  %ln1h0 = ptrtoint i8* @MainCapability to i64
+  %ln1h1 = add i64 %ln1h0, 856
+  %ln1h2 = ptrtoint i8* @MainCapability to i64
+  %ln1h3 = add i64 %ln1h2, 856
+  %ln1h4 = inttoptr i64 %ln1h3 to i64*
+  %ln1h5 = load i64* %ln1h4, !tbaa !5
+  %ln1h6 = add i64 %ln1h5, -24
+  %ln1h7 = inttoptr i64 %ln1h1 to i64*
+  store i64 %ln1h6, i64* %ln1h7, !tbaa !5
+  %ln1h8 = bitcast i8* @stg_ap_n_fast to void ()*
+  tail call ccc void ()* %ln1h8( ) nounwind
+  ret void
+c1eD:
+  %ln1h9 = ptrtoint i8* @MainCapability to i64
+  %ln1ha = add i64 %ln1h9, 24
+  %ln1hb = load i64* %ls1bH
+  %ln1hc = inttoptr i64 %ln1ha to i64*
+  store i64 %ln1hb, i64* %ln1hc, !tbaa !5
+  %ln1hd = ptrtoint i8* @MainCapability to i64
+  %ln1he = add i64 %ln1hd, 8
+  %ln1hf = inttoptr i64 %ln1he to i64*
+  %ln1hg = load i64* %ln1hf, !tbaa !5
+  %ln1hh = inttoptr i64 %ln1hg to void ()*
+  tail call ccc void ()* %ln1hh( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.704002 UTC
+
+@s1bI_entry = alias internal i8* bitcast (void ()* @s1bI_entry$def to i8*)
+define internal ccc void @s1bI_entry$def() align 8 nounwind
+{
+c1eF:
+  %ls1bI = alloca i64, i32 1
+  %lc1ex = alloca i64, i32 1
+  %ln1hi = ptrtoint i8* @MainCapability to i64
+  %ln1hj = add i64 %ln1hi, 24
+  %ln1hk = inttoptr i64 %ln1hj to i64*
+  %ln1hl = load i64* %ln1hk, !tbaa !5
+  store i64 %ln1hl, i64* %ls1bI
+  %ln1hm = ptrtoint i8* @MainCapability to i64
+  %ln1hn = add i64 %ln1hm, 856
+  %ln1ho = inttoptr i64 %ln1hn to i64*
+  %ln1hp = load i64* %ln1ho, !tbaa !5
+  %ln1hq = add i64 %ln1hp, 8
+  %ln1hr = sub i64 %ln1hq, 32
+  %ln1hs = ptrtoint i8* @MainCapability to i64
+  %ln1ht = add i64 %ln1hs, 864
+  %ln1hu = inttoptr i64 %ln1ht to i64*
+  %ln1hv = load i64* %ln1hu, !tbaa !5
+  %ln1hw = icmp ult i64 %ln1hr, %ln1hv
+  br i1 %ln1hw, label %c1eG, label %c1eH
+c1eH:
+  %ln1hx = ptrtoint i8* @MainCapability to i64
+  %ln1hy = add i64 %ln1hx, 872
+  %ln1hz = ptrtoint i8* @MainCapability to i64
+  %ln1hA = add i64 %ln1hz, 872
+  %ln1hB = inttoptr i64 %ln1hA to i64*
+  %ln1hC = load i64* %ln1hB, !tbaa !5
+  %ln1hD = add i64 %ln1hC, 16
+  %ln1hE = inttoptr i64 %ln1hy to i64*
+  store i64 %ln1hD, i64* %ln1hE, !tbaa !5
+  %ln1hF = ptrtoint i8* @MainCapability to i64
+  %ln1hG = add i64 %ln1hF, 872
+  %ln1hH = inttoptr i64 %ln1hG to i64*
+  %ln1hI = load i64* %ln1hH, !tbaa !5
+  %ln1hJ = ptrtoint i8* @MainCapability to i64
+  %ln1hK = add i64 %ln1hJ, 880
+  %ln1hL = inttoptr i64 %ln1hK to i64*
+  %ln1hM = load i64* %ln1hL, !tbaa !5
+  %ln1hN = icmp ugt i64 %ln1hI, %ln1hM
+  br i1 %ln1hN, label %c1eJ, label %c1eI
+c1eI:
+  %ln1hO = ptrtoint i8* @MainCapability to i64
+  %ln1hP = add i64 %ln1hO, 856
+  %ln1hQ = inttoptr i64 %ln1hP to i64*
+  %ln1hR = load i64* %ln1hQ, !tbaa !5
+  %ln1hS = add i64 %ln1hR, -16
+  %ln1hT = ptrtoint i8* @stg_upd_frame_info to i64
+  %ln1hU = inttoptr i64 %ln1hS to i64*
+  store i64 %ln1hT, i64* %ln1hU, !tbaa !5
+  %ln1hV = ptrtoint i8* @MainCapability to i64
+  %ln1hW = add i64 %ln1hV, 856
+  %ln1hX = inttoptr i64 %ln1hW to i64*
+  %ln1hY = load i64* %ln1hX, !tbaa !5
+  %ln1hZ = add i64 %ln1hY, -8
+  %ln1i0 = load i64* %ls1bI
+  %ln1i1 = inttoptr i64 %ln1hZ to i64*
+  store i64 %ln1i0, i64* %ln1i1, !tbaa !5
+  %ln1i2 = ptrtoint i8* @MainCapability to i64
+  %ln1i3 = add i64 %ln1i2, 872
+  %ln1i4 = inttoptr i64 %ln1i3 to i64*
+  %ln1i5 = load i64* %ln1i4, !tbaa !5
+  %ln1i6 = add i64 %ln1i5, -8
+  %ln1i7 = ptrtoint %s1bH_info_struct* @s1bH_info$def to i64
+  %ln1i8 = inttoptr i64 %ln1i6 to i64*
+  store i64 %ln1i7, i64* %ln1i8, !tbaa !5
+  %ln1i9 = ptrtoint i8* @MainCapability to i64
+  %ln1ia = add i64 %ln1i9, 872
+  %ln1ib = inttoptr i64 %ln1ia to i64*
+  %ln1ic = load i64* %ln1ib, !tbaa !5
+  %ln1id = add i64 %ln1ic, -8
+  store i64 %ln1id, i64* %lc1ex
+  %ln1ie = ptrtoint i8* @MainCapability to i64
+  %ln1if = add i64 %ln1ie, 24
+  %ln1ig = ptrtoint i8* @base_GHCziShow_showString_closure to i64
+  %ln1ih = inttoptr i64 %ln1if to i64*
+  store i64 %ln1ig, i64* %ln1ih, !tbaa !5
+  %ln1ii = ptrtoint i8* @MainCapability to i64
+  %ln1ij = add i64 %ln1ii, 856
+  %ln1ik = inttoptr i64 %ln1ij to i64*
+  %ln1il = load i64* %ln1ik, !tbaa !5
+  %ln1im = add i64 %ln1il, -24
+  %ln1in = load i64* %lc1ex
+  %ln1io = inttoptr i64 %ln1im to i64*
+  store i64 %ln1in, i64* %ln1io, !tbaa !5
+  %ln1ip = ptrtoint i8* @MainCapability to i64
+  %ln1iq = add i64 %ln1ip, 856
+  %ln1ir = ptrtoint i8* @MainCapability to i64
+  %ln1is = add i64 %ln1ir, 856
+  %ln1it = inttoptr i64 %ln1is to i64*
+  %ln1iu = load i64* %ln1it, !tbaa !5
+  %ln1iv = add i64 %ln1iu, -24
+  %ln1iw = inttoptr i64 %ln1iq to i64*
+  store i64 %ln1iv, i64* %ln1iw, !tbaa !5
+  %ln1ix = bitcast i8* @stg_ap_p_fast to void ()*
+  tail call ccc void ()* %ln1ix( ) nounwind
+  ret void
+c1eJ:
+  %ln1iy = ptrtoint i8* @MainCapability to i64
+  %ln1iz = add i64 %ln1iy, 928
+  %ln1iA = inttoptr i64 %ln1iz to i64*
+  store i64 16, i64* %ln1iA, !tbaa !5
+  br label %c1eG
+c1eG:
+  %ln1iB = ptrtoint i8* @MainCapability to i64
+  %ln1iC = add i64 %ln1iB, 24
+  %ln1iD = load i64* %ls1bI
+  %ln1iE = inttoptr i64 %ln1iC to i64*
+  store i64 %ln1iD, i64* %ln1iE, !tbaa !5
+  %ln1iF = ptrtoint i8* @MainCapability to i64
+  %ln1iG = add i64 %ln1iF, 8
+  %ln1iH = inttoptr i64 %ln1iG to i64*
+  %ln1iI = load i64* %ln1iH, !tbaa !5
+  %ln1iJ = inttoptr i64 %ln1iI to void ()*
+  tail call ccc void ()* %ln1iJ( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.728026 UTC
+
+@s1bL_entry = alias internal i8* bitcast (void ()* @s1bL_entry$def to i8*)
+define internal ccc void @s1bL_entry$def() align 8 nounwind
+{
+c1eK:
+  %ls1bL = alloca i64, i32 1
+  %ls1bE = alloca i64, i32 1
+  %lc1em = alloca i64, i32 1
+  %lc1et = alloca i64, i32 1
+  %ln1iK = ptrtoint i8* @MainCapability to i64
+  %ln1iL = add i64 %ln1iK, 24
+  %ln1iM = inttoptr i64 %ln1iL to i64*
+  %ln1iN = load i64* %ln1iM, !tbaa !5
+  store i64 %ln1iN, i64* %ls1bL
+  %ln1iO = ptrtoint i8* @MainCapability to i64
+  %ln1iP = add i64 %ln1iO, 856
+  %ln1iQ = inttoptr i64 %ln1iP to i64*
+  %ln1iR = load i64* %ln1iQ, !tbaa !5
+  %ln1iS = add i64 %ln1iR, 8
+  %ln1iT = sub i64 %ln1iS, 40
+  %ln1iU = ptrtoint i8* @MainCapability to i64
+  %ln1iV = add i64 %ln1iU, 864
+  %ln1iW = inttoptr i64 %ln1iV to i64*
+  %ln1iX = load i64* %ln1iW, !tbaa !5
+  %ln1iY = icmp ult i64 %ln1iT, %ln1iX
+  br i1 %ln1iY, label %c1eL, label %c1eM
+c1eM:
+  %ln1iZ = ptrtoint i8* @MainCapability to i64
+  %ln1j0 = add i64 %ln1iZ, 872
+  %ln1j1 = ptrtoint i8* @MainCapability to i64
+  %ln1j2 = add i64 %ln1j1, 872
+  %ln1j3 = inttoptr i64 %ln1j2 to i64*
+  %ln1j4 = load i64* %ln1j3, !tbaa !5
+  %ln1j5 = add i64 %ln1j4, 40
+  %ln1j6 = inttoptr i64 %ln1j0 to i64*
+  store i64 %ln1j5, i64* %ln1j6, !tbaa !5
+  %ln1j7 = ptrtoint i8* @MainCapability to i64
+  %ln1j8 = add i64 %ln1j7, 872
+  %ln1j9 = inttoptr i64 %ln1j8 to i64*
+  %ln1ja = load i64* %ln1j9, !tbaa !5
+  %ln1jb = ptrtoint i8* @MainCapability to i64
+  %ln1jc = add i64 %ln1jb, 880
+  %ln1jd = inttoptr i64 %ln1jc to i64*
+  %ln1je = load i64* %ln1jd, !tbaa !5
+  %ln1jf = icmp ugt i64 %ln1ja, %ln1je
+  br i1 %ln1jf, label %c1eO, label %c1eN
+c1eN:
+  %ln1jg = ptrtoint i8* @MainCapability to i64
+  %ln1jh = add i64 %ln1jg, 856
+  %ln1ji = inttoptr i64 %ln1jh to i64*
+  %ln1jj = load i64* %ln1ji, !tbaa !5
+  %ln1jk = add i64 %ln1jj, -16
+  %ln1jl = ptrtoint i8* @stg_upd_frame_info to i64
+  %ln1jm = inttoptr i64 %ln1jk to i64*
+  store i64 %ln1jl, i64* %ln1jm, !tbaa !5
+  %ln1jn = ptrtoint i8* @MainCapability to i64
+  %ln1jo = add i64 %ln1jn, 856
+  %ln1jp = inttoptr i64 %ln1jo to i64*
+  %ln1jq = load i64* %ln1jp, !tbaa !5
+  %ln1jr = add i64 %ln1jq, -8
+  %ln1js = load i64* %ls1bL
+  %ln1jt = inttoptr i64 %ln1jr to i64*
+  store i64 %ln1js, i64* %ln1jt, !tbaa !5
+  %ln1ju = load i64* %ls1bL
+  %ln1jv = add i64 %ln1ju, 16
+  %ln1jw = inttoptr i64 %ln1jv to i64*
+  %ln1jx = load i64* %ln1jw, !tbaa !5
+  store i64 %ln1jx, i64* %ls1bE
+  %ln1jy = ptrtoint i8* @MainCapability to i64
+  %ln1jz = add i64 %ln1jy, 872
+  %ln1jA = inttoptr i64 %ln1jz to i64*
+  %ln1jB = load i64* %ln1jA, !tbaa !5
+  %ln1jC = add i64 %ln1jB, -32
+  %ln1jD = ptrtoint %s1bK_info_struct* @s1bK_info$def to i64
+  %ln1jE = inttoptr i64 %ln1jC to i64*
+  store i64 %ln1jD, i64* %ln1jE, !tbaa !5
+  %ln1jF = ptrtoint i8* @MainCapability to i64
+  %ln1jG = add i64 %ln1jF, 872
+  %ln1jH = inttoptr i64 %ln1jG to i64*
+  %ln1jI = load i64* %ln1jH, !tbaa !5
+  %ln1jJ = add i64 %ln1jI, -16
+  %ln1jK = load i64* %ls1bE
+  %ln1jL = inttoptr i64 %ln1jJ to i64*
+  store i64 %ln1jK, i64* %ln1jL, !tbaa !5
+  %ln1jM = ptrtoint i8* @MainCapability to i64
+  %ln1jN = add i64 %ln1jM, 872
+  %ln1jO = inttoptr i64 %ln1jN to i64*
+  %ln1jP = load i64* %ln1jO, !tbaa !5
+  %ln1jQ = add i64 %ln1jP, -32
+  store i64 %ln1jQ, i64* %lc1em
+  %ln1jR = ptrtoint i8* @MainCapability to i64
+  %ln1jS = add i64 %ln1jR, 872
+  %ln1jT = inttoptr i64 %ln1jS to i64*
+  %ln1jU = load i64* %ln1jT, !tbaa !5
+  %ln1jV = add i64 %ln1jU, -8
+  %ln1jW = ptrtoint %s1bI_info_struct* @s1bI_info$def to i64
+  %ln1jX = inttoptr i64 %ln1jV to i64*
+  store i64 %ln1jW, i64* %ln1jX, !tbaa !5
+  %ln1jY = ptrtoint i8* @MainCapability to i64
+  %ln1jZ = add i64 %ln1jY, 872
+  %ln1k0 = inttoptr i64 %ln1jZ to i64*
+  %ln1k1 = load i64* %ln1k0, !tbaa !5
+  %ln1k2 = add i64 %ln1k1, -8
+  store i64 %ln1k2, i64* %lc1et
+  %ln1k3 = ptrtoint i8* @MainCapability to i64
+  %ln1k4 = add i64 %ln1k3, 24
+  %ln1k5 = ptrtoint i8* @base_GHCziBase_zi_closure to i64
+  %ln1k6 = inttoptr i64 %ln1k4 to i64*
+  store i64 %ln1k5, i64* %ln1k6, !tbaa !5
+  %ln1k7 = ptrtoint i8* @MainCapability to i64
+  %ln1k8 = add i64 %ln1k7, 856
+  %ln1k9 = inttoptr i64 %ln1k8 to i64*
+  %ln1ka = load i64* %ln1k9, !tbaa !5
+  %ln1kb = add i64 %ln1ka, -32
+  %ln1kc = load i64* %lc1et
+  %ln1kd = inttoptr i64 %ln1kb to i64*
+  store i64 %ln1kc, i64* %ln1kd, !tbaa !5
+  %ln1ke = ptrtoint i8* @MainCapability to i64
+  %ln1kf = add i64 %ln1ke, 856
+  %ln1kg = inttoptr i64 %ln1kf to i64*
+  %ln1kh = load i64* %ln1kg, !tbaa !5
+  %ln1ki = add i64 %ln1kh, -24
+  %ln1kj = load i64* %lc1em
+  %ln1kk = inttoptr i64 %ln1ki to i64*
+  store i64 %ln1kj, i64* %ln1kk, !tbaa !5
+  %ln1kl = ptrtoint i8* @MainCapability to i64
+  %ln1km = add i64 %ln1kl, 856
+  %ln1kn = ptrtoint i8* @MainCapability to i64
+  %ln1ko = add i64 %ln1kn, 856
+  %ln1kp = inttoptr i64 %ln1ko to i64*
+  %ln1kq = load i64* %ln1kp, !tbaa !5
+  %ln1kr = add i64 %ln1kq, -32
+  %ln1ks = inttoptr i64 %ln1km to i64*
+  store i64 %ln1kr, i64* %ln1ks, !tbaa !5
+  %ln1kt = bitcast i8* @stg_ap_pp_fast to void ()*
+  tail call ccc void ()* %ln1kt( ) nounwind
+  ret void
+c1eO:
+  %ln1ku = ptrtoint i8* @MainCapability to i64
+  %ln1kv = add i64 %ln1ku, 928
+  %ln1kw = inttoptr i64 %ln1kv to i64*
+  store i64 40, i64* %ln1kw, !tbaa !5
+  br label %c1eL
+c1eL:
+  %ln1kx = ptrtoint i8* @MainCapability to i64
+  %ln1ky = add i64 %ln1kx, 24
+  %ln1kz = load i64* %ls1bL
+  %ln1kA = inttoptr i64 %ln1ky to i64*
+  store i64 %ln1kz, i64* %ln1kA, !tbaa !5
+  %ln1kB = ptrtoint i8* @MainCapability to i64
+  %ln1kC = add i64 %ln1kB, 8
+  %ln1kD = inttoptr i64 %ln1kC to i64*
+  %ln1kE = load i64* %ln1kD, !tbaa !5
+  %ln1kF = inttoptr i64 %ln1kE to void ()*
+  tail call ccc void ()* %ln1kF( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.754165 UTC
+
+@s1bG_entry = alias internal i8* bitcast (void ()* @s1bG_entry$def to i8*)
+define internal ccc void @s1bG_entry$def() align 8 nounwind
+{
+c1eT:
+  %ls1bG = alloca i64, i32 1
+  %ls1bB = alloca i64, i32 1
+  %ln1kG = ptrtoint i8* @MainCapability to i64
+  %ln1kH = add i64 %ln1kG, 24
+  %ln1kI = inttoptr i64 %ln1kH to i64*
+  %ln1kJ = load i64* %ln1kI, !tbaa !5
+  store i64 %ln1kJ, i64* %ls1bG
+  %ln1kK = ptrtoint i8* @MainCapability to i64
+  %ln1kL = add i64 %ln1kK, 856
+  %ln1kM = inttoptr i64 %ln1kL to i64*
+  %ln1kN = load i64* %ln1kM, !tbaa !5
+  %ln1kO = add i64 %ln1kN, 8
+  %ln1kP = sub i64 %ln1kO, 56
+  %ln1kQ = ptrtoint i8* @MainCapability to i64
+  %ln1kR = add i64 %ln1kQ, 864
+  %ln1kS = inttoptr i64 %ln1kR to i64*
+  %ln1kT = load i64* %ln1kS, !tbaa !5
+  %ln1kU = icmp ult i64 %ln1kP, %ln1kT
+  br i1 %ln1kU, label %c1eU, label %c1eV
+c1eV:
+  %ln1kV = ptrtoint i8* @MainCapability to i64
+  %ln1kW = add i64 %ln1kV, 856
+  %ln1kX = inttoptr i64 %ln1kW to i64*
+  %ln1kY = load i64* %ln1kX, !tbaa !5
+  %ln1kZ = add i64 %ln1kY, -16
+  %ln1l0 = ptrtoint i8* @stg_upd_frame_info to i64
+  %ln1l1 = inttoptr i64 %ln1kZ to i64*
+  store i64 %ln1l0, i64* %ln1l1, !tbaa !5
+  %ln1l2 = ptrtoint i8* @MainCapability to i64
+  %ln1l3 = add i64 %ln1l2, 856
+  %ln1l4 = inttoptr i64 %ln1l3 to i64*
+  %ln1l5 = load i64* %ln1l4, !tbaa !5
+  %ln1l6 = add i64 %ln1l5, -8
+  %ln1l7 = load i64* %ls1bG
+  %ln1l8 = inttoptr i64 %ln1l6 to i64*
+  store i64 %ln1l7, i64* %ln1l8, !tbaa !5
+  %ln1l9 = load i64* %ls1bG
+  %ln1la = add i64 %ln1l9, 16
+  %ln1lb = inttoptr i64 %ln1la to i64*
+  %ln1lc = load i64* %ln1lb, !tbaa !5
+  store i64 %ln1lc, i64* %ls1bB
+  %ln1ld = ptrtoint i8* @MainCapability to i64
+  %ln1le = add i64 %ln1ld, 856
+  %ln1lf = inttoptr i64 %ln1le to i64*
+  %ln1lg = load i64* %ln1lf, !tbaa !5
+  %ln1lh = add i64 %ln1lg, -48
+  %ln1li = ptrtoint i8* @ghczmprim_GHCziClasses_zdfOrdInt_closure to i64
+  %ln1lj = inttoptr i64 %ln1lh to i64*
+  store i64 %ln1li, i64* %ln1lj, !tbaa !5
+  %ln1lk = ptrtoint i8* @MainCapability to i64
+  %ln1ll = add i64 %ln1lk, 856
+  %ln1lm = inttoptr i64 %ln1ll to i64*
+  %ln1ln = load i64* %ln1lm, !tbaa !5
+  %ln1lo = add i64 %ln1ln, -40
+  %ln1lp = ptrtoint i8* @stg_ap_pp_info to i64
+  %ln1lq = inttoptr i64 %ln1lo to i64*
+  store i64 %ln1lp, i64* %ln1lq, !tbaa !5
+  %ln1lr = ptrtoint i8* @MainCapability to i64
+  %ln1ls = add i64 %ln1lr, 856
+  %ln1lt = inttoptr i64 %ln1ls to i64*
+  %ln1lu = load i64* %ln1lt, !tbaa !5
+  %ln1lv = add i64 %ln1lu, -32
+  %ln1lw = load i64* %ls1bB
+  %ln1lx = inttoptr i64 %ln1lv to i64*
+  store i64 %ln1lw, i64* %ln1lx, !tbaa !5
+  %ln1ly = ptrtoint i8* @MainCapability to i64
+  %ln1lz = add i64 %ln1ly, 856
+  %ln1lA = inttoptr i64 %ln1lz to i64*
+  %ln1lB = load i64* %ln1lA, !tbaa !5
+  %ln1lC = add i64 %ln1lB, -24
+  %ln1lD = ptrtoint i8* @stg_INTLIKE_closure to i64
+  %ln1lE = add i64 %ln1lD, 433
+  %ln1lF = inttoptr i64 %ln1lC to i64*
+  store i64 %ln1lE, i64* %ln1lF, !tbaa !5
+  %ln1lG = ptrtoint i8* @MainCapability to i64
+  %ln1lH = add i64 %ln1lG, 856
+  %ln1lI = ptrtoint i8* @MainCapability to i64
+  %ln1lJ = add i64 %ln1lI, 856
+  %ln1lK = inttoptr i64 %ln1lJ to i64*
+  %ln1lL = load i64* %ln1lK, !tbaa !5
+  %ln1lM = add i64 %ln1lL, -48
+  %ln1lN = inttoptr i64 %ln1lH to i64*
+  store i64 %ln1lM, i64* %ln1lN, !tbaa !5
+  %ln1lO = bitcast i8* @ghczmprim_GHCziClasses_zgze_entry to void ()*
+  tail call ccc void ()* %ln1lO( ) nounwind
+  ret void
+c1eU:
+  %ln1lP = ptrtoint i8* @MainCapability to i64
+  %ln1lQ = add i64 %ln1lP, 24
+  %ln1lR = load i64* %ls1bG
+  %ln1lS = inttoptr i64 %ln1lQ to i64*
+  store i64 %ln1lR, i64* %ln1lS, !tbaa !5
+  %ln1lT = ptrtoint i8* @MainCapability to i64
+  %ln1lU = add i64 %ln1lT, 8
+  %ln1lV = inttoptr i64 %ln1lU to i64*
+  %ln1lW = load i64* %ln1lV, !tbaa !5
+  %ln1lX = inttoptr i64 %ln1lW to void ()*
+  tail call ccc void ()* %ln1lX( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.772572 UTC
+
+@r18d_entry = alias internal i8* bitcast (void ()* @r18d_entry$def to i8*)
+define internal ccc void @r18d_entry$def() align 8 nounwind
+{
+c1eW:
+  %ls1bB = alloca i64, i32 1
+  %ls1bC = alloca i64, i32 1
+  %ln1lY = ptrtoint i8* @MainCapability to i64
+  %ln1lZ = add i64 %ln1lY, 856
+  %ln1m0 = inttoptr i64 %ln1lZ to i64*
+  %ln1m1 = load i64* %ln1m0, !tbaa !5
+  %ln1m2 = inttoptr i64 %ln1m1 to i64*
+  %ln1m3 = load i64* %ln1m2, !tbaa !5
+  store i64 %ln1m3, i64* %ls1bB
+  %ln1m4 = ptrtoint i8* @MainCapability to i64
+  %ln1m5 = add i64 %ln1m4, 856
+  %ln1m6 = inttoptr i64 %ln1m5 to i64*
+  %ln1m7 = load i64* %ln1m6, !tbaa !5
+  %ln1m8 = add i64 %ln1m7, 8
+  %ln1m9 = inttoptr i64 %ln1m8 to i64*
+  %ln1ma = load i64* %ln1m9, !tbaa !5
+  store i64 %ln1ma, i64* %ls1bC
+  %ln1mb = ptrtoint i8* @MainCapability to i64
+  %ln1mc = add i64 %ln1mb, 856
+  %ln1md = inttoptr i64 %ln1mc to i64*
+  %ln1me = load i64* %ln1md, !tbaa !5
+  %ln1mf = add i64 %ln1me, 24
+  %ln1mg = sub i64 %ln1mf, 32
+  %ln1mh = ptrtoint i8* @MainCapability to i64
+  %ln1mi = add i64 %ln1mh, 864
+  %ln1mj = inttoptr i64 %ln1mi to i64*
+  %ln1mk = load i64* %ln1mj, !tbaa !5
+  %ln1ml = icmp ult i64 %ln1mg, %ln1mk
+  br i1 %ln1ml, label %c1eX, label %c1eY
+c1eY:
+  %ln1mm = ptrtoint i8* @MainCapability to i64
+  %ln1mn = add i64 %ln1mm, 856
+  %ln1mo = inttoptr i64 %ln1mn to i64*
+  %ln1mp = load i64* %ln1mo, !tbaa !5
+  %ln1mq = add i64 %ln1mp, -8
+  %ln1mr = ptrtoint %c1ed_info_struct* @c1ed_info$def to i64
+  %ln1ms = inttoptr i64 %ln1mq to i64*
+  store i64 %ln1mr, i64* %ln1ms, !tbaa !5
+  %ln1mt = ptrtoint i8* @MainCapability to i64
+  %ln1mu = add i64 %ln1mt, 24
+  %ln1mv = load i64* %ls1bC
+  %ln1mw = inttoptr i64 %ln1mu to i64*
+  store i64 %ln1mv, i64* %ln1mw, !tbaa !5
+  %ln1mx = ptrtoint i8* @MainCapability to i64
+  %ln1my = add i64 %ln1mx, 856
+  %ln1mz = ptrtoint i8* @MainCapability to i64
+  %ln1mA = add i64 %ln1mz, 856
+  %ln1mB = inttoptr i64 %ln1mA to i64*
+  %ln1mC = load i64* %ln1mB, !tbaa !5
+  %ln1mD = add i64 %ln1mC, -8
+  %ln1mE = inttoptr i64 %ln1my to i64*
+  store i64 %ln1mD, i64* %ln1mE, !tbaa !5
+  %ln1mF = ptrtoint i8* @MainCapability to i64
+  %ln1mG = add i64 %ln1mF, 24
+  %ln1mH = inttoptr i64 %ln1mG to i64*
+  %ln1mI = load i64* %ln1mH, !tbaa !5
+  %ln1mJ = and i64 %ln1mI, 7
+  %ln1mK = icmp ne i64 %ln1mJ, 0
+  br i1 %ln1mK, label %u1f2, label %c1ee
+c1ee:
+  %ln1mL = ptrtoint i8* @MainCapability to i64
+  %ln1mM = add i64 %ln1mL, 24
+  %ln1mN = inttoptr i64 %ln1mM to i64*
+  %ln1mO = load i64* %ln1mN, !tbaa !5
+  %ln1mP = inttoptr i64 %ln1mO to i64*
+  %ln1mQ = load i64* %ln1mP, !tbaa !5
+  %ln1mR = inttoptr i64 %ln1mQ to i64*
+  %ln1mS = load i64* %ln1mR, !tbaa !5
+  %ln1mT = inttoptr i64 %ln1mS to void ()*
+  tail call ccc void ()* %ln1mT( ) nounwind
+  ret void
+u1f2:
+  %ln1mU = bitcast void ()* @c1ed_entry$def to void ()*
+  tail call ccc void ()* %ln1mU( ) nounwind
+  ret void
+c1eX:
+  %ln1mV = ptrtoint i8* @MainCapability to i64
+  %ln1mW = add i64 %ln1mV, 24
+  %ln1mX = ptrtoint %r18d_closure_struct* @r18d_closure$def to i64
+  %ln1mY = inttoptr i64 %ln1mW to i64*
+  store i64 %ln1mX, i64* %ln1mY, !tbaa !5
+  %ln1mZ = ptrtoint i8* @MainCapability to i64
+  %ln1n0 = add i64 %ln1mZ, 16
+  %ln1n1 = inttoptr i64 %ln1n0 to i64*
+  %ln1n2 = load i64* %ln1n1, !tbaa !5
+  %ln1n3 = inttoptr i64 %ln1n2 to void ()*
+  tail call ccc void ()* %ln1n3( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.793527 UTC
+
+@c1ed_entry = alias internal i8* bitcast (void ()* @c1ed_entry$def to i8*)
+define internal ccc void @c1ed_entry$def() align 8 nounwind
+{
+c1ed:
+  %ls1bB = alloca i64, i32 1
+  %ls1bD = alloca i64, i32 1
+  %ls1bE = alloca i64, i32 1
+  %lc1ei = alloca i64, i32 1
+  %lc1eP = alloca i64, i32 1
+  %ln1n4 = ptrtoint i8* @MainCapability to i64
+  %ln1n5 = add i64 %ln1n4, 856
+  %ln1n6 = inttoptr i64 %ln1n5 to i64*
+  %ln1n7 = load i64* %ln1n6, !tbaa !5
+  %ln1n8 = add i64 %ln1n7, 8
+  %ln1n9 = inttoptr i64 %ln1n8 to i64*
+  %ln1na = load i64* %ln1n9, !tbaa !5
+  store i64 %ln1na, i64* %ls1bB
+  %ln1nb = ptrtoint i8* @MainCapability to i64
+  %ln1nc = add i64 %ln1nb, 24
+  %ln1nd = inttoptr i64 %ln1nc to i64*
+  %ln1ne = load i64* %ln1nd, !tbaa !5
+  store i64 %ln1ne, i64* %ls1bD
+  %ln1nf = ptrtoint i8* @MainCapability to i64
+  %ln1ng = add i64 %ln1nf, 872
+  %ln1nh = ptrtoint i8* @MainCapability to i64
+  %ln1ni = add i64 %ln1nh, 872
+  %ln1nj = inttoptr i64 %ln1ni to i64*
+  %ln1nk = load i64* %ln1nj, !tbaa !5
+  %ln1nl = add i64 %ln1nk, 48
+  %ln1nm = inttoptr i64 %ln1ng to i64*
+  store i64 %ln1nl, i64* %ln1nm, !tbaa !5
+  %ln1nn = ptrtoint i8* @MainCapability to i64
+  %ln1no = add i64 %ln1nn, 872
+  %ln1np = inttoptr i64 %ln1no to i64*
+  %ln1nq = load i64* %ln1np, !tbaa !5
+  %ln1nr = ptrtoint i8* @MainCapability to i64
+  %ln1ns = add i64 %ln1nr, 880
+  %ln1nt = inttoptr i64 %ln1ns to i64*
+  %ln1nu = load i64* %ln1nt, !tbaa !5
+  %ln1nv = icmp ugt i64 %ln1nq, %ln1nu
+  br i1 %ln1nv, label %c1f1, label %c1f0
+c1f0:
+  %ln1nw = load i64* %ls1bD
+  %ln1nx = add i64 %ln1nw, 7
+  %ln1ny = inttoptr i64 %ln1nx to i64*
+  %ln1nz = load i64* %ln1ny, !tbaa !5
+  store i64 %ln1nz, i64* %ls1bE
+  %ln1nA = ptrtoint i8* @MainCapability to i64
+  %ln1nB = add i64 %ln1nA, 872
+  %ln1nC = inttoptr i64 %ln1nB to i64*
+  %ln1nD = load i64* %ln1nC, !tbaa !5
+  %ln1nE = add i64 %ln1nD, -40
+  %ln1nF = ptrtoint %s1bL_info_struct* @s1bL_info$def to i64
+  %ln1nG = inttoptr i64 %ln1nE to i64*
+  store i64 %ln1nF, i64* %ln1nG, !tbaa !5
+  %ln1nH = ptrtoint i8* @MainCapability to i64
+  %ln1nI = add i64 %ln1nH, 872
+  %ln1nJ = inttoptr i64 %ln1nI to i64*
+  %ln1nK = load i64* %ln1nJ, !tbaa !5
+  %ln1nL = add i64 %ln1nK, -24
+  %ln1nM = load i64* %ls1bE
+  %ln1nN = inttoptr i64 %ln1nL to i64*
+  store i64 %ln1nM, i64* %ln1nN, !tbaa !5
+  %ln1nO = ptrtoint i8* @MainCapability to i64
+  %ln1nP = add i64 %ln1nO, 872
+  %ln1nQ = inttoptr i64 %ln1nP to i64*
+  %ln1nR = load i64* %ln1nQ, !tbaa !5
+  %ln1nS = add i64 %ln1nR, -40
+  store i64 %ln1nS, i64* %lc1ei
+  %ln1nT = ptrtoint i8* @MainCapability to i64
+  %ln1nU = add i64 %ln1nT, 872
+  %ln1nV = inttoptr i64 %ln1nU to i64*
+  %ln1nW = load i64* %ln1nV, !tbaa !5
+  %ln1nX = add i64 %ln1nW, -16
+  %ln1nY = ptrtoint %s1bG_info_struct* @s1bG_info$def to i64
+  %ln1nZ = inttoptr i64 %ln1nX to i64*
+  store i64 %ln1nY, i64* %ln1nZ, !tbaa !5
+  %ln1o0 = ptrtoint i8* @MainCapability to i64
+  %ln1o1 = add i64 %ln1o0, 872
+  %ln1o2 = inttoptr i64 %ln1o1 to i64*
+  %ln1o3 = load i64* %ln1o2, !tbaa !5
+  %ln1o4 = load i64* %ls1bB
+  %ln1o5 = inttoptr i64 %ln1o3 to i64*
+  store i64 %ln1o4, i64* %ln1o5, !tbaa !5
+  %ln1o6 = ptrtoint i8* @MainCapability to i64
+  %ln1o7 = add i64 %ln1o6, 872
+  %ln1o8 = inttoptr i64 %ln1o7 to i64*
+  %ln1o9 = load i64* %ln1o8, !tbaa !5
+  %ln1oa = add i64 %ln1o9, -16
+  store i64 %ln1oa, i64* %lc1eP
+  %ln1ob = ptrtoint i8* @MainCapability to i64
+  %ln1oc = add i64 %ln1ob, 24
+  %ln1od = ptrtoint i8* @base_GHCziShow_showParen_closure to i64
+  %ln1oe = inttoptr i64 %ln1oc to i64*
+  store i64 %ln1od, i64* %ln1oe, !tbaa !5
+  %ln1of = ptrtoint i8* @MainCapability to i64
+  %ln1og = add i64 %ln1of, 856
+  %ln1oh = inttoptr i64 %ln1og to i64*
+  %ln1oi = load i64* %ln1oh, !tbaa !5
+  %ln1oj = add i64 %ln1oi, 8
+  %ln1ok = load i64* %lc1eP
+  %ln1ol = inttoptr i64 %ln1oj to i64*
+  store i64 %ln1ok, i64* %ln1ol, !tbaa !5
+  %ln1om = ptrtoint i8* @MainCapability to i64
+  %ln1on = add i64 %ln1om, 856
+  %ln1oo = inttoptr i64 %ln1on to i64*
+  %ln1op = load i64* %ln1oo, !tbaa !5
+  %ln1oq = add i64 %ln1op, 16
+  %ln1or = load i64* %lc1ei
+  %ln1os = inttoptr i64 %ln1oq to i64*
+  store i64 %ln1or, i64* %ln1os, !tbaa !5
+  %ln1ot = ptrtoint i8* @MainCapability to i64
+  %ln1ou = add i64 %ln1ot, 856
+  %ln1ov = ptrtoint i8* @MainCapability to i64
+  %ln1ow = add i64 %ln1ov, 856
+  %ln1ox = inttoptr i64 %ln1ow to i64*
+  %ln1oy = load i64* %ln1ox, !tbaa !5
+  %ln1oz = add i64 %ln1oy, 8
+  %ln1oA = inttoptr i64 %ln1ou to i64*
+  store i64 %ln1oz, i64* %ln1oA, !tbaa !5
+  %ln1oB = bitcast i8* @stg_ap_pp_fast to void ()*
+  tail call ccc void ()* %ln1oB( ) nounwind
+  ret void
+c1f1:
+  %ln1oC = ptrtoint i8* @MainCapability to i64
+  %ln1oD = add i64 %ln1oC, 928
+  %ln1oE = inttoptr i64 %ln1oD to i64*
+  store i64 48, i64* %ln1oE, !tbaa !5
+  %ln1oF = ptrtoint i8* @MainCapability to i64
+  %ln1oG = add i64 %ln1oF, 24
+  %ln1oH = load i64* %ls1bD
+  %ln1oI = inttoptr i64 %ln1oG to i64*
+  store i64 %ln1oH, i64* %ln1oI, !tbaa !5
+  %ln1oJ = bitcast i8* @stg_gc_unpt_r1 to void ()*
+  tail call ccc void ()* %ln1oJ( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.917061 UTC
+
+%s1bN_closure_struct = type <{i64, i64, i64, i64}>
+%s1bN_info_struct = type <{i64, i64, i64, i64}>
+%Main_zdfShowFoo_closure_struct = type <{i64, i64, i64, i64, i64}>
+%r1bg_closure_struct = type <{i64, i64, i64, i64}>
+%r1bg_info_struct = type <{i64, i64, i64, i64}>
+%r1bh_closure_struct = type <{i64, i64, i64, i64}>
+%r1bh_info_struct = type <{i64, i64, i64, i64}>
+@s1bN_closure$def = internal global %s1bN_closure_struct<{i64 ptrtoint (i8* @s1bN_info to i64), i64 0, i64 0, i64 0}>
+@s1bN_closure = alias internal i8* bitcast (%s1bN_closure_struct* @s1bN_closure$def to i8*)
+@s1bN_info$def = internal global %s1bN_info_struct<{i64 ptrtoint (void ()* @s1bN_entry$def to i64), i64 0, i64 4294967318, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 56)}>
+@s1bN_info = alias internal i8* bitcast (%s1bN_info_struct* @s1bN_info$def to i8*)
+@Main_zdfShowFoo_closure$def = internal global %Main_zdfShowFoo_closure_struct<{i64 ptrtoint (i8* @base_GHCziShow_DZCShow_static_info to i64), i64 add (i64 ptrtoint (%r18d_closure_struct* @r18d_closure$def to i64),i64 2), i64 ptrtoint (i8* @r1bh_closure to i64), i64 ptrtoint (i8* @r1bg_closure to i64), i64 0}>
+@Main_zdfShowFoo_closure = alias i8* bitcast (%Main_zdfShowFoo_closure_struct* @Main_zdfShowFoo_closure$def to i8*)
+@r1bg_closure$def = internal global %r1bg_closure_struct<{i64 ptrtoint (i8* @r1bg_info to i64), i64 0, i64 0, i64 0}>
+@r1bg_closure = alias internal i8* bitcast (%r1bg_closure_struct* @r1bg_closure$def to i8*)
+@r1bg_info$def = internal global %r1bg_info_struct<{i64 ptrtoint (void ()* @r1bg_entry$def to i64), i64 0, i64 12884901910, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 64)}>
+@r1bg_info = alias internal i8* bitcast (%r1bg_info_struct* @r1bg_info$def to i8*)
+@r1bh_closure$def = internal global %r1bh_closure_struct<{i64 ptrtoint (i8* @r1bh_info to i64), i64 0, i64 0, i64 0}>
+@r1bh_closure = alias internal i8* bitcast (%r1bh_closure_struct* @r1bh_closure$def to i8*)
+@r1bh_info$def = internal global %r1bh_info_struct<{i64 ptrtoint (void ()* @r1bh_entry$def to i64), i64 0, i64 38654705686, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 56)}>
+@r1bh_info = alias internal i8* bitcast (%r1bh_info_struct* @r1bh_info$def to i8*)
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.931264 UTC
+
+@s1bN_entry = alias internal i8* bitcast (void ()* @s1bN_entry$def to i8*)
+define internal ccc void @s1bN_entry$def() align 8 nounwind
+{
+c1oQ:
+  %ls1bN = alloca i64, i32 1
+  %lc1oN = alloca i64, i32 1
+  %ln1pb = ptrtoint i8* @MainCapability to i64
+  %ln1pc = add i64 %ln1pb, 24
+  %ln1pd = inttoptr i64 %ln1pc to i64*
+  %ln1pe = load i64* %ln1pd, !tbaa !5
+  store i64 %ln1pe, i64* %ls1bN
+  %ln1pf = ptrtoint i8* @MainCapability to i64
+  %ln1pg = add i64 %ln1pf, 856
+  %ln1ph = inttoptr i64 %ln1pg to i64*
+  %ln1pi = load i64* %ln1ph, !tbaa !5
+  %ln1pj = add i64 %ln1pi, 8
+  %ln1pk = sub i64 %ln1pj, 48
+  %ln1pl = ptrtoint i8* @MainCapability to i64
+  %ln1pm = add i64 %ln1pl, 864
+  %ln1pn = inttoptr i64 %ln1pm to i64*
+  %ln1po = load i64* %ln1pn, !tbaa !5
+  %ln1pp = icmp ult i64 %ln1pk, %ln1po
+  br i1 %ln1pp, label %c1oR, label %c1oS
+c1oS:
+  %ln1pq = ptrtoint i8* @MainCapability to i64
+  %ln1pr = add i64 %ln1pq, 24
+  %ln1ps = inttoptr i64 %ln1pr to i8*
+  %ln1pt = load i64* %ls1bN
+  %ln1pu = inttoptr i64 %ln1pt to i8*
+  %ln1pv = bitcast i8* @newCAF to i8* (i8*, i8*)*
+  %ln1pw = call ccc i8* (i8*, i8*)* %ln1pv( i8* %ln1ps, i8* %ln1pu ) nounwind
+  %ln1px = ptrtoint i8* %ln1pw to i64
+  store i64 %ln1px, i64* %lc1oN
+  %ln1py = load i64* %lc1oN
+  %ln1pz = icmp eq i64 %ln1py, 0
+  br i1 %ln1pz, label %c1oP, label %c1oO
+c1oO:
+  %ln1pA = ptrtoint i8* @MainCapability to i64
+  %ln1pB = add i64 %ln1pA, 856
+  %ln1pC = inttoptr i64 %ln1pB to i64*
+  %ln1pD = load i64* %ln1pC, !tbaa !5
+  %ln1pE = add i64 %ln1pD, -16
+  %ln1pF = ptrtoint i8* @stg_bh_upd_frame_info to i64
+  %ln1pG = inttoptr i64 %ln1pE to i64*
+  store i64 %ln1pF, i64* %ln1pG, !tbaa !5
+  %ln1pH = ptrtoint i8* @MainCapability to i64
+  %ln1pI = add i64 %ln1pH, 856
+  %ln1pJ = inttoptr i64 %ln1pI to i64*
+  %ln1pK = load i64* %ln1pJ, !tbaa !5
+  %ln1pL = add i64 %ln1pK, -8
+  %ln1pM = load i64* %lc1oN
+  %ln1pN = inttoptr i64 %ln1pL to i64*
+  store i64 %ln1pM, i64* %ln1pN, !tbaa !5
+  %ln1pO = ptrtoint i8* @MainCapability to i64
+  %ln1pP = add i64 %ln1pO, 856
+  %ln1pQ = inttoptr i64 %ln1pP to i64*
+  %ln1pR = load i64* %ln1pQ, !tbaa !5
+  %ln1pS = add i64 %ln1pR, -40
+  %ln1pT = ptrtoint %Main_zdfShowFoo_closure_struct* @Main_zdfShowFoo_closure$def to i64
+  %ln1pU = add i64 %ln1pT, 1
+  %ln1pV = inttoptr i64 %ln1pS to i64*
+  store i64 %ln1pU, i64* %ln1pV, !tbaa !5
+  %ln1pW = ptrtoint i8* @MainCapability to i64
+  %ln1pX = add i64 %ln1pW, 856
+  %ln1pY = inttoptr i64 %ln1pX to i64*
+  %ln1pZ = load i64* %ln1pY, !tbaa !5
+  %ln1q0 = add i64 %ln1pZ, -32
+  %ln1q1 = ptrtoint i8* @stg_ap_p_info to i64
+  %ln1q2 = inttoptr i64 %ln1q0 to i64*
+  store i64 %ln1q1, i64* %ln1q2, !tbaa !5
+  %ln1q3 = ptrtoint i8* @MainCapability to i64
+  %ln1q4 = add i64 %ln1q3, 856
+  %ln1q5 = inttoptr i64 %ln1q4 to i64*
+  %ln1q6 = load i64* %ln1q5, !tbaa !5
+  %ln1q7 = add i64 %ln1q6, -24
+  %ln1q8 = ptrtoint i8* @stg_INTLIKE_closure to i64
+  %ln1q9 = add i64 %ln1q8, 257
+  %ln1qa = inttoptr i64 %ln1q7 to i64*
+  store i64 %ln1q9, i64* %ln1qa, !tbaa !5
+  %ln1qb = ptrtoint i8* @MainCapability to i64
+  %ln1qc = add i64 %ln1qb, 856
+  %ln1qd = ptrtoint i8* @MainCapability to i64
+  %ln1qe = add i64 %ln1qd, 856
+  %ln1qf = inttoptr i64 %ln1qe to i64*
+  %ln1qg = load i64* %ln1qf, !tbaa !5
+  %ln1qh = add i64 %ln1qg, -40
+  %ln1qi = inttoptr i64 %ln1qc to i64*
+  store i64 %ln1qh, i64* %ln1qi, !tbaa !5
+  %ln1qj = bitcast i8* @base_GHCziShow_showsPrec_entry to void ()*
+  tail call ccc void ()* %ln1qj( ) nounwind
+  ret void
+c1oP:
+  %ln1qk = load i64* %ls1bN
+  %ln1ql = inttoptr i64 %ln1qk to i64*
+  %ln1qm = load i64* %ln1ql, !tbaa !5
+  %ln1qn = inttoptr i64 %ln1qm to i64*
+  %ln1qo = load i64* %ln1qn, !tbaa !5
+  %ln1qp = inttoptr i64 %ln1qo to void ()*
+  tail call ccc void ()* %ln1qp( ) nounwind
+  ret void
+c1oR:
+  %ln1qq = ptrtoint i8* @MainCapability to i64
+  %ln1qr = add i64 %ln1qq, 24
+  %ln1qs = load i64* %ls1bN
+  %ln1qt = inttoptr i64 %ln1qr to i64*
+  store i64 %ln1qs, i64* %ln1qt, !tbaa !5
+  %ln1qu = ptrtoint i8* @MainCapability to i64
+  %ln1qv = add i64 %ln1qu, 8
+  %ln1qw = inttoptr i64 %ln1qv to i64*
+  %ln1qx = load i64* %ln1qw, !tbaa !5
+  %ln1qy = inttoptr i64 %ln1qx to void ()*
+  tail call ccc void ()* %ln1qy( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.951694 UTC
+
+@r1bg_entry = alias internal i8* bitcast (void ()* @r1bg_entry$def to i8*)
+define internal ccc void @r1bg_entry$def() align 8 nounwind
+{
+c1oZ:
+  %lr1bg = alloca i64, i32 1
+  %lc1oW = alloca i64, i32 1
+  %ln1qz = ptrtoint i8* @MainCapability to i64
+  %ln1qA = add i64 %ln1qz, 24
+  %ln1qB = inttoptr i64 %ln1qA to i64*
+  %ln1qC = load i64* %ln1qB, !tbaa !5
+  store i64 %ln1qC, i64* %lr1bg
+  %ln1qD = ptrtoint i8* @MainCapability to i64
+  %ln1qE = add i64 %ln1qD, 856
+  %ln1qF = inttoptr i64 %ln1qE to i64*
+  %ln1qG = load i64* %ln1qF, !tbaa !5
+  %ln1qH = add i64 %ln1qG, 8
+  %ln1qI = sub i64 %ln1qH, 32
+  %ln1qJ = ptrtoint i8* @MainCapability to i64
+  %ln1qK = add i64 %ln1qJ, 864
+  %ln1qL = inttoptr i64 %ln1qK to i64*
+  %ln1qM = load i64* %ln1qL, !tbaa !5
+  %ln1qN = icmp ult i64 %ln1qI, %ln1qM
+  br i1 %ln1qN, label %c1p0, label %c1p1
+c1p1:
+  %ln1qO = ptrtoint i8* @MainCapability to i64
+  %ln1qP = add i64 %ln1qO, 24
+  %ln1qQ = inttoptr i64 %ln1qP to i8*
+  %ln1qR = load i64* %lr1bg
+  %ln1qS = inttoptr i64 %ln1qR to i8*
+  %ln1qT = bitcast i8* @newCAF to i8* (i8*, i8*)*
+  %ln1qU = call ccc i8* (i8*, i8*)* %ln1qT( i8* %ln1qQ, i8* %ln1qS ) nounwind
+  %ln1qV = ptrtoint i8* %ln1qU to i64
+  store i64 %ln1qV, i64* %lc1oW
+  %ln1qW = load i64* %lc1oW
+  %ln1qX = icmp eq i64 %ln1qW, 0
+  br i1 %ln1qX, label %c1oY, label %c1oX
+c1oX:
+  %ln1qY = ptrtoint i8* @MainCapability to i64
+  %ln1qZ = add i64 %ln1qY, 856
+  %ln1r0 = inttoptr i64 %ln1qZ to i64*
+  %ln1r1 = load i64* %ln1r0, !tbaa !5
+  %ln1r2 = add i64 %ln1r1, -16
+  %ln1r3 = ptrtoint i8* @stg_bh_upd_frame_info to i64
+  %ln1r4 = inttoptr i64 %ln1r2 to i64*
+  store i64 %ln1r3, i64* %ln1r4, !tbaa !5
+  %ln1r5 = ptrtoint i8* @MainCapability to i64
+  %ln1r6 = add i64 %ln1r5, 856
+  %ln1r7 = inttoptr i64 %ln1r6 to i64*
+  %ln1r8 = load i64* %ln1r7, !tbaa !5
+  %ln1r9 = add i64 %ln1r8, -8
+  %ln1ra = load i64* %lc1oW
+  %ln1rb = inttoptr i64 %ln1r9 to i64*
+  store i64 %ln1ra, i64* %ln1rb, !tbaa !5
+  %ln1rc = ptrtoint i8* @MainCapability to i64
+  %ln1rd = add i64 %ln1rc, 24
+  %ln1re = ptrtoint i8* @base_GHCziShow_showListzuzu_closure to i64
+  %ln1rf = inttoptr i64 %ln1rd to i64*
+  store i64 %ln1re, i64* %ln1rf, !tbaa !5
+  %ln1rg = ptrtoint i8* @MainCapability to i64
+  %ln1rh = add i64 %ln1rg, 856
+  %ln1ri = inttoptr i64 %ln1rh to i64*
+  %ln1rj = load i64* %ln1ri, !tbaa !5
+  %ln1rk = add i64 %ln1rj, -24
+  %ln1rl = ptrtoint %s1bN_closure_struct* @s1bN_closure$def to i64
+  %ln1rm = inttoptr i64 %ln1rk to i64*
+  store i64 %ln1rl, i64* %ln1rm, !tbaa !5
+  %ln1rn = ptrtoint i8* @MainCapability to i64
+  %ln1ro = add i64 %ln1rn, 856
+  %ln1rp = ptrtoint i8* @MainCapability to i64
+  %ln1rq = add i64 %ln1rp, 856
+  %ln1rr = inttoptr i64 %ln1rq to i64*
+  %ln1rs = load i64* %ln1rr, !tbaa !5
+  %ln1rt = add i64 %ln1rs, -24
+  %ln1ru = inttoptr i64 %ln1ro to i64*
+  store i64 %ln1rt, i64* %ln1ru, !tbaa !5
+  %ln1rv = bitcast i8* @stg_ap_p_fast to void ()*
+  tail call ccc void ()* %ln1rv( ) nounwind
+  ret void
+c1oY:
+  %ln1rw = load i64* %lr1bg
+  %ln1rx = inttoptr i64 %ln1rw to i64*
+  %ln1ry = load i64* %ln1rx, !tbaa !5
+  %ln1rz = inttoptr i64 %ln1ry to i64*
+  %ln1rA = load i64* %ln1rz, !tbaa !5
+  %ln1rB = inttoptr i64 %ln1rA to void ()*
+  tail call ccc void ()* %ln1rB( ) nounwind
+  ret void
+c1p0:
+  %ln1rC = ptrtoint i8* @MainCapability to i64
+  %ln1rD = add i64 %ln1rC, 24
+  %ln1rE = load i64* %lr1bg
+  %ln1rF = inttoptr i64 %ln1rD to i64*
+  store i64 %ln1rE, i64* %ln1rF, !tbaa !5
+  %ln1rG = ptrtoint i8* @MainCapability to i64
+  %ln1rH = add i64 %ln1rG, 8
+  %ln1rI = inttoptr i64 %ln1rH to i64*
+  %ln1rJ = load i64* %ln1rI, !tbaa !5
+  %ln1rK = inttoptr i64 %ln1rJ to void ()*
+  tail call ccc void ()* %ln1rK( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:37.971567 UTC
+
+@r1bh_entry = alias internal i8* bitcast (void ()* @r1bh_entry$def to i8*)
+define internal ccc void @r1bh_entry$def() align 8 nounwind
+{
+c1p8:
+  %lr1bh = alloca i64, i32 1
+  %lc1p5 = alloca i64, i32 1
+  %ln1rL = ptrtoint i8* @MainCapability to i64
+  %ln1rM = add i64 %ln1rL, 24
+  %ln1rN = inttoptr i64 %ln1rM to i64*
+  %ln1rO = load i64* %ln1rN, !tbaa !5
+  store i64 %ln1rO, i64* %lr1bh
+  %ln1rP = ptrtoint i8* @MainCapability to i64
+  %ln1rQ = add i64 %ln1rP, 856
+  %ln1rR = inttoptr i64 %ln1rQ to i64*
+  %ln1rS = load i64* %ln1rR, !tbaa !5
+  %ln1rT = add i64 %ln1rS, 8
+  %ln1rU = sub i64 %ln1rT, 32
+  %ln1rV = ptrtoint i8* @MainCapability to i64
+  %ln1rW = add i64 %ln1rV, 864
+  %ln1rX = inttoptr i64 %ln1rW to i64*
+  %ln1rY = load i64* %ln1rX, !tbaa !5
+  %ln1rZ = icmp ult i64 %ln1rU, %ln1rY
+  br i1 %ln1rZ, label %c1p9, label %c1pa
+c1pa:
+  %ln1s0 = ptrtoint i8* @MainCapability to i64
+  %ln1s1 = add i64 %ln1s0, 24
+  %ln1s2 = inttoptr i64 %ln1s1 to i8*
+  %ln1s3 = load i64* %lr1bh
+  %ln1s4 = inttoptr i64 %ln1s3 to i8*
+  %ln1s5 = bitcast i8* @newCAF to i8* (i8*, i8*)*
+  %ln1s6 = call ccc i8* (i8*, i8*)* %ln1s5( i8* %ln1s2, i8* %ln1s4 ) nounwind
+  %ln1s7 = ptrtoint i8* %ln1s6 to i64
+  store i64 %ln1s7, i64* %lc1p5
+  %ln1s8 = load i64* %lc1p5
+  %ln1s9 = icmp eq i64 %ln1s8, 0
+  br i1 %ln1s9, label %c1p7, label %c1p6
+c1p6:
+  %ln1sa = ptrtoint i8* @MainCapability to i64
+  %ln1sb = add i64 %ln1sa, 856
+  %ln1sc = inttoptr i64 %ln1sb to i64*
+  %ln1sd = load i64* %ln1sc, !tbaa !5
+  %ln1se = add i64 %ln1sd, -16
+  %ln1sf = ptrtoint i8* @stg_bh_upd_frame_info to i64
+  %ln1sg = inttoptr i64 %ln1se to i64*
+  store i64 %ln1sf, i64* %ln1sg, !tbaa !5
+  %ln1sh = ptrtoint i8* @MainCapability to i64
+  %ln1si = add i64 %ln1sh, 856
+  %ln1sj = inttoptr i64 %ln1si to i64*
+  %ln1sk = load i64* %ln1sj, !tbaa !5
+  %ln1sl = add i64 %ln1sk, -8
+  %ln1sm = load i64* %lc1p5
+  %ln1sn = inttoptr i64 %ln1sl to i64*
+  store i64 %ln1sm, i64* %ln1sn, !tbaa !5
+  %ln1so = ptrtoint i8* @MainCapability to i64
+  %ln1sp = add i64 %ln1so, 24
+  %ln1sq = ptrtoint i8* @base_GHCziShow_zddmshow_closure to i64
+  %ln1sr = inttoptr i64 %ln1sp to i64*
+  store i64 %ln1sq, i64* %ln1sr, !tbaa !5
+  %ln1ss = ptrtoint i8* @MainCapability to i64
+  %ln1st = add i64 %ln1ss, 856
+  %ln1su = inttoptr i64 %ln1st to i64*
+  %ln1sv = load i64* %ln1su, !tbaa !5
+  %ln1sw = add i64 %ln1sv, -24
+  %ln1sx = ptrtoint %Main_zdfShowFoo_closure_struct* @Main_zdfShowFoo_closure$def to i64
+  %ln1sy = add i64 %ln1sx, 1
+  %ln1sz = inttoptr i64 %ln1sw to i64*
+  store i64 %ln1sy, i64* %ln1sz, !tbaa !5
+  %ln1sA = ptrtoint i8* @MainCapability to i64
+  %ln1sB = add i64 %ln1sA, 856
+  %ln1sC = ptrtoint i8* @MainCapability to i64
+  %ln1sD = add i64 %ln1sC, 856
+  %ln1sE = inttoptr i64 %ln1sD to i64*
+  %ln1sF = load i64* %ln1sE, !tbaa !5
+  %ln1sG = add i64 %ln1sF, -24
+  %ln1sH = inttoptr i64 %ln1sB to i64*
+  store i64 %ln1sG, i64* %ln1sH, !tbaa !5
+  %ln1sI = bitcast i8* @stg_ap_p_fast to void ()*
+  tail call ccc void ()* %ln1sI( ) nounwind
+  ret void
+c1p7:
+  %ln1sJ = load i64* %lr1bh
+  %ln1sK = inttoptr i64 %ln1sJ to i64*
+  %ln1sL = load i64* %ln1sK, !tbaa !5
+  %ln1sM = inttoptr i64 %ln1sL to i64*
+  %ln1sN = load i64* %ln1sM, !tbaa !5
+  %ln1sO = inttoptr i64 %ln1sN to void ()*
+  tail call ccc void ()* %ln1sO( ) nounwind
+  ret void
+c1p9:
+  %ln1sP = ptrtoint i8* @MainCapability to i64
+  %ln1sQ = add i64 %ln1sP, 24
+  %ln1sR = load i64* %lr1bh
+  %ln1sS = inttoptr i64 %ln1sQ to i64*
+  store i64 %ln1sR, i64* %ln1sS, !tbaa !5
+  %ln1sT = ptrtoint i8* @MainCapability to i64
+  %ln1sU = add i64 %ln1sT, 8
+  %ln1sV = inttoptr i64 %ln1sU to i64*
+  %ln1sW = load i64* %ln1sV, !tbaa !5
+  %ln1sX = inttoptr i64 %ln1sW to void ()*
+  tail call ccc void ()* %ln1sX( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.310397 UTC
+
+%s1c5_closure_struct = type <{i64, i64, i64, i64}>
+%s1c2_info_struct = type <{i64, i64, i64, i64, i64}>
+%s1c0_info_struct = type <{i64, i64, i64, i64}>
+%s1c3_info_struct = type <{i64, i64, i64, i64}>
+%s1bX_info_struct = type <{i64, i64, i64}>
+%s1bV_info_struct = type <{i64, i64, i64, i64}>
+%s1bY_info_struct = type <{i64, i64, i64, i64}>
+%s1bZ_info_struct = type <{i64, i64, i64, i64}>
+%s1c4_info_struct = type <{i64, i64, i64, i64, i64}>
+%s1bT_info_struct = type <{i64, i64, i64, i64}>
+%s1c5_info_struct = type <{i64, i64, i64, i64}>
+@s1c5_closure$def = internal global %s1c5_closure_struct<{i64 ptrtoint (i8* @s1c5_info to i64), i64 0, i64 0, i64 0}>
+@s1c5_closure = alias internal i8* bitcast (%s1c5_closure_struct* @s1c5_closure$def to i8*)
+@s1c2_info$def = internal global %s1c2_info_struct<{i64 ptrtoint (void ()* @s1c2_entry$def to i64), i64 4294967296, i64 73014444043, i64 4294967301, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 56)}>
+@s1c2_info = alias internal i8* bitcast (%s1c2_info_struct* @s1c2_info$def to i8*)
+@s1c0_info$def = internal global %s1c0_info_struct<{i64 ptrtoint (void ()* @s1c0_entry$def to i64), i64 1, i64 4294967313, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 96)}>
+@s1c0_info = alias internal i8* bitcast (%s1c0_info_struct* @s1c0_info$def to i8*)
+@s1c3_info$def = internal global %s1c3_info_struct<{i64 ptrtoint (void ()* @s1c3_entry$def to i64), i64 1, i64 485331304465, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 56)}>
+@s1c3_info = alias internal i8* bitcast (%s1c3_info_struct* @s1c3_info$def to i8*)
+@s1bX_info$def = internal global %s1bX_info_struct<{i64 ptrtoint (void ()* @s1bX_entry$def to i64), i64 0, i64 16}>
+@s1bX_info = alias internal i8* bitcast (%s1bX_info_struct* @s1bX_info$def to i8*)
+@s1bV_info$def = internal global %s1bV_info_struct<{i64 ptrtoint (void ()* @s1bV_entry$def to i64), i64 1, i64 4294967313, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 112)}>
+@s1bV_info = alias internal i8* bitcast (%s1bV_info_struct* @s1bV_info$def to i8*)
+@s1bY_info$def = internal global %s1bY_info_struct<{i64 ptrtoint (void ()* @s1bY_entry$def to i64), i64 1, i64 12884901905, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 112)}>
+@s1bY_info = alias internal i8* bitcast (%s1bY_info_struct* @s1bY_info$def to i8*)
+@s1bZ_info$def = internal global %s1bZ_info_struct<{i64 ptrtoint (void ()* @s1bZ_entry$def to i64), i64 1, i64 30064771089, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 112)}>
+@s1bZ_info = alias internal i8* bitcast (%s1bZ_info_struct* @s1bZ_info$def to i8*)
+@s1c4_info$def = internal global %s1c4_info_struct<{i64 ptrtoint (void ()* @s1c4_entry$def to i64), i64 4294967296, i64 4333622001675, i64 4294967301, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 56)}>
+@s1c4_info = alias internal i8* bitcast (%s1c4_info_struct* @s1c4_info$def to i8*)
+@s1bT_info$def = internal global %s1bT_info_struct<{i64 ptrtoint (void ()* @s1bT_entry$def to i64), i64 0, i64 21474836496, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 120)}>
+@s1bT_info = alias internal i8* bitcast (%s1bT_info_struct* @s1bT_info$def to i8*)
+@s1c5_info$def = internal global %s1c5_info_struct<{i64 ptrtoint (void ()* @s1c5_entry$def to i64), i64 0, i64 8731668512790, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 56)}>
+@s1c5_info = alias internal i8* bitcast (%s1c5_info_struct* @s1c5_info$def to i8*)
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.324282 UTC
+
+@s1c2_entry = alias internal i8* bitcast (void ()* @s1c2_entry$def to i8*)
+define internal ccc void @s1c2_entry$def() align 8 nounwind
+{
+c1ti:
+  %ls1c2 = alloca i64, i32 1
+  %ls1c1 = alloca i64, i32 1
+  %ln1un = ptrtoint i8* @MainCapability to i64
+  %ln1uo = add i64 %ln1un, 24
+  %ln1up = inttoptr i64 %ln1uo to i64*
+  %ln1uq = load i64* %ln1up, !tbaa !5
+  store i64 %ln1uq, i64* %ls1c2
+  %ln1ur = ptrtoint i8* @MainCapability to i64
+  %ln1us = add i64 %ln1ur, 856
+  %ln1ut = inttoptr i64 %ln1us to i64*
+  %ln1uu = load i64* %ln1ut, !tbaa !5
+  %ln1uv = inttoptr i64 %ln1uu to i64*
+  %ln1uw = load i64* %ln1uv, !tbaa !5
+  store i64 %ln1uw, i64* %ls1c1
+  %ln1ux = ptrtoint i8* @MainCapability to i64
+  %ln1uy = add i64 %ln1ux, 856
+  %ln1uz = inttoptr i64 %ln1uy to i64*
+  %ln1uA = load i64* %ln1uz, !tbaa !5
+  %ln1uB = add i64 %ln1uA, 16
+  %ln1uC = sub i64 %ln1uB, 24
+  %ln1uD = ptrtoint i8* @MainCapability to i64
+  %ln1uE = add i64 %ln1uD, 864
+  %ln1uF = inttoptr i64 %ln1uE to i64*
+  %ln1uG = load i64* %ln1uF, !tbaa !5
+  %ln1uH = icmp ult i64 %ln1uC, %ln1uG
+  br i1 %ln1uH, label %c1tj, label %c1tk
+c1tk:
+  %ln1uI = ptrtoint i8* @MainCapability to i64
+  %ln1uJ = add i64 %ln1uI, 24
+  %ln1uK = ptrtoint i8* @base_SystemziIO_print_closure to i64
+  %ln1uL = inttoptr i64 %ln1uJ to i64*
+  store i64 %ln1uK, i64* %ln1uL, !tbaa !5
+  %ln1uM = ptrtoint i8* @MainCapability to i64
+  %ln1uN = add i64 %ln1uM, 856
+  %ln1uO = inttoptr i64 %ln1uN to i64*
+  %ln1uP = load i64* %ln1uO, !tbaa !5
+  %ln1uQ = add i64 %ln1uP, -8
+  %ln1uR = ptrtoint %Main_zdfShowFoo_closure_struct* @Main_zdfShowFoo_closure$def to i64
+  %ln1uS = add i64 %ln1uR, 1
+  %ln1uT = inttoptr i64 %ln1uQ to i64*
+  store i64 %ln1uS, i64* %ln1uT, !tbaa !5
+  %ln1uU = ptrtoint i8* @MainCapability to i64
+  %ln1uV = add i64 %ln1uU, 856
+  %ln1uW = ptrtoint i8* @MainCapability to i64
+  %ln1uX = add i64 %ln1uW, 856
+  %ln1uY = inttoptr i64 %ln1uX to i64*
+  %ln1uZ = load i64* %ln1uY, !tbaa !5
+  %ln1v0 = add i64 %ln1uZ, -8
+  %ln1v1 = inttoptr i64 %ln1uV to i64*
+  store i64 %ln1v0, i64* %ln1v1, !tbaa !5
+  %ln1v2 = bitcast i8* @stg_ap_pp_fast to void ()*
+  tail call ccc void ()* %ln1v2( ) nounwind
+  ret void
+c1tj:
+  %ln1v3 = ptrtoint i8* @MainCapability to i64
+  %ln1v4 = add i64 %ln1v3, 24
+  %ln1v5 = load i64* %ls1c2
+  %ln1v6 = inttoptr i64 %ln1v4 to i64*
+  store i64 %ln1v5, i64* %ln1v6, !tbaa !5
+  %ln1v7 = ptrtoint i8* @MainCapability to i64
+  %ln1v8 = add i64 %ln1v7, 16
+  %ln1v9 = inttoptr i64 %ln1v8 to i64*
+  %ln1va = load i64* %ln1v9, !tbaa !5
+  %ln1vb = inttoptr i64 %ln1va to void ()*
+  tail call ccc void ()* %ln1vb( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.339692 UTC
+
+@s1c0_entry = alias internal i8* bitcast (void ()* @s1c0_entry$def to i8*)
+define internal ccc void @s1c0_entry$def() align 8 nounwind
+{
+c1tp:
+  %ls1c0 = alloca i64, i32 1
+  %ls1bU = alloca i64, i32 1
+  %ln1vc = ptrtoint i8* @MainCapability to i64
+  %ln1vd = add i64 %ln1vc, 24
+  %ln1ve = inttoptr i64 %ln1vd to i64*
+  %ln1vf = load i64* %ln1ve, !tbaa !5
+  store i64 %ln1vf, i64* %ls1c0
+  %ln1vg = ptrtoint i8* @MainCapability to i64
+  %ln1vh = add i64 %ln1vg, 856
+  %ln1vi = inttoptr i64 %ln1vh to i64*
+  %ln1vj = load i64* %ln1vi, !tbaa !5
+  %ln1vk = add i64 %ln1vj, 8
+  %ln1vl = sub i64 %ln1vk, 32
+  %ln1vm = ptrtoint i8* @MainCapability to i64
+  %ln1vn = add i64 %ln1vm, 864
+  %ln1vo = inttoptr i64 %ln1vn to i64*
+  %ln1vp = load i64* %ln1vo, !tbaa !5
+  %ln1vq = icmp ult i64 %ln1vl, %ln1vp
+  br i1 %ln1vq, label %c1tq, label %c1tr
+c1tr:
+  %ln1vr = ptrtoint i8* @MainCapability to i64
+  %ln1vs = add i64 %ln1vr, 856
+  %ln1vt = inttoptr i64 %ln1vs to i64*
+  %ln1vu = load i64* %ln1vt, !tbaa !5
+  %ln1vv = add i64 %ln1vu, -16
+  %ln1vw = ptrtoint i8* @stg_upd_frame_info to i64
+  %ln1vx = inttoptr i64 %ln1vv to i64*
+  store i64 %ln1vw, i64* %ln1vx, !tbaa !5
+  %ln1vy = ptrtoint i8* @MainCapability to i64
+  %ln1vz = add i64 %ln1vy, 856
+  %ln1vA = inttoptr i64 %ln1vz to i64*
+  %ln1vB = load i64* %ln1vA, !tbaa !5
+  %ln1vC = add i64 %ln1vB, -8
+  %ln1vD = load i64* %ls1c0
+  %ln1vE = inttoptr i64 %ln1vC to i64*
+  store i64 %ln1vD, i64* %ln1vE, !tbaa !5
+  %ln1vF = load i64* %ls1c0
+  %ln1vG = add i64 %ln1vF, 16
+  %ln1vH = inttoptr i64 %ln1vG to i64*
+  %ln1vI = load i64* %ln1vH, !tbaa !5
+  store i64 %ln1vI, i64* %ls1bU
+  %ln1vJ = ptrtoint i8* @MainCapability to i64
+  %ln1vK = add i64 %ln1vJ, 24
+  %ln1vL = ptrtoint i8* @base_GHCziIORef_readIORef_closure to i64
+  %ln1vM = inttoptr i64 %ln1vK to i64*
+  store i64 %ln1vL, i64* %ln1vM, !tbaa !5
+  %ln1vN = ptrtoint i8* @MainCapability to i64
+  %ln1vO = add i64 %ln1vN, 856
+  %ln1vP = inttoptr i64 %ln1vO to i64*
+  %ln1vQ = load i64* %ln1vP, !tbaa !5
+  %ln1vR = add i64 %ln1vQ, -24
+  %ln1vS = load i64* %ls1bU
+  %ln1vT = inttoptr i64 %ln1vR to i64*
+  store i64 %ln1vS, i64* %ln1vT, !tbaa !5
+  %ln1vU = ptrtoint i8* @MainCapability to i64
+  %ln1vV = add i64 %ln1vU, 856
+  %ln1vW = ptrtoint i8* @MainCapability to i64
+  %ln1vX = add i64 %ln1vW, 856
+  %ln1vY = inttoptr i64 %ln1vX to i64*
+  %ln1vZ = load i64* %ln1vY, !tbaa !5
+  %ln1w0 = add i64 %ln1vZ, -24
+  %ln1w1 = inttoptr i64 %ln1vV to i64*
+  store i64 %ln1w0, i64* %ln1w1, !tbaa !5
+  %ln1w2 = bitcast i8* @stg_ap_p_fast to void ()*
+  tail call ccc void ()* %ln1w2( ) nounwind
+  ret void
+c1tq:
+  %ln1w3 = ptrtoint i8* @MainCapability to i64
+  %ln1w4 = add i64 %ln1w3, 24
+  %ln1w5 = load i64* %ls1c0
+  %ln1w6 = inttoptr i64 %ln1w4 to i64*
+  store i64 %ln1w5, i64* %ln1w6, !tbaa !5
+  %ln1w7 = ptrtoint i8* @MainCapability to i64
+  %ln1w8 = add i64 %ln1w7, 8
+  %ln1w9 = inttoptr i64 %ln1w8 to i64*
+  %ln1wa = load i64* %ln1w9, !tbaa !5
+  %ln1wb = inttoptr i64 %ln1wa to void ()*
+  tail call ccc void ()* %ln1wb( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.360777 UTC
+
+@s1c3_entry = alias internal i8* bitcast (void ()* @s1c3_entry$def to i8*)
+define internal ccc void @s1c3_entry$def() align 8 nounwind
+{
+c1ts:
+  %ls1c3 = alloca i64, i32 1
+  %ls1bU = alloca i64, i32 1
+  %lc1td = alloca i64, i32 1
+  %lc1tl = alloca i64, i32 1
+  %ln1wc = ptrtoint i8* @MainCapability to i64
+  %ln1wd = add i64 %ln1wc, 24
+  %ln1we = inttoptr i64 %ln1wd to i64*
+  %ln1wf = load i64* %ln1we, !tbaa !5
+  store i64 %ln1wf, i64* %ls1c3
+  %ln1wg = ptrtoint i8* @MainCapability to i64
+  %ln1wh = add i64 %ln1wg, 856
+  %ln1wi = inttoptr i64 %ln1wh to i64*
+  %ln1wj = load i64* %ln1wi, !tbaa !5
+  %ln1wk = add i64 %ln1wj, 8
+  %ln1wl = sub i64 %ln1wk, 56
+  %ln1wm = ptrtoint i8* @MainCapability to i64
+  %ln1wn = add i64 %ln1wm, 864
+  %ln1wo = inttoptr i64 %ln1wn to i64*
+  %ln1wp = load i64* %ln1wo, !tbaa !5
+  %ln1wq = icmp ult i64 %ln1wl, %ln1wp
+  br i1 %ln1wq, label %c1tt, label %c1tu
+c1tu:
+  %ln1wr = ptrtoint i8* @MainCapability to i64
+  %ln1ws = add i64 %ln1wr, 872
+  %ln1wt = ptrtoint i8* @MainCapability to i64
+  %ln1wu = add i64 %ln1wt, 872
+  %ln1wv = inttoptr i64 %ln1wu to i64*
+  %ln1ww = load i64* %ln1wv, !tbaa !5
+  %ln1wx = add i64 %ln1ww, 40
+  %ln1wy = inttoptr i64 %ln1ws to i64*
+  store i64 %ln1wx, i64* %ln1wy, !tbaa !5
+  %ln1wz = ptrtoint i8* @MainCapability to i64
+  %ln1wA = add i64 %ln1wz, 872
+  %ln1wB = inttoptr i64 %ln1wA to i64*
+  %ln1wC = load i64* %ln1wB, !tbaa !5
+  %ln1wD = ptrtoint i8* @MainCapability to i64
+  %ln1wE = add i64 %ln1wD, 880
+  %ln1wF = inttoptr i64 %ln1wE to i64*
+  %ln1wG = load i64* %ln1wF, !tbaa !5
+  %ln1wH = icmp ugt i64 %ln1wC, %ln1wG
+  br i1 %ln1wH, label %c1tw, label %c1tv
+c1tv:
+  %ln1wI = ptrtoint i8* @MainCapability to i64
+  %ln1wJ = add i64 %ln1wI, 856
+  %ln1wK = inttoptr i64 %ln1wJ to i64*
+  %ln1wL = load i64* %ln1wK, !tbaa !5
+  %ln1wM = add i64 %ln1wL, -16
+  %ln1wN = ptrtoint i8* @stg_upd_frame_info to i64
+  %ln1wO = inttoptr i64 %ln1wM to i64*
+  store i64 %ln1wN, i64* %ln1wO, !tbaa !5
+  %ln1wP = ptrtoint i8* @MainCapability to i64
+  %ln1wQ = add i64 %ln1wP, 856
+  %ln1wR = inttoptr i64 %ln1wQ to i64*
+  %ln1wS = load i64* %ln1wR, !tbaa !5
+  %ln1wT = add i64 %ln1wS, -8
+  %ln1wU = load i64* %ls1c3
+  %ln1wV = inttoptr i64 %ln1wT to i64*
+  store i64 %ln1wU, i64* %ln1wV, !tbaa !5
+  %ln1wW = load i64* %ls1c3
+  %ln1wX = add i64 %ln1wW, 16
+  %ln1wY = inttoptr i64 %ln1wX to i64*
+  %ln1wZ = load i64* %ln1wY, !tbaa !5
+  store i64 %ln1wZ, i64* %ls1bU
+  %ln1x0 = ptrtoint i8* @MainCapability to i64
+  %ln1x1 = add i64 %ln1x0, 872
+  %ln1x2 = inttoptr i64 %ln1x1 to i64*
+  %ln1x3 = load i64* %ln1x2, !tbaa !5
+  %ln1x4 = add i64 %ln1x3, -32
+  %ln1x5 = ptrtoint %s1c2_info_struct* @s1c2_info$def to i64
+  %ln1x6 = inttoptr i64 %ln1x4 to i64*
+  store i64 %ln1x5, i64* %ln1x6, !tbaa !5
+  %ln1x7 = ptrtoint i8* @MainCapability to i64
+  %ln1x8 = add i64 %ln1x7, 872
+  %ln1x9 = inttoptr i64 %ln1x8 to i64*
+  %ln1xa = load i64* %ln1x9, !tbaa !5
+  %ln1xb = add i64 %ln1xa, -31
+  store i64 %ln1xb, i64* %lc1td
+  %ln1xc = ptrtoint i8* @MainCapability to i64
+  %ln1xd = add i64 %ln1xc, 872
+  %ln1xe = inttoptr i64 %ln1xd to i64*
+  %ln1xf = load i64* %ln1xe, !tbaa !5
+  %ln1xg = add i64 %ln1xf, -16
+  %ln1xh = ptrtoint %s1c0_info_struct* @s1c0_info$def to i64
+  %ln1xi = inttoptr i64 %ln1xg to i64*
+  store i64 %ln1xh, i64* %ln1xi, !tbaa !5
+  %ln1xj = ptrtoint i8* @MainCapability to i64
+  %ln1xk = add i64 %ln1xj, 872
+  %ln1xl = inttoptr i64 %ln1xk to i64*
+  %ln1xm = load i64* %ln1xl, !tbaa !5
+  %ln1xn = load i64* %ls1bU
+  %ln1xo = inttoptr i64 %ln1xm to i64*
+  store i64 %ln1xn, i64* %ln1xo, !tbaa !5
+  %ln1xp = ptrtoint i8* @MainCapability to i64
+  %ln1xq = add i64 %ln1xp, 872
+  %ln1xr = inttoptr i64 %ln1xq to i64*
+  %ln1xs = load i64* %ln1xr, !tbaa !5
+  %ln1xt = add i64 %ln1xs, -16
+  store i64 %ln1xt, i64* %lc1tl
+  %ln1xu = ptrtoint i8* @MainCapability to i64
+  %ln1xv = add i64 %ln1xu, 856
+  %ln1xw = inttoptr i64 %ln1xv to i64*
+  %ln1xx = load i64* %ln1xw, !tbaa !5
+  %ln1xy = add i64 %ln1xx, -48
+  %ln1xz = ptrtoint i8* @base_GHCziBase_zdfMonadIO_closure to i64
+  %ln1xA = inttoptr i64 %ln1xy to i64*
+  store i64 %ln1xz, i64* %ln1xA, !tbaa !5
+  %ln1xB = ptrtoint i8* @MainCapability to i64
+  %ln1xC = add i64 %ln1xB, 856
+  %ln1xD = inttoptr i64 %ln1xC to i64*
+  %ln1xE = load i64* %ln1xD, !tbaa !5
+  %ln1xF = add i64 %ln1xE, -40
+  %ln1xG = ptrtoint i8* @stg_ap_pp_info to i64
+  %ln1xH = inttoptr i64 %ln1xF to i64*
+  store i64 %ln1xG, i64* %ln1xH, !tbaa !5
+  %ln1xI = ptrtoint i8* @MainCapability to i64
+  %ln1xJ = add i64 %ln1xI, 856
+  %ln1xK = inttoptr i64 %ln1xJ to i64*
+  %ln1xL = load i64* %ln1xK, !tbaa !5
+  %ln1xM = add i64 %ln1xL, -32
+  %ln1xN = load i64* %lc1tl
+  %ln1xO = inttoptr i64 %ln1xM to i64*
+  store i64 %ln1xN, i64* %ln1xO, !tbaa !5
+  %ln1xP = ptrtoint i8* @MainCapability to i64
+  %ln1xQ = add i64 %ln1xP, 856
+  %ln1xR = inttoptr i64 %ln1xQ to i64*
+  %ln1xS = load i64* %ln1xR, !tbaa !5
+  %ln1xT = add i64 %ln1xS, -24
+  %ln1xU = load i64* %lc1td
+  %ln1xV = inttoptr i64 %ln1xT to i64*
+  store i64 %ln1xU, i64* %ln1xV, !tbaa !5
+  %ln1xW = ptrtoint i8* @MainCapability to i64
+  %ln1xX = add i64 %ln1xW, 856
+  %ln1xY = ptrtoint i8* @MainCapability to i64
+  %ln1xZ = add i64 %ln1xY, 856
+  %ln1y0 = inttoptr i64 %ln1xZ to i64*
+  %ln1y1 = load i64* %ln1y0, !tbaa !5
+  %ln1y2 = add i64 %ln1y1, -48
+  %ln1y3 = inttoptr i64 %ln1xX to i64*
+  store i64 %ln1y2, i64* %ln1y3, !tbaa !5
+  %ln1y4 = bitcast i8* @base_GHCziBase_zgzgze_entry to void ()*
+  tail call ccc void ()* %ln1y4( ) nounwind
+  ret void
+c1tw:
+  %ln1y5 = ptrtoint i8* @MainCapability to i64
+  %ln1y6 = add i64 %ln1y5, 928
+  %ln1y7 = inttoptr i64 %ln1y6 to i64*
+  store i64 40, i64* %ln1y7, !tbaa !5
+  br label %c1tt
+c1tt:
+  %ln1y8 = ptrtoint i8* @MainCapability to i64
+  %ln1y9 = add i64 %ln1y8, 24
+  %ln1ya = load i64* %ls1c3
+  %ln1yb = inttoptr i64 %ln1y9 to i64*
+  store i64 %ln1ya, i64* %ln1yb, !tbaa !5
+  %ln1yc = ptrtoint i8* @MainCapability to i64
+  %ln1yd = add i64 %ln1yc, 8
+  %ln1ye = inttoptr i64 %ln1yd to i64*
+  %ln1yf = load i64* %ln1ye, !tbaa !5
+  %ln1yg = inttoptr i64 %ln1yf to void ()*
+  tail call ccc void ()* %ln1yg( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.385332 UTC
+
+@s1bX_entry = alias internal i8* bitcast (void ()* @s1bX_entry$def to i8*)
+define internal ccc void @s1bX_entry$def() align 8 nounwind
+{
+c1tJ:
+  %ls1bX = alloca i64, i32 1
+  %ln1yh = ptrtoint i8* @MainCapability to i64
+  %ln1yi = add i64 %ln1yh, 24
+  %ln1yj = inttoptr i64 %ln1yi to i64*
+  %ln1yk = load i64* %ln1yj, !tbaa !5
+  store i64 %ln1yk, i64* %ls1bX
+  %ln1yl = ptrtoint i8* @MainCapability to i64
+  %ln1ym = add i64 %ln1yl, 856
+  %ln1yn = inttoptr i64 %ln1ym to i64*
+  %ln1yo = load i64* %ln1yn, !tbaa !5
+  %ln1yp = add i64 %ln1yo, 8
+  %ln1yq = sub i64 %ln1yp, 32
+  %ln1yr = ptrtoint i8* @MainCapability to i64
+  %ln1ys = add i64 %ln1yr, 864
+  %ln1yt = inttoptr i64 %ln1ys to i64*
+  %ln1yu = load i64* %ln1yt, !tbaa !5
+  %ln1yv = icmp ult i64 %ln1yq, %ln1yu
+  br i1 %ln1yv, label %c1tK, label %c1tL
+c1tL:
+  %ln1yw = ptrtoint i8* @MainCapability to i64
+  %ln1yx = add i64 %ln1yw, 856
+  %ln1yy = inttoptr i64 %ln1yx to i64*
+  %ln1yz = load i64* %ln1yy, !tbaa !5
+  %ln1yA = add i64 %ln1yz, -16
+  %ln1yB = ptrtoint i8* @stg_upd_frame_info to i64
+  %ln1yC = inttoptr i64 %ln1yA to i64*
+  store i64 %ln1yB, i64* %ln1yC, !tbaa !5
+  %ln1yD = ptrtoint i8* @MainCapability to i64
+  %ln1yE = add i64 %ln1yD, 856
+  %ln1yF = inttoptr i64 %ln1yE to i64*
+  %ln1yG = load i64* %ln1yF, !tbaa !5
+  %ln1yH = add i64 %ln1yG, -8
+  %ln1yI = load i64* %ls1bX
+  %ln1yJ = inttoptr i64 %ln1yH to i64*
+  store i64 %ln1yI, i64* %ln1yJ, !tbaa !5
+  %ln1yK = ptrtoint i8* @MainCapability to i64
+  %ln1yL = add i64 %ln1yK, 856
+  %ln1yM = inttoptr i64 %ln1yL to i64*
+  %ln1yN = load i64* %ln1yM, !tbaa !5
+  %ln1yO = add i64 %ln1yN, -24
+  %ln1yP = ptrtoint i8* @stg_INTLIKE_closure to i64
+  %ln1yQ = add i64 %ln1yP, 321
+  %ln1yR = inttoptr i64 %ln1yO to i64*
+  store i64 %ln1yQ, i64* %ln1yR, !tbaa !5
+  %ln1yS = ptrtoint i8* @MainCapability to i64
+  %ln1yT = add i64 %ln1yS, 856
+  %ln1yU = ptrtoint i8* @MainCapability to i64
+  %ln1yV = add i64 %ln1yU, 856
+  %ln1yW = inttoptr i64 %ln1yV to i64*
+  %ln1yX = load i64* %ln1yW, !tbaa !5
+  %ln1yY = add i64 %ln1yX, -24
+  %ln1yZ = inttoptr i64 %ln1yT to i64*
+  store i64 %ln1yY, i64* %ln1yZ, !tbaa !5
+  %ln1z0 = bitcast void ()* @rnV_entry$def to void ()*
+  tail call ccc void ()* %ln1z0( ) nounwind
+  ret void
+c1tK:
+  %ln1z1 = ptrtoint i8* @MainCapability to i64
+  %ln1z2 = add i64 %ln1z1, 24
+  %ln1z3 = load i64* %ls1bX
+  %ln1z4 = inttoptr i64 %ln1z2 to i64*
+  store i64 %ln1z3, i64* %ln1z4, !tbaa !5
+  %ln1z5 = ptrtoint i8* @MainCapability to i64
+  %ln1z6 = add i64 %ln1z5, 8
+  %ln1z7 = inttoptr i64 %ln1z6 to i64*
+  %ln1z8 = load i64* %ln1z7, !tbaa !5
+  %ln1z9 = inttoptr i64 %ln1z8 to void ()*
+  tail call ccc void ()* %ln1z9( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.399851 UTC
+
+@s1bV_entry = alias internal i8* bitcast (void ()* @s1bV_entry$def to i8*)
+define internal ccc void @s1bV_entry$def() align 8 nounwind
+{
+c1tQ:
+  %ls1bV = alloca i64, i32 1
+  %ls1bU = alloca i64, i32 1
+  %ln1za = ptrtoint i8* @MainCapability to i64
+  %ln1zb = add i64 %ln1za, 24
+  %ln1zc = inttoptr i64 %ln1zb to i64*
+  %ln1zd = load i64* %ln1zc, !tbaa !5
+  store i64 %ln1zd, i64* %ls1bV
+  %ln1ze = ptrtoint i8* @MainCapability to i64
+  %ln1zf = add i64 %ln1ze, 856
+  %ln1zg = inttoptr i64 %ln1zf to i64*
+  %ln1zh = load i64* %ln1zg, !tbaa !5
+  %ln1zi = add i64 %ln1zh, 8
+  %ln1zj = sub i64 %ln1zi, 32
+  %ln1zk = ptrtoint i8* @MainCapability to i64
+  %ln1zl = add i64 %ln1zk, 864
+  %ln1zm = inttoptr i64 %ln1zl to i64*
+  %ln1zn = load i64* %ln1zm, !tbaa !5
+  %ln1zo = icmp ult i64 %ln1zj, %ln1zn
+  br i1 %ln1zo, label %c1tR, label %c1tS
+c1tS:
+  %ln1zp = ptrtoint i8* @MainCapability to i64
+  %ln1zq = add i64 %ln1zp, 856
+  %ln1zr = inttoptr i64 %ln1zq to i64*
+  %ln1zs = load i64* %ln1zr, !tbaa !5
+  %ln1zt = add i64 %ln1zs, -16
+  %ln1zu = ptrtoint i8* @stg_upd_frame_info to i64
+  %ln1zv = inttoptr i64 %ln1zt to i64*
+  store i64 %ln1zu, i64* %ln1zv, !tbaa !5
+  %ln1zw = ptrtoint i8* @MainCapability to i64
+  %ln1zx = add i64 %ln1zw, 856
+  %ln1zy = inttoptr i64 %ln1zx to i64*
+  %ln1zz = load i64* %ln1zy, !tbaa !5
+  %ln1zA = add i64 %ln1zz, -8
+  %ln1zB = load i64* %ls1bV
+  %ln1zC = inttoptr i64 %ln1zA to i64*
+  store i64 %ln1zB, i64* %ln1zC, !tbaa !5
+  %ln1zD = load i64* %ls1bV
+  %ln1zE = add i64 %ln1zD, 16
+  %ln1zF = inttoptr i64 %ln1zE to i64*
+  %ln1zG = load i64* %ln1zF, !tbaa !5
+  store i64 %ln1zG, i64* %ls1bU
+  %ln1zH = ptrtoint i8* @MainCapability to i64
+  %ln1zI = add i64 %ln1zH, 24
+  %ln1zJ = ptrtoint i8* @base_GHCziIORef_writeIORef_closure to i64
+  %ln1zK = inttoptr i64 %ln1zI to i64*
+  store i64 %ln1zJ, i64* %ln1zK, !tbaa !5
+  %ln1zL = ptrtoint i8* @MainCapability to i64
+  %ln1zM = add i64 %ln1zL, 856
+  %ln1zN = inttoptr i64 %ln1zM to i64*
+  %ln1zO = load i64* %ln1zN, !tbaa !5
+  %ln1zP = add i64 %ln1zO, -24
+  %ln1zQ = load i64* %ls1bU
+  %ln1zR = inttoptr i64 %ln1zP to i64*
+  store i64 %ln1zQ, i64* %ln1zR, !tbaa !5
+  %ln1zS = ptrtoint i8* @MainCapability to i64
+  %ln1zT = add i64 %ln1zS, 856
+  %ln1zU = ptrtoint i8* @MainCapability to i64
+  %ln1zV = add i64 %ln1zU, 856
+  %ln1zW = inttoptr i64 %ln1zV to i64*
+  %ln1zX = load i64* %ln1zW, !tbaa !5
+  %ln1zY = add i64 %ln1zX, -24
+  %ln1zZ = inttoptr i64 %ln1zT to i64*
+  store i64 %ln1zY, i64* %ln1zZ, !tbaa !5
+  %ln1A0 = bitcast i8* @stg_ap_p_fast to void ()*
+  tail call ccc void ()* %ln1A0( ) nounwind
+  ret void
+c1tR:
+  %ln1A1 = ptrtoint i8* @MainCapability to i64
+  %ln1A2 = add i64 %ln1A1, 24
+  %ln1A3 = load i64* %ls1bV
+  %ln1A4 = inttoptr i64 %ln1A2 to i64*
+  store i64 %ln1A3, i64* %ln1A4, !tbaa !5
+  %ln1A5 = ptrtoint i8* @MainCapability to i64
+  %ln1A6 = add i64 %ln1A5, 8
+  %ln1A7 = inttoptr i64 %ln1A6 to i64*
+  %ln1A8 = load i64* %ln1A7, !tbaa !5
+  %ln1A9 = inttoptr i64 %ln1A8 to void ()*
+  tail call ccc void ()* %ln1A9( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.420126 UTC
+
+@s1bY_entry = alias internal i8* bitcast (void ()* @s1bY_entry$def to i8*)
+define internal ccc void @s1bY_entry$def() align 8 nounwind
+{
+c1tT:
+  %ls1bY = alloca i64, i32 1
+  %ls1bU = alloca i64, i32 1
+  %lc1tF = alloca i64, i32 1
+  %lc1tM = alloca i64, i32 1
+  %ln1Aa = ptrtoint i8* @MainCapability to i64
+  %ln1Ab = add i64 %ln1Aa, 24
+  %ln1Ac = inttoptr i64 %ln1Ab to i64*
+  %ln1Ad = load i64* %ln1Ac, !tbaa !5
+  store i64 %ln1Ad, i64* %ls1bY
+  %ln1Ae = ptrtoint i8* @MainCapability to i64
+  %ln1Af = add i64 %ln1Ae, 856
+  %ln1Ag = inttoptr i64 %ln1Af to i64*
+  %ln1Ah = load i64* %ln1Ag, !tbaa !5
+  %ln1Ai = add i64 %ln1Ah, 8
+  %ln1Aj = sub i64 %ln1Ai, 40
+  %ln1Ak = ptrtoint i8* @MainCapability to i64
+  %ln1Al = add i64 %ln1Ak, 864
+  %ln1Am = inttoptr i64 %ln1Al to i64*
+  %ln1An = load i64* %ln1Am, !tbaa !5
+  %ln1Ao = icmp ult i64 %ln1Aj, %ln1An
+  br i1 %ln1Ao, label %c1tU, label %c1tV
+c1tV:
+  %ln1Ap = ptrtoint i8* @MainCapability to i64
+  %ln1Aq = add i64 %ln1Ap, 872
+  %ln1Ar = ptrtoint i8* @MainCapability to i64
+  %ln1As = add i64 %ln1Ar, 872
+  %ln1At = inttoptr i64 %ln1As to i64*
+  %ln1Au = load i64* %ln1At, !tbaa !5
+  %ln1Av = add i64 %ln1Au, 40
+  %ln1Aw = inttoptr i64 %ln1Aq to i64*
+  store i64 %ln1Av, i64* %ln1Aw, !tbaa !5
+  %ln1Ax = ptrtoint i8* @MainCapability to i64
+  %ln1Ay = add i64 %ln1Ax, 872
+  %ln1Az = inttoptr i64 %ln1Ay to i64*
+  %ln1AA = load i64* %ln1Az, !tbaa !5
+  %ln1AB = ptrtoint i8* @MainCapability to i64
+  %ln1AC = add i64 %ln1AB, 880
+  %ln1AD = inttoptr i64 %ln1AC to i64*
+  %ln1AE = load i64* %ln1AD, !tbaa !5
+  %ln1AF = icmp ugt i64 %ln1AA, %ln1AE
+  br i1 %ln1AF, label %c1tX, label %c1tW
+c1tW:
+  %ln1AG = ptrtoint i8* @MainCapability to i64
+  %ln1AH = add i64 %ln1AG, 856
+  %ln1AI = inttoptr i64 %ln1AH to i64*
+  %ln1AJ = load i64* %ln1AI, !tbaa !5
+  %ln1AK = add i64 %ln1AJ, -16
+  %ln1AL = ptrtoint i8* @stg_upd_frame_info to i64
+  %ln1AM = inttoptr i64 %ln1AK to i64*
+  store i64 %ln1AL, i64* %ln1AM, !tbaa !5
+  %ln1AN = ptrtoint i8* @MainCapability to i64
+  %ln1AO = add i64 %ln1AN, 856
+  %ln1AP = inttoptr i64 %ln1AO to i64*
+  %ln1AQ = load i64* %ln1AP, !tbaa !5
+  %ln1AR = add i64 %ln1AQ, -8
+  %ln1AS = load i64* %ls1bY
+  %ln1AT = inttoptr i64 %ln1AR to i64*
+  store i64 %ln1AS, i64* %ln1AT, !tbaa !5
+  %ln1AU = load i64* %ls1bY
+  %ln1AV = add i64 %ln1AU, 16
+  %ln1AW = inttoptr i64 %ln1AV to i64*
+  %ln1AX = load i64* %ln1AW, !tbaa !5
+  store i64 %ln1AX, i64* %ls1bU
+  %ln1AY = ptrtoint i8* @MainCapability to i64
+  %ln1AZ = add i64 %ln1AY, 872
+  %ln1B0 = inttoptr i64 %ln1AZ to i64*
+  %ln1B1 = load i64* %ln1B0, !tbaa !5
+  %ln1B2 = add i64 %ln1B1, -32
+  %ln1B3 = ptrtoint %s1bX_info_struct* @s1bX_info$def to i64
+  %ln1B4 = inttoptr i64 %ln1B2 to i64*
+  store i64 %ln1B3, i64* %ln1B4, !tbaa !5
+  %ln1B5 = ptrtoint i8* @MainCapability to i64
+  %ln1B6 = add i64 %ln1B5, 872
+  %ln1B7 = inttoptr i64 %ln1B6 to i64*
+  %ln1B8 = load i64* %ln1B7, !tbaa !5
+  %ln1B9 = add i64 %ln1B8, -32
+  store i64 %ln1B9, i64* %lc1tF
+  %ln1Ba = ptrtoint i8* @MainCapability to i64
+  %ln1Bb = add i64 %ln1Ba, 872
+  %ln1Bc = inttoptr i64 %ln1Bb to i64*
+  %ln1Bd = load i64* %ln1Bc, !tbaa !5
+  %ln1Be = add i64 %ln1Bd, -16
+  %ln1Bf = ptrtoint %s1bV_info_struct* @s1bV_info$def to i64
+  %ln1Bg = inttoptr i64 %ln1Be to i64*
+  store i64 %ln1Bf, i64* %ln1Bg, !tbaa !5
+  %ln1Bh = ptrtoint i8* @MainCapability to i64
+  %ln1Bi = add i64 %ln1Bh, 872
+  %ln1Bj = inttoptr i64 %ln1Bi to i64*
+  %ln1Bk = load i64* %ln1Bj, !tbaa !5
+  %ln1Bl = load i64* %ls1bU
+  %ln1Bm = inttoptr i64 %ln1Bk to i64*
+  store i64 %ln1Bl, i64* %ln1Bm, !tbaa !5
+  %ln1Bn = ptrtoint i8* @MainCapability to i64
+  %ln1Bo = add i64 %ln1Bn, 872
+  %ln1Bp = inttoptr i64 %ln1Bo to i64*
+  %ln1Bq = load i64* %ln1Bp, !tbaa !5
+  %ln1Br = add i64 %ln1Bq, -16
+  store i64 %ln1Br, i64* %lc1tM
+  %ln1Bs = ptrtoint i8* @MainCapability to i64
+  %ln1Bt = add i64 %ln1Bs, 24
+  %ln1Bu = ptrtoint i8* @base_GHCziBase_zdzn_closure to i64
+  %ln1Bv = inttoptr i64 %ln1Bt to i64*
+  store i64 %ln1Bu, i64* %ln1Bv, !tbaa !5
+  %ln1Bw = ptrtoint i8* @MainCapability to i64
+  %ln1Bx = add i64 %ln1Bw, 856
+  %ln1By = inttoptr i64 %ln1Bx to i64*
+  %ln1Bz = load i64* %ln1By, !tbaa !5
+  %ln1BA = add i64 %ln1Bz, -32
+  %ln1BB = load i64* %lc1tM
+  %ln1BC = inttoptr i64 %ln1BA to i64*
+  store i64 %ln1BB, i64* %ln1BC, !tbaa !5
+  %ln1BD = ptrtoint i8* @MainCapability to i64
+  %ln1BE = add i64 %ln1BD, 856
+  %ln1BF = inttoptr i64 %ln1BE to i64*
+  %ln1BG = load i64* %ln1BF, !tbaa !5
+  %ln1BH = add i64 %ln1BG, -24
+  %ln1BI = load i64* %lc1tF
+  %ln1BJ = inttoptr i64 %ln1BH to i64*
+  store i64 %ln1BI, i64* %ln1BJ, !tbaa !5
+  %ln1BK = ptrtoint i8* @MainCapability to i64
+  %ln1BL = add i64 %ln1BK, 856
+  %ln1BM = ptrtoint i8* @MainCapability to i64
+  %ln1BN = add i64 %ln1BM, 856
+  %ln1BO = inttoptr i64 %ln1BN to i64*
+  %ln1BP = load i64* %ln1BO, !tbaa !5
+  %ln1BQ = add i64 %ln1BP, -32
+  %ln1BR = inttoptr i64 %ln1BL to i64*
+  store i64 %ln1BQ, i64* %ln1BR, !tbaa !5
+  %ln1BS = bitcast i8* @stg_ap_pp_fast to void ()*
+  tail call ccc void ()* %ln1BS( ) nounwind
+  ret void
+c1tX:
+  %ln1BT = ptrtoint i8* @MainCapability to i64
+  %ln1BU = add i64 %ln1BT, 928
+  %ln1BV = inttoptr i64 %ln1BU to i64*
+  store i64 40, i64* %ln1BV, !tbaa !5
+  br label %c1tU
+c1tU:
+  %ln1BW = ptrtoint i8* @MainCapability to i64
+  %ln1BX = add i64 %ln1BW, 24
+  %ln1BY = load i64* %ls1bY
+  %ln1BZ = inttoptr i64 %ln1BX to i64*
+  store i64 %ln1BY, i64* %ln1BZ, !tbaa !5
+  %ln1C0 = ptrtoint i8* @MainCapability to i64
+  %ln1C1 = add i64 %ln1C0, 8
+  %ln1C2 = inttoptr i64 %ln1C1 to i64*
+  %ln1C3 = load i64* %ln1C2, !tbaa !5
+  %ln1C4 = inttoptr i64 %ln1C3 to void ()*
+  tail call ccc void ()* %ln1C4( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.447399 UTC
+
+@s1bZ_entry = alias internal i8* bitcast (void ()* @s1bZ_entry$def to i8*)
+define internal ccc void @s1bZ_entry$def() align 8 nounwind
+{
+c1tY:
+  %ls1bZ = alloca i64, i32 1
+  %ls1bU = alloca i64, i32 1
+  %lc1tB = alloca i64, i32 1
+  %ln1C5 = ptrtoint i8* @MainCapability to i64
+  %ln1C6 = add i64 %ln1C5, 24
+  %ln1C7 = inttoptr i64 %ln1C6 to i64*
+  %ln1C8 = load i64* %ln1C7, !tbaa !5
+  store i64 %ln1C8, i64* %ls1bZ
+  %ln1C9 = ptrtoint i8* @MainCapability to i64
+  %ln1Ca = add i64 %ln1C9, 856
+  %ln1Cb = inttoptr i64 %ln1Ca to i64*
+  %ln1Cc = load i64* %ln1Cb, !tbaa !5
+  %ln1Cd = add i64 %ln1Cc, 8
+  %ln1Ce = sub i64 %ln1Cd, 32
+  %ln1Cf = ptrtoint i8* @MainCapability to i64
+  %ln1Cg = add i64 %ln1Cf, 864
+  %ln1Ch = inttoptr i64 %ln1Cg to i64*
+  %ln1Ci = load i64* %ln1Ch, !tbaa !5
+  %ln1Cj = icmp ult i64 %ln1Ce, %ln1Ci
+  br i1 %ln1Cj, label %c1tZ, label %c1u0
+c1u0:
+  %ln1Ck = ptrtoint i8* @MainCapability to i64
+  %ln1Cl = add i64 %ln1Ck, 872
+  %ln1Cm = ptrtoint i8* @MainCapability to i64
+  %ln1Cn = add i64 %ln1Cm, 872
+  %ln1Co = inttoptr i64 %ln1Cn to i64*
+  %ln1Cp = load i64* %ln1Co, !tbaa !5
+  %ln1Cq = add i64 %ln1Cp, 24
+  %ln1Cr = inttoptr i64 %ln1Cl to i64*
+  store i64 %ln1Cq, i64* %ln1Cr, !tbaa !5
+  %ln1Cs = ptrtoint i8* @MainCapability to i64
+  %ln1Ct = add i64 %ln1Cs, 872
+  %ln1Cu = inttoptr i64 %ln1Ct to i64*
+  %ln1Cv = load i64* %ln1Cu, !tbaa !5
+  %ln1Cw = ptrtoint i8* @MainCapability to i64
+  %ln1Cx = add i64 %ln1Cw, 880
+  %ln1Cy = inttoptr i64 %ln1Cx to i64*
+  %ln1Cz = load i64* %ln1Cy, !tbaa !5
+  %ln1CA = icmp ugt i64 %ln1Cv, %ln1Cz
+  br i1 %ln1CA, label %c1u2, label %c1u1
+c1u1:
+  %ln1CB = ptrtoint i8* @MainCapability to i64
+  %ln1CC = add i64 %ln1CB, 856
+  %ln1CD = inttoptr i64 %ln1CC to i64*
+  %ln1CE = load i64* %ln1CD, !tbaa !5
+  %ln1CF = add i64 %ln1CE, -16
+  %ln1CG = ptrtoint i8* @stg_upd_frame_info to i64
+  %ln1CH = inttoptr i64 %ln1CF to i64*
+  store i64 %ln1CG, i64* %ln1CH, !tbaa !5
+  %ln1CI = ptrtoint i8* @MainCapability to i64
+  %ln1CJ = add i64 %ln1CI, 856
+  %ln1CK = inttoptr i64 %ln1CJ to i64*
+  %ln1CL = load i64* %ln1CK, !tbaa !5
+  %ln1CM = add i64 %ln1CL, -8
+  %ln1CN = load i64* %ls1bZ
+  %ln1CO = inttoptr i64 %ln1CM to i64*
+  store i64 %ln1CN, i64* %ln1CO, !tbaa !5
+  %ln1CP = load i64* %ls1bZ
+  %ln1CQ = add i64 %ln1CP, 16
+  %ln1CR = inttoptr i64 %ln1CQ to i64*
+  %ln1CS = load i64* %ln1CR, !tbaa !5
+  store i64 %ln1CS, i64* %ls1bU
+  %ln1CT = ptrtoint i8* @MainCapability to i64
+  %ln1CU = add i64 %ln1CT, 872
+  %ln1CV = inttoptr i64 %ln1CU to i64*
+  %ln1CW = load i64* %ln1CV, !tbaa !5
+  %ln1CX = add i64 %ln1CW, -16
+  %ln1CY = ptrtoint %s1bY_info_struct* @s1bY_info$def to i64
+  %ln1CZ = inttoptr i64 %ln1CX to i64*
+  store i64 %ln1CY, i64* %ln1CZ, !tbaa !5
+  %ln1D0 = ptrtoint i8* @MainCapability to i64
+  %ln1D1 = add i64 %ln1D0, 872
+  %ln1D2 = inttoptr i64 %ln1D1 to i64*
+  %ln1D3 = load i64* %ln1D2, !tbaa !5
+  %ln1D4 = load i64* %ls1bU
+  %ln1D5 = inttoptr i64 %ln1D3 to i64*
+  store i64 %ln1D4, i64* %ln1D5, !tbaa !5
+  %ln1D6 = ptrtoint i8* @MainCapability to i64
+  %ln1D7 = add i64 %ln1D6, 872
+  %ln1D8 = inttoptr i64 %ln1D7 to i64*
+  %ln1D9 = load i64* %ln1D8, !tbaa !5
+  %ln1Da = add i64 %ln1D9, -16
+  store i64 %ln1Da, i64* %lc1tB
+  %ln1Db = ptrtoint i8* @MainCapability to i64
+  %ln1Dc = add i64 %ln1Db, 24
+  %ln1Dd = ptrtoint i8* @base_GHCziConcziSync_forkIO_closure to i64
+  %ln1De = inttoptr i64 %ln1Dc to i64*
+  store i64 %ln1Dd, i64* %ln1De, !tbaa !5
+  %ln1Df = ptrtoint i8* @MainCapability to i64
+  %ln1Dg = add i64 %ln1Df, 856
+  %ln1Dh = inttoptr i64 %ln1Dg to i64*
+  %ln1Di = load i64* %ln1Dh, !tbaa !5
+  %ln1Dj = add i64 %ln1Di, -24
+  %ln1Dk = load i64* %lc1tB
+  %ln1Dl = inttoptr i64 %ln1Dj to i64*
+  store i64 %ln1Dk, i64* %ln1Dl, !tbaa !5
+  %ln1Dm = ptrtoint i8* @MainCapability to i64
+  %ln1Dn = add i64 %ln1Dm, 856
+  %ln1Do = ptrtoint i8* @MainCapability to i64
+  %ln1Dp = add i64 %ln1Do, 856
+  %ln1Dq = inttoptr i64 %ln1Dp to i64*
+  %ln1Dr = load i64* %ln1Dq, !tbaa !5
+  %ln1Ds = add i64 %ln1Dr, -24
+  %ln1Dt = inttoptr i64 %ln1Dn to i64*
+  store i64 %ln1Ds, i64* %ln1Dt, !tbaa !5
+  %ln1Du = bitcast i8* @stg_ap_p_fast to void ()*
+  tail call ccc void ()* %ln1Du( ) nounwind
+  ret void
+c1u2:
+  %ln1Dv = ptrtoint i8* @MainCapability to i64
+  %ln1Dw = add i64 %ln1Dv, 928
+  %ln1Dx = inttoptr i64 %ln1Dw to i64*
+  store i64 24, i64* %ln1Dx, !tbaa !5
+  br label %c1tZ
+c1tZ:
+  %ln1Dy = ptrtoint i8* @MainCapability to i64
+  %ln1Dz = add i64 %ln1Dy, 24
+  %ln1DA = load i64* %ls1bZ
+  %ln1DB = inttoptr i64 %ln1Dz to i64*
+  store i64 %ln1DA, i64* %ln1DB, !tbaa !5
+  %ln1DC = ptrtoint i8* @MainCapability to i64
+  %ln1DD = add i64 %ln1DC, 8
+  %ln1DE = inttoptr i64 %ln1DD to i64*
+  %ln1DF = load i64* %ln1DE, !tbaa !5
+  %ln1DG = inttoptr i64 %ln1DF to void ()*
+  tail call ccc void ()* %ln1DG( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.474108 UTC
+
+@s1c4_entry = alias internal i8* bitcast (void ()* @s1c4_entry$def to i8*)
+define internal ccc void @s1c4_entry$def() align 8 nounwind
+{
+c1u3:
+  %ls1c4 = alloca i64, i32 1
+  %ls1bU = alloca i64, i32 1
+  %lc1t9 = alloca i64, i32 1
+  %lc1tx = alloca i64, i32 1
+  %ln1DH = ptrtoint i8* @MainCapability to i64
+  %ln1DI = add i64 %ln1DH, 24
+  %ln1DJ = inttoptr i64 %ln1DI to i64*
+  %ln1DK = load i64* %ln1DJ, !tbaa !5
+  store i64 %ln1DK, i64* %ls1c4
+  %ln1DL = ptrtoint i8* @MainCapability to i64
+  %ln1DM = add i64 %ln1DL, 856
+  %ln1DN = inttoptr i64 %ln1DM to i64*
+  %ln1DO = load i64* %ln1DN, !tbaa !5
+  %ln1DP = inttoptr i64 %ln1DO to i64*
+  %ln1DQ = load i64* %ln1DP, !tbaa !5
+  store i64 %ln1DQ, i64* %ls1bU
+  %ln1DR = ptrtoint i8* @MainCapability to i64
+  %ln1DS = add i64 %ln1DR, 856
+  %ln1DT = inttoptr i64 %ln1DS to i64*
+  %ln1DU = load i64* %ln1DT, !tbaa !5
+  %ln1DV = add i64 %ln1DU, 16
+  %ln1DW = sub i64 %ln1DV, 40
+  %ln1DX = ptrtoint i8* @MainCapability to i64
+  %ln1DY = add i64 %ln1DX, 864
+  %ln1DZ = inttoptr i64 %ln1DY to i64*
+  %ln1E0 = load i64* %ln1DZ, !tbaa !5
+  %ln1E1 = icmp ult i64 %ln1DW, %ln1E0
+  br i1 %ln1E1, label %c1u4, label %c1u5
+c1u5:
+  %ln1E2 = ptrtoint i8* @MainCapability to i64
+  %ln1E3 = add i64 %ln1E2, 872
+  %ln1E4 = ptrtoint i8* @MainCapability to i64
+  %ln1E5 = add i64 %ln1E4, 872
+  %ln1E6 = inttoptr i64 %ln1E5 to i64*
+  %ln1E7 = load i64* %ln1E6, !tbaa !5
+  %ln1E8 = add i64 %ln1E7, 48
+  %ln1E9 = inttoptr i64 %ln1E3 to i64*
+  store i64 %ln1E8, i64* %ln1E9, !tbaa !5
+  %ln1Ea = ptrtoint i8* @MainCapability to i64
+  %ln1Eb = add i64 %ln1Ea, 872
+  %ln1Ec = inttoptr i64 %ln1Eb to i64*
+  %ln1Ed = load i64* %ln1Ec, !tbaa !5
+  %ln1Ee = ptrtoint i8* @MainCapability to i64
+  %ln1Ef = add i64 %ln1Ee, 880
+  %ln1Eg = inttoptr i64 %ln1Ef to i64*
+  %ln1Eh = load i64* %ln1Eg, !tbaa !5
+  %ln1Ei = icmp ugt i64 %ln1Ed, %ln1Eh
+  br i1 %ln1Ei, label %c1u7, label %c1u6
+c1u6:
+  %ln1Ej = ptrtoint i8* @MainCapability to i64
+  %ln1Ek = add i64 %ln1Ej, 872
+  %ln1El = inttoptr i64 %ln1Ek to i64*
+  %ln1Em = load i64* %ln1El, !tbaa !5
+  %ln1En = add i64 %ln1Em, -40
+  %ln1Eo = ptrtoint %s1c3_info_struct* @s1c3_info$def to i64
+  %ln1Ep = inttoptr i64 %ln1En to i64*
+  store i64 %ln1Eo, i64* %ln1Ep, !tbaa !5
+  %ln1Eq = ptrtoint i8* @MainCapability to i64
+  %ln1Er = add i64 %ln1Eq, 872
+  %ln1Es = inttoptr i64 %ln1Er to i64*
+  %ln1Et = load i64* %ln1Es, !tbaa !5
+  %ln1Eu = add i64 %ln1Et, -24
+  %ln1Ev = load i64* %ls1bU
+  %ln1Ew = inttoptr i64 %ln1Eu to i64*
+  store i64 %ln1Ev, i64* %ln1Ew, !tbaa !5
+  %ln1Ex = ptrtoint i8* @MainCapability to i64
+  %ln1Ey = add i64 %ln1Ex, 872
+  %ln1Ez = inttoptr i64 %ln1Ey to i64*
+  %ln1EA = load i64* %ln1Ez, !tbaa !5
+  %ln1EB = add i64 %ln1EA, -40
+  store i64 %ln1EB, i64* %lc1t9
+  %ln1EC = ptrtoint i8* @MainCapability to i64
+  %ln1ED = add i64 %ln1EC, 872
+  %ln1EE = inttoptr i64 %ln1ED to i64*
+  %ln1EF = load i64* %ln1EE, !tbaa !5
+  %ln1EG = add i64 %ln1EF, -16
+  %ln1EH = ptrtoint %s1bZ_info_struct* @s1bZ_info$def to i64
+  %ln1EI = inttoptr i64 %ln1EG to i64*
+  store i64 %ln1EH, i64* %ln1EI, !tbaa !5
+  %ln1EJ = ptrtoint i8* @MainCapability to i64
+  %ln1EK = add i64 %ln1EJ, 872
+  %ln1EL = inttoptr i64 %ln1EK to i64*
+  %ln1EM = load i64* %ln1EL, !tbaa !5
+  %ln1EN = load i64* %ls1bU
+  %ln1EO = inttoptr i64 %ln1EM to i64*
+  store i64 %ln1EN, i64* %ln1EO, !tbaa !5
+  %ln1EP = ptrtoint i8* @MainCapability to i64
+  %ln1EQ = add i64 %ln1EP, 872
+  %ln1ER = inttoptr i64 %ln1EQ to i64*
+  %ln1ES = load i64* %ln1ER, !tbaa !5
+  %ln1ET = add i64 %ln1ES, -16
+  store i64 %ln1ET, i64* %lc1tx
+  %ln1EU = ptrtoint i8* @MainCapability to i64
+  %ln1EV = add i64 %ln1EU, 856
+  %ln1EW = inttoptr i64 %ln1EV to i64*
+  %ln1EX = load i64* %ln1EW, !tbaa !5
+  %ln1EY = add i64 %ln1EX, -24
+  %ln1EZ = ptrtoint i8* @base_GHCziBase_zdfMonadIO_closure to i64
+  %ln1F0 = inttoptr i64 %ln1EY to i64*
+  store i64 %ln1EZ, i64* %ln1F0, !tbaa !5
+  %ln1F1 = ptrtoint i8* @MainCapability to i64
+  %ln1F2 = add i64 %ln1F1, 856
+  %ln1F3 = inttoptr i64 %ln1F2 to i64*
+  %ln1F4 = load i64* %ln1F3, !tbaa !5
+  %ln1F5 = add i64 %ln1F4, -16
+  %ln1F6 = ptrtoint i8* @stg_ap_pp_info to i64
+  %ln1F7 = inttoptr i64 %ln1F5 to i64*
+  store i64 %ln1F6, i64* %ln1F7, !tbaa !5
+  %ln1F8 = ptrtoint i8* @MainCapability to i64
+  %ln1F9 = add i64 %ln1F8, 856
+  %ln1Fa = inttoptr i64 %ln1F9 to i64*
+  %ln1Fb = load i64* %ln1Fa, !tbaa !5
+  %ln1Fc = add i64 %ln1Fb, -8
+  %ln1Fd = load i64* %lc1tx
+  %ln1Fe = inttoptr i64 %ln1Fc to i64*
+  store i64 %ln1Fd, i64* %ln1Fe, !tbaa !5
+  %ln1Ff = ptrtoint i8* @MainCapability to i64
+  %ln1Fg = add i64 %ln1Ff, 856
+  %ln1Fh = inttoptr i64 %ln1Fg to i64*
+  %ln1Fi = load i64* %ln1Fh, !tbaa !5
+  %ln1Fj = load i64* %lc1t9
+  %ln1Fk = inttoptr i64 %ln1Fi to i64*
+  store i64 %ln1Fj, i64* %ln1Fk, !tbaa !5
+  %ln1Fl = ptrtoint i8* @MainCapability to i64
+  %ln1Fm = add i64 %ln1Fl, 856
+  %ln1Fn = ptrtoint i8* @MainCapability to i64
+  %ln1Fo = add i64 %ln1Fn, 856
+  %ln1Fp = inttoptr i64 %ln1Fo to i64*
+  %ln1Fq = load i64* %ln1Fp, !tbaa !5
+  %ln1Fr = add i64 %ln1Fq, -24
+  %ln1Fs = inttoptr i64 %ln1Fm to i64*
+  store i64 %ln1Fr, i64* %ln1Fs, !tbaa !5
+  %ln1Ft = bitcast i8* @base_GHCziBase_zgzg_entry to void ()*
+  tail call ccc void ()* %ln1Ft( ) nounwind
+  ret void
+c1u7:
+  %ln1Fu = ptrtoint i8* @MainCapability to i64
+  %ln1Fv = add i64 %ln1Fu, 928
+  %ln1Fw = inttoptr i64 %ln1Fv to i64*
+  store i64 48, i64* %ln1Fw, !tbaa !5
+  br label %c1u4
+c1u4:
+  %ln1Fx = ptrtoint i8* @MainCapability to i64
+  %ln1Fy = add i64 %ln1Fx, 24
+  %ln1Fz = load i64* %ls1c4
+  %ln1FA = inttoptr i64 %ln1Fy to i64*
+  store i64 %ln1Fz, i64* %ln1FA, !tbaa !5
+  %ln1FB = ptrtoint i8* @MainCapability to i64
+  %ln1FC = add i64 %ln1FB, 16
+  %ln1FD = inttoptr i64 %ln1FC to i64*
+  %ln1FE = load i64* %ln1FD, !tbaa !5
+  %ln1FF = inttoptr i64 %ln1FE to void ()*
+  tail call ccc void ()* %ln1FF( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.501005 UTC
+
+@s1bT_entry = alias internal i8* bitcast (void ()* @s1bT_entry$def to i8*)
+define internal ccc void @s1bT_entry$def() align 8 nounwind
+{
+c1ud:
+  %ls1bT = alloca i64, i32 1
+  %lc1uc = alloca i64, i32 1
+  %ln1FG = ptrtoint i8* @MainCapability to i64
+  %ln1FH = add i64 %ln1FG, 24
+  %ln1FI = inttoptr i64 %ln1FH to i64*
+  %ln1FJ = load i64* %ln1FI, !tbaa !5
+  store i64 %ln1FJ, i64* %ls1bT
+  %ln1FK = ptrtoint i8* @MainCapability to i64
+  %ln1FL = add i64 %ln1FK, 856
+  %ln1FM = inttoptr i64 %ln1FL to i64*
+  %ln1FN = load i64* %ln1FM, !tbaa !5
+  %ln1FO = add i64 %ln1FN, 8
+  %ln1FP = sub i64 %ln1FO, 40
+  %ln1FQ = ptrtoint i8* @MainCapability to i64
+  %ln1FR = add i64 %ln1FQ, 864
+  %ln1FS = inttoptr i64 %ln1FR to i64*
+  %ln1FT = load i64* %ln1FS, !tbaa !5
+  %ln1FU = icmp ult i64 %ln1FP, %ln1FT
+  br i1 %ln1FU, label %c1ue, label %c1uf
+c1uf:
+  %ln1FV = ptrtoint i8* @MainCapability to i64
+  %ln1FW = add i64 %ln1FV, 872
+  %ln1FX = ptrtoint i8* @MainCapability to i64
+  %ln1FY = add i64 %ln1FX, 872
+  %ln1FZ = inttoptr i64 %ln1FY to i64*
+  %ln1G0 = load i64* %ln1FZ, !tbaa !5
+  %ln1G1 = add i64 %ln1G0, 16
+  %ln1G2 = inttoptr i64 %ln1FW to i64*
+  store i64 %ln1G1, i64* %ln1G2, !tbaa !5
+  %ln1G3 = ptrtoint i8* @MainCapability to i64
+  %ln1G4 = add i64 %ln1G3, 872
+  %ln1G5 = inttoptr i64 %ln1G4 to i64*
+  %ln1G6 = load i64* %ln1G5, !tbaa !5
+  %ln1G7 = ptrtoint i8* @MainCapability to i64
+  %ln1G8 = add i64 %ln1G7, 880
+  %ln1G9 = inttoptr i64 %ln1G8 to i64*
+  %ln1Ga = load i64* %ln1G9, !tbaa !5
+  %ln1Gb = icmp ugt i64 %ln1G6, %ln1Ga
+  br i1 %ln1Gb, label %c1uh, label %c1ug
+c1ug:
+  %ln1Gc = ptrtoint i8* @MainCapability to i64
+  %ln1Gd = add i64 %ln1Gc, 856
+  %ln1Ge = inttoptr i64 %ln1Gd to i64*
+  %ln1Gf = load i64* %ln1Ge, !tbaa !5
+  %ln1Gg = add i64 %ln1Gf, -16
+  %ln1Gh = ptrtoint i8* @stg_upd_frame_info to i64
+  %ln1Gi = inttoptr i64 %ln1Gg to i64*
+  store i64 %ln1Gh, i64* %ln1Gi, !tbaa !5
+  %ln1Gj = ptrtoint i8* @MainCapability to i64
+  %ln1Gk = add i64 %ln1Gj, 856
+  %ln1Gl = inttoptr i64 %ln1Gk to i64*
+  %ln1Gm = load i64* %ln1Gl, !tbaa !5
+  %ln1Gn = add i64 %ln1Gm, -8
+  %ln1Go = load i64* %ls1bT
+  %ln1Gp = inttoptr i64 %ln1Gn to i64*
+  store i64 %ln1Go, i64* %ln1Gp, !tbaa !5
+  %ln1Gq = ptrtoint i8* @MainCapability to i64
+  %ln1Gr = add i64 %ln1Gq, 872
+  %ln1Gs = inttoptr i64 %ln1Gr to i64*
+  %ln1Gt = load i64* %ln1Gs, !tbaa !5
+  %ln1Gu = add i64 %ln1Gt, -8
+  %ln1Gv = ptrtoint i8* @Main_Foo_con_info to i64
+  %ln1Gw = inttoptr i64 %ln1Gu to i64*
+  store i64 %ln1Gv, i64* %ln1Gw, !tbaa !5
+  %ln1Gx = ptrtoint i8* @MainCapability to i64
+  %ln1Gy = add i64 %ln1Gx, 872
+  %ln1Gz = inttoptr i64 %ln1Gy to i64*
+  %ln1GA = load i64* %ln1Gz, !tbaa !5
+  %ln1GB = ptrtoint i8* @stg_INTLIKE_closure to i64
+  %ln1GC = add i64 %ln1GB, 305
+  %ln1GD = inttoptr i64 %ln1GA to i64*
+  store i64 %ln1GC, i64* %ln1GD, !tbaa !5
+  %ln1GE = ptrtoint i8* @MainCapability to i64
+  %ln1GF = add i64 %ln1GE, 872
+  %ln1GG = inttoptr i64 %ln1GF to i64*
+  %ln1GH = load i64* %ln1GG, !tbaa !5
+  %ln1GI = add i64 %ln1GH, -7
+  store i64 %ln1GI, i64* %lc1uc
+  %ln1GJ = ptrtoint i8* @MainCapability to i64
+  %ln1GK = add i64 %ln1GJ, 24
+  %ln1GL = ptrtoint i8* @base_GHCziBase_zdzn_closure to i64
+  %ln1GM = inttoptr i64 %ln1GK to i64*
+  store i64 %ln1GL, i64* %ln1GM, !tbaa !5
+  %ln1GN = ptrtoint i8* @MainCapability to i64
+  %ln1GO = add i64 %ln1GN, 856
+  %ln1GP = inttoptr i64 %ln1GO to i64*
+  %ln1GQ = load i64* %ln1GP, !tbaa !5
+  %ln1GR = add i64 %ln1GQ, -32
+  %ln1GS = ptrtoint i8* @base_GHCziIORef_newIORef_closure to i64
+  %ln1GT = inttoptr i64 %ln1GR to i64*
+  store i64 %ln1GS, i64* %ln1GT, !tbaa !5
+  %ln1GU = ptrtoint i8* @MainCapability to i64
+  %ln1GV = add i64 %ln1GU, 856
+  %ln1GW = inttoptr i64 %ln1GV to i64*
+  %ln1GX = load i64* %ln1GW, !tbaa !5
+  %ln1GY = add i64 %ln1GX, -24
+  %ln1GZ = load i64* %lc1uc
+  %ln1H0 = inttoptr i64 %ln1GY to i64*
+  store i64 %ln1GZ, i64* %ln1H0, !tbaa !5
+  %ln1H1 = ptrtoint i8* @MainCapability to i64
+  %ln1H2 = add i64 %ln1H1, 856
+  %ln1H3 = ptrtoint i8* @MainCapability to i64
+  %ln1H4 = add i64 %ln1H3, 856
+  %ln1H5 = inttoptr i64 %ln1H4 to i64*
+  %ln1H6 = load i64* %ln1H5, !tbaa !5
+  %ln1H7 = add i64 %ln1H6, -32
+  %ln1H8 = inttoptr i64 %ln1H2 to i64*
+  store i64 %ln1H7, i64* %ln1H8, !tbaa !5
+  %ln1H9 = bitcast i8* @stg_ap_pp_fast to void ()*
+  tail call ccc void ()* %ln1H9( ) nounwind
+  ret void
+c1uh:
+  %ln1Ha = ptrtoint i8* @MainCapability to i64
+  %ln1Hb = add i64 %ln1Ha, 928
+  %ln1Hc = inttoptr i64 %ln1Hb to i64*
+  store i64 16, i64* %ln1Hc, !tbaa !5
+  br label %c1ue
+c1ue:
+  %ln1Hd = ptrtoint i8* @MainCapability to i64
+  %ln1He = add i64 %ln1Hd, 24
+  %ln1Hf = load i64* %ls1bT
+  %ln1Hg = inttoptr i64 %ln1He to i64*
+  store i64 %ln1Hf, i64* %ln1Hg, !tbaa !5
+  %ln1Hh = ptrtoint i8* @MainCapability to i64
+  %ln1Hi = add i64 %ln1Hh, 8
+  %ln1Hj = inttoptr i64 %ln1Hi to i64*
+  %ln1Hk = load i64* %ln1Hj, !tbaa !5
+  %ln1Hl = inttoptr i64 %ln1Hk to void ()*
+  tail call ccc void ()* %ln1Hl( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.529548 UTC
+
+@s1c5_entry = alias internal i8* bitcast (void ()* @s1c5_entry$def to i8*)
+define internal ccc void @s1c5_entry$def() align 8 nounwind
+{
+c1ui:
+  %ls1c5 = alloca i64, i32 1
+  %lc1t1 = alloca i64, i32 1
+  %lc1t4 = alloca i64, i32 1
+  %lc1u8 = alloca i64, i32 1
+  %ln1Hm = ptrtoint i8* @MainCapability to i64
+  %ln1Hn = add i64 %ln1Hm, 24
+  %ln1Ho = inttoptr i64 %ln1Hn to i64*
+  %ln1Hp = load i64* %ln1Ho, !tbaa !5
+  store i64 %ln1Hp, i64* %ls1c5
+  %ln1Hq = ptrtoint i8* @MainCapability to i64
+  %ln1Hr = add i64 %ln1Hq, 856
+  %ln1Hs = inttoptr i64 %ln1Hr to i64*
+  %ln1Ht = load i64* %ln1Hs, !tbaa !5
+  %ln1Hu = add i64 %ln1Ht, 8
+  %ln1Hv = sub i64 %ln1Hu, 56
+  %ln1Hw = ptrtoint i8* @MainCapability to i64
+  %ln1Hx = add i64 %ln1Hw, 864
+  %ln1Hy = inttoptr i64 %ln1Hx to i64*
+  %ln1Hz = load i64* %ln1Hy, !tbaa !5
+  %ln1HA = icmp ult i64 %ln1Hv, %ln1Hz
+  br i1 %ln1HA, label %c1uj, label %c1uk
+c1uk:
+  %ln1HB = ptrtoint i8* @MainCapability to i64
+  %ln1HC = add i64 %ln1HB, 872
+  %ln1HD = ptrtoint i8* @MainCapability to i64
+  %ln1HE = add i64 %ln1HD, 872
+  %ln1HF = inttoptr i64 %ln1HE to i64*
+  %ln1HG = load i64* %ln1HF, !tbaa !5
+  %ln1HH = add i64 %ln1HG, 32
+  %ln1HI = inttoptr i64 %ln1HC to i64*
+  store i64 %ln1HH, i64* %ln1HI, !tbaa !5
+  %ln1HJ = ptrtoint i8* @MainCapability to i64
+  %ln1HK = add i64 %ln1HJ, 872
+  %ln1HL = inttoptr i64 %ln1HK to i64*
+  %ln1HM = load i64* %ln1HL, !tbaa !5
+  %ln1HN = ptrtoint i8* @MainCapability to i64
+  %ln1HO = add i64 %ln1HN, 880
+  %ln1HP = inttoptr i64 %ln1HO to i64*
+  %ln1HQ = load i64* %ln1HP, !tbaa !5
+  %ln1HR = icmp ugt i64 %ln1HM, %ln1HQ
+  br i1 %ln1HR, label %c1um, label %c1ul
+c1ul:
+  %ln1HS = ptrtoint i8* @MainCapability to i64
+  %ln1HT = add i64 %ln1HS, 24
+  %ln1HU = inttoptr i64 %ln1HT to i8*
+  %ln1HV = load i64* %ls1c5
+  %ln1HW = inttoptr i64 %ln1HV to i8*
+  %ln1HX = bitcast i8* @newCAF to i8* (i8*, i8*)*
+  %ln1HY = call ccc i8* (i8*, i8*)* %ln1HX( i8* %ln1HU, i8* %ln1HW ) nounwind
+  %ln1HZ = ptrtoint i8* %ln1HY to i64
+  store i64 %ln1HZ, i64* %lc1t1
+  %ln1I0 = load i64* %lc1t1
+  %ln1I1 = icmp eq i64 %ln1I0, 0
+  br i1 %ln1I1, label %c1t3, label %c1t2
+c1t2:
+  %ln1I2 = ptrtoint i8* @MainCapability to i64
+  %ln1I3 = add i64 %ln1I2, 856
+  %ln1I4 = inttoptr i64 %ln1I3 to i64*
+  %ln1I5 = load i64* %ln1I4, !tbaa !5
+  %ln1I6 = add i64 %ln1I5, -16
+  %ln1I7 = ptrtoint i8* @stg_bh_upd_frame_info to i64
+  %ln1I8 = inttoptr i64 %ln1I6 to i64*
+  store i64 %ln1I7, i64* %ln1I8, !tbaa !5
+  %ln1I9 = ptrtoint i8* @MainCapability to i64
+  %ln1Ia = add i64 %ln1I9, 856
+  %ln1Ib = inttoptr i64 %ln1Ia to i64*
+  %ln1Ic = load i64* %ln1Ib, !tbaa !5
+  %ln1Id = add i64 %ln1Ic, -8
+  %ln1Ie = load i64* %lc1t1
+  %ln1If = inttoptr i64 %ln1Id to i64*
+  store i64 %ln1Ie, i64* %ln1If, !tbaa !5
+  %ln1Ig = ptrtoint i8* @MainCapability to i64
+  %ln1Ih = add i64 %ln1Ig, 872
+  %ln1Ii = inttoptr i64 %ln1Ih to i64*
+  %ln1Ij = load i64* %ln1Ii, !tbaa !5
+  %ln1Ik = add i64 %ln1Ij, -24
+  %ln1Il = ptrtoint %s1c4_info_struct* @s1c4_info$def to i64
+  %ln1Im = inttoptr i64 %ln1Ik to i64*
+  store i64 %ln1Il, i64* %ln1Im, !tbaa !5
+  %ln1In = ptrtoint i8* @MainCapability to i64
+  %ln1Io = add i64 %ln1In, 872
+  %ln1Ip = inttoptr i64 %ln1Io to i64*
+  %ln1Iq = load i64* %ln1Ip, !tbaa !5
+  %ln1Ir = add i64 %ln1Iq, -23
+  store i64 %ln1Ir, i64* %lc1t4
+  %ln1Is = ptrtoint i8* @MainCapability to i64
+  %ln1It = add i64 %ln1Is, 872
+  %ln1Iu = inttoptr i64 %ln1It to i64*
+  %ln1Iv = load i64* %ln1Iu, !tbaa !5
+  %ln1Iw = add i64 %ln1Iv, -8
+  %ln1Ix = ptrtoint %s1bT_info_struct* @s1bT_info$def to i64
+  %ln1Iy = inttoptr i64 %ln1Iw to i64*
+  store i64 %ln1Ix, i64* %ln1Iy, !tbaa !5
+  %ln1Iz = ptrtoint i8* @MainCapability to i64
+  %ln1IA = add i64 %ln1Iz, 872
+  %ln1IB = inttoptr i64 %ln1IA to i64*
+  %ln1IC = load i64* %ln1IB, !tbaa !5
+  %ln1ID = add i64 %ln1IC, -8
+  store i64 %ln1ID, i64* %lc1u8
+  %ln1IE = ptrtoint i8* @MainCapability to i64
+  %ln1IF = add i64 %ln1IE, 856
+  %ln1IG = inttoptr i64 %ln1IF to i64*
+  %ln1IH = load i64* %ln1IG, !tbaa !5
+  %ln1II = add i64 %ln1IH, -48
+  %ln1IJ = ptrtoint i8* @base_GHCziBase_zdfMonadIO_closure to i64
+  %ln1IK = inttoptr i64 %ln1II to i64*
+  store i64 %ln1IJ, i64* %ln1IK, !tbaa !5
+  %ln1IL = ptrtoint i8* @MainCapability to i64
+  %ln1IM = add i64 %ln1IL, 856
+  %ln1IN = inttoptr i64 %ln1IM to i64*
+  %ln1IO = load i64* %ln1IN, !tbaa !5
+  %ln1IP = add i64 %ln1IO, -40
+  %ln1IQ = ptrtoint i8* @stg_ap_pp_info to i64
+  %ln1IR = inttoptr i64 %ln1IP to i64*
+  store i64 %ln1IQ, i64* %ln1IR, !tbaa !5
+  %ln1IS = ptrtoint i8* @MainCapability to i64
+  %ln1IT = add i64 %ln1IS, 856
+  %ln1IU = inttoptr i64 %ln1IT to i64*
+  %ln1IV = load i64* %ln1IU, !tbaa !5
+  %ln1IW = add i64 %ln1IV, -32
+  %ln1IX = load i64* %lc1u8
+  %ln1IY = inttoptr i64 %ln1IW to i64*
+  store i64 %ln1IX, i64* %ln1IY, !tbaa !5
+  %ln1IZ = ptrtoint i8* @MainCapability to i64
+  %ln1J0 = add i64 %ln1IZ, 856
+  %ln1J1 = inttoptr i64 %ln1J0 to i64*
+  %ln1J2 = load i64* %ln1J1, !tbaa !5
+  %ln1J3 = add i64 %ln1J2, -24
+  %ln1J4 = load i64* %lc1t4
+  %ln1J5 = inttoptr i64 %ln1J3 to i64*
+  store i64 %ln1J4, i64* %ln1J5, !tbaa !5
+  %ln1J6 = ptrtoint i8* @MainCapability to i64
+  %ln1J7 = add i64 %ln1J6, 856
+  %ln1J8 = ptrtoint i8* @MainCapability to i64
+  %ln1J9 = add i64 %ln1J8, 856
+  %ln1Ja = inttoptr i64 %ln1J9 to i64*
+  %ln1Jb = load i64* %ln1Ja, !tbaa !5
+  %ln1Jc = add i64 %ln1Jb, -48
+  %ln1Jd = inttoptr i64 %ln1J7 to i64*
+  store i64 %ln1Jc, i64* %ln1Jd, !tbaa !5
+  %ln1Je = bitcast i8* @base_GHCziBase_zgzgze_entry to void ()*
+  tail call ccc void ()* %ln1Je( ) nounwind
+  ret void
+c1t3:
+  %ln1Jf = load i64* %ls1c5
+  %ln1Jg = inttoptr i64 %ln1Jf to i64*
+  %ln1Jh = load i64* %ln1Jg, !tbaa !5
+  %ln1Ji = inttoptr i64 %ln1Jh to i64*
+  %ln1Jj = load i64* %ln1Ji, !tbaa !5
+  %ln1Jk = inttoptr i64 %ln1Jj to void ()*
+  tail call ccc void ()* %ln1Jk( ) nounwind
+  ret void
+c1um:
+  %ln1Jl = ptrtoint i8* @MainCapability to i64
+  %ln1Jm = add i64 %ln1Jl, 928
+  %ln1Jn = inttoptr i64 %ln1Jm to i64*
+  store i64 32, i64* %ln1Jn, !tbaa !5
+  br label %c1uj
+c1uj:
+  %ln1Jo = ptrtoint i8* @MainCapability to i64
+  %ln1Jp = add i64 %ln1Jo, 24
+  %ln1Jq = load i64* %ls1c5
+  %ln1Jr = inttoptr i64 %ln1Jp to i64*
+  store i64 %ln1Jq, i64* %ln1Jr, !tbaa !5
+  %ln1Js = ptrtoint i8* @MainCapability to i64
+  %ln1Jt = add i64 %ln1Js, 8
+  %ln1Ju = inttoptr i64 %ln1Jt to i64*
+  %ln1Jv = load i64* %ln1Ju, !tbaa !5
+  %ln1Jw = inttoptr i64 %ln1Jv to void ()*
+  tail call ccc void ()* %ln1Jw( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.644235 UTC
+
+%s1bQ_closure_struct = type <{i64, i64, i64, i64}>
+%c1JH_str_struct = type <{[3 x i8]}>
+%s1bP_info_struct = type <{i64, i64, i64, i64}>
+%s1bO_info_struct = type <{i64, i64, i64, i64}>
+%s1bQ_info_struct = type <{i64, i64, i64, i64}>
+@s1bQ_closure$def = internal global %s1bQ_closure_struct<{i64 ptrtoint (i8* @s1bQ_info to i64), i64 0, i64 0, i64 0}>
+@s1bQ_closure = alias internal i8* bitcast (%s1bQ_closure_struct* @s1bQ_closure$def to i8*)
+@c1JH_str$def = internal constant %c1JH_str_struct<{[3 x i8] [i8 104, i8 105, i8 0]}>
+@c1JH_str = alias internal i8* bitcast (%c1JH_str_struct* @c1JH_str$def to i8*)
+@s1bP_info$def = internal global %s1bP_info_struct<{i64 ptrtoint (void ()* @s1bP_entry$def to i64), i64 0, i64 4294967312, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 8)}>
+@s1bP_info = alias internal i8* bitcast (%s1bP_info_struct* @s1bP_info$def to i8*)
+@s1bO_info$def = internal global %s1bO_info_struct<{i64 ptrtoint (void ()* @s1bO_entry$def to i64), i64 0, i64 12884901904, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 144)}>
+@s1bO_info = alias internal i8* bitcast (%s1bO_info_struct* @s1bO_info$def to i8*)
+@s1bQ_info$def = internal global %s1bQ_info_struct<{i64 ptrtoint (void ()* @s1bQ_entry$def to i64), i64 0, i64 1693252201742358, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 8)}>
+@s1bQ_info = alias internal i8* bitcast (%s1bQ_info_struct* @s1bQ_info$def to i8*)
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.655142 UTC
+
+@s1bP_entry = alias internal i8* bitcast (void ()* @s1bP_entry$def to i8*)
+define internal ccc void @s1bP_entry$def() align 8 nounwind
+{
+c1JI:
+  %ls1bP = alloca i64, i32 1
+  %ln1JX = ptrtoint i8* @MainCapability to i64
+  %ln1JY = add i64 %ln1JX, 24
+  %ln1JZ = inttoptr i64 %ln1JY to i64*
+  %ln1K0 = load i64* %ln1JZ, !tbaa !5
+  store i64 %ln1K0, i64* %ls1bP
+  %ln1K1 = ptrtoint i8* @MainCapability to i64
+  %ln1K2 = add i64 %ln1K1, 856
+  %ln1K3 = inttoptr i64 %ln1K2 to i64*
+  %ln1K4 = load i64* %ln1K3, !tbaa !5
+  %ln1K5 = add i64 %ln1K4, 8
+  %ln1K6 = sub i64 %ln1K5, 32
+  %ln1K7 = ptrtoint i8* @MainCapability to i64
+  %ln1K8 = add i64 %ln1K7, 864
+  %ln1K9 = inttoptr i64 %ln1K8 to i64*
+  %ln1Ka = load i64* %ln1K9, !tbaa !5
+  %ln1Kb = icmp ult i64 %ln1K6, %ln1Ka
+  br i1 %ln1Kb, label %c1JJ, label %c1JK
+c1JK:
+  %ln1Kc = ptrtoint i8* @MainCapability to i64
+  %ln1Kd = add i64 %ln1Kc, 856
+  %ln1Ke = inttoptr i64 %ln1Kd to i64*
+  %ln1Kf = load i64* %ln1Ke, !tbaa !5
+  %ln1Kg = add i64 %ln1Kf, -16
+  %ln1Kh = ptrtoint i8* @stg_upd_frame_info to i64
+  %ln1Ki = inttoptr i64 %ln1Kg to i64*
+  store i64 %ln1Kh, i64* %ln1Ki, !tbaa !5
+  %ln1Kj = ptrtoint i8* @MainCapability to i64
+  %ln1Kk = add i64 %ln1Kj, 856
+  %ln1Kl = inttoptr i64 %ln1Kk to i64*
+  %ln1Km = load i64* %ln1Kl, !tbaa !5
+  %ln1Kn = add i64 %ln1Km, -8
+  %ln1Ko = load i64* %ls1bP
+  %ln1Kp = inttoptr i64 %ln1Kn to i64*
+  store i64 %ln1Ko, i64* %ln1Kp, !tbaa !5
+  %ln1Kq = ptrtoint i8* @MainCapability to i64
+  %ln1Kr = add i64 %ln1Kq, 24
+  %ln1Ks = ptrtoint i8* @ghczmprim_GHCziCString_unpackCStringzh_closure to i64
+  %ln1Kt = inttoptr i64 %ln1Kr to i64*
+  store i64 %ln1Ks, i64* %ln1Kt, !tbaa !5
+  %ln1Ku = ptrtoint i8* @MainCapability to i64
+  %ln1Kv = add i64 %ln1Ku, 856
+  %ln1Kw = inttoptr i64 %ln1Kv to i64*
+  %ln1Kx = load i64* %ln1Kw, !tbaa !5
+  %ln1Ky = add i64 %ln1Kx, -24
+  %ln1Kz = ptrtoint %c1JH_str_struct* @c1JH_str$def to i64
+  %ln1KA = inttoptr i64 %ln1Ky to i64*
+  store i64 %ln1Kz, i64* %ln1KA, !tbaa !5
+  %ln1KB = ptrtoint i8* @MainCapability to i64
+  %ln1KC = add i64 %ln1KB, 856
+  %ln1KD = ptrtoint i8* @MainCapability to i64
+  %ln1KE = add i64 %ln1KD, 856
+  %ln1KF = inttoptr i64 %ln1KE to i64*
+  %ln1KG = load i64* %ln1KF, !tbaa !5
+  %ln1KH = add i64 %ln1KG, -24
+  %ln1KI = inttoptr i64 %ln1KC to i64*
+  store i64 %ln1KH, i64* %ln1KI, !tbaa !5
+  %ln1KJ = bitcast i8* @stg_ap_n_fast to void ()*
+  tail call ccc void ()* %ln1KJ( ) nounwind
+  ret void
+c1JJ:
+  %ln1KK = ptrtoint i8* @MainCapability to i64
+  %ln1KL = add i64 %ln1KK, 24
+  %ln1KM = load i64* %ls1bP
+  %ln1KN = inttoptr i64 %ln1KL to i64*
+  store i64 %ln1KM, i64* %ln1KN, !tbaa !5
+  %ln1KO = ptrtoint i8* @MainCapability to i64
+  %ln1KP = add i64 %ln1KO, 8
+  %ln1KQ = inttoptr i64 %ln1KP to i64*
+  %ln1KR = load i64* %ln1KQ, !tbaa !5
+  %ln1KS = inttoptr i64 %ln1KR to void ()*
+  tail call ccc void ()* %ln1KS( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.669923 UTC
+
+@s1bO_entry = alias internal i8* bitcast (void ()* @s1bO_entry$def to i8*)
+define internal ccc void @s1bO_entry$def() align 8 nounwind
+{
+c1JP:
+  %ls1bO = alloca i64, i32 1
+  %ln1KT = ptrtoint i8* @MainCapability to i64
+  %ln1KU = add i64 %ln1KT, 24
+  %ln1KV = inttoptr i64 %ln1KU to i64*
+  %ln1KW = load i64* %ln1KV, !tbaa !5
+  store i64 %ln1KW, i64* %ls1bO
+  %ln1KX = ptrtoint i8* @MainCapability to i64
+  %ln1KY = add i64 %ln1KX, 856
+  %ln1KZ = inttoptr i64 %ln1KY to i64*
+  %ln1L0 = load i64* %ln1KZ, !tbaa !5
+  %ln1L1 = add i64 %ln1L0, 8
+  %ln1L2 = sub i64 %ln1L1, 32
+  %ln1L3 = ptrtoint i8* @MainCapability to i64
+  %ln1L4 = add i64 %ln1L3, 864
+  %ln1L5 = inttoptr i64 %ln1L4 to i64*
+  %ln1L6 = load i64* %ln1L5, !tbaa !5
+  %ln1L7 = icmp ult i64 %ln1L2, %ln1L6
+  br i1 %ln1L7, label %c1JQ, label %c1JR
+c1JR:
+  %ln1L8 = ptrtoint i8* @MainCapability to i64
+  %ln1L9 = add i64 %ln1L8, 856
+  %ln1La = inttoptr i64 %ln1L9 to i64*
+  %ln1Lb = load i64* %ln1La, !tbaa !5
+  %ln1Lc = add i64 %ln1Lb, -16
+  %ln1Ld = ptrtoint i8* @stg_upd_frame_info to i64
+  %ln1Le = inttoptr i64 %ln1Lc to i64*
+  store i64 %ln1Ld, i64* %ln1Le, !tbaa !5
+  %ln1Lf = ptrtoint i8* @MainCapability to i64
+  %ln1Lg = add i64 %ln1Lf, 856
+  %ln1Lh = inttoptr i64 %ln1Lg to i64*
+  %ln1Li = load i64* %ln1Lh, !tbaa !5
+  %ln1Lj = add i64 %ln1Li, -8
+  %ln1Lk = load i64* %ls1bO
+  %ln1Ll = inttoptr i64 %ln1Lj to i64*
+  store i64 %ln1Lk, i64* %ln1Ll, !tbaa !5
+  %ln1Lm = ptrtoint i8* @MainCapability to i64
+  %ln1Ln = add i64 %ln1Lm, 24
+  %ln1Lo = ptrtoint i8* @base_GHCziShow_zdfShowZMZN_closure to i64
+  %ln1Lp = inttoptr i64 %ln1Ln to i64*
+  store i64 %ln1Lo, i64* %ln1Lp, !tbaa !5
+  %ln1Lq = ptrtoint i8* @MainCapability to i64
+  %ln1Lr = add i64 %ln1Lq, 856
+  %ln1Ls = inttoptr i64 %ln1Lr to i64*
+  %ln1Lt = load i64* %ln1Ls, !tbaa !5
+  %ln1Lu = add i64 %ln1Lt, -24
+  %ln1Lv = ptrtoint i8* @base_GHCziShow_zdfShowChar_closure to i64
+  %ln1Lw = inttoptr i64 %ln1Lu to i64*
+  store i64 %ln1Lv, i64* %ln1Lw, !tbaa !5
+  %ln1Lx = ptrtoint i8* @MainCapability to i64
+  %ln1Ly = add i64 %ln1Lx, 856
+  %ln1Lz = ptrtoint i8* @MainCapability to i64
+  %ln1LA = add i64 %ln1Lz, 856
+  %ln1LB = inttoptr i64 %ln1LA to i64*
+  %ln1LC = load i64* %ln1LB, !tbaa !5
+  %ln1LD = add i64 %ln1LC, -24
+  %ln1LE = inttoptr i64 %ln1Ly to i64*
+  store i64 %ln1LD, i64* %ln1LE, !tbaa !5
+  %ln1LF = bitcast i8* @stg_ap_p_fast to void ()*
+  tail call ccc void ()* %ln1LF( ) nounwind
+  ret void
+c1JQ:
+  %ln1LG = ptrtoint i8* @MainCapability to i64
+  %ln1LH = add i64 %ln1LG, 24
+  %ln1LI = load i64* %ls1bO
+  %ln1LJ = inttoptr i64 %ln1LH to i64*
+  store i64 %ln1LI, i64* %ln1LJ, !tbaa !5
+  %ln1LK = ptrtoint i8* @MainCapability to i64
+  %ln1LL = add i64 %ln1LK, 8
+  %ln1LM = inttoptr i64 %ln1LL to i64*
+  %ln1LN = load i64* %ln1LM, !tbaa !5
+  %ln1LO = inttoptr i64 %ln1LN to void ()*
+  tail call ccc void ()* %ln1LO( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.690703 UTC
+
+@s1bQ_entry = alias internal i8* bitcast (void ()* @s1bQ_entry$def to i8*)
+define internal ccc void @s1bQ_entry$def() align 8 nounwind
+{
+c1JS:
+  %ls1bQ = alloca i64, i32 1
+  %lc1JA = alloca i64, i32 1
+  %lc1JD = alloca i64, i32 1
+  %lc1JL = alloca i64, i32 1
+  %ln1LP = ptrtoint i8* @MainCapability to i64
+  %ln1LQ = add i64 %ln1LP, 24
+  %ln1LR = inttoptr i64 %ln1LQ to i64*
+  %ln1LS = load i64* %ln1LR, !tbaa !5
+  store i64 %ln1LS, i64* %ls1bQ
+  %ln1LT = ptrtoint i8* @MainCapability to i64
+  %ln1LU = add i64 %ln1LT, 856
+  %ln1LV = inttoptr i64 %ln1LU to i64*
+  %ln1LW = load i64* %ln1LV, !tbaa !5
+  %ln1LX = add i64 %ln1LW, 8
+  %ln1LY = sub i64 %ln1LX, 40
+  %ln1LZ = ptrtoint i8* @MainCapability to i64
+  %ln1M0 = add i64 %ln1LZ, 864
+  %ln1M1 = inttoptr i64 %ln1M0 to i64*
+  %ln1M2 = load i64* %ln1M1, !tbaa !5
+  %ln1M3 = icmp ult i64 %ln1LY, %ln1M2
+  br i1 %ln1M3, label %c1JT, label %c1JU
+c1JU:
+  %ln1M4 = ptrtoint i8* @MainCapability to i64
+  %ln1M5 = add i64 %ln1M4, 872
+  %ln1M6 = ptrtoint i8* @MainCapability to i64
+  %ln1M7 = add i64 %ln1M6, 872
+  %ln1M8 = inttoptr i64 %ln1M7 to i64*
+  %ln1M9 = load i64* %ln1M8, !tbaa !5
+  %ln1Ma = add i64 %ln1M9, 32
+  %ln1Mb = inttoptr i64 %ln1M5 to i64*
+  store i64 %ln1Ma, i64* %ln1Mb, !tbaa !5
+  %ln1Mc = ptrtoint i8* @MainCapability to i64
+  %ln1Md = add i64 %ln1Mc, 872
+  %ln1Me = inttoptr i64 %ln1Md to i64*
+  %ln1Mf = load i64* %ln1Me, !tbaa !5
+  %ln1Mg = ptrtoint i8* @MainCapability to i64
+  %ln1Mh = add i64 %ln1Mg, 880
+  %ln1Mi = inttoptr i64 %ln1Mh to i64*
+  %ln1Mj = load i64* %ln1Mi, !tbaa !5
+  %ln1Mk = icmp ugt i64 %ln1Mf, %ln1Mj
+  br i1 %ln1Mk, label %c1JW, label %c1JV
+c1JV:
+  %ln1Ml = ptrtoint i8* @MainCapability to i64
+  %ln1Mm = add i64 %ln1Ml, 24
+  %ln1Mn = inttoptr i64 %ln1Mm to i8*
+  %ln1Mo = load i64* %ls1bQ
+  %ln1Mp = inttoptr i64 %ln1Mo to i8*
+  %ln1Mq = bitcast i8* @newCAF to i8* (i8*, i8*)*
+  %ln1Mr = call ccc i8* (i8*, i8*)* %ln1Mq( i8* %ln1Mn, i8* %ln1Mp ) nounwind
+  %ln1Ms = ptrtoint i8* %ln1Mr to i64
+  store i64 %ln1Ms, i64* %lc1JA
+  %ln1Mt = load i64* %lc1JA
+  %ln1Mu = icmp eq i64 %ln1Mt, 0
+  br i1 %ln1Mu, label %c1JC, label %c1JB
+c1JB:
+  %ln1Mv = ptrtoint i8* @MainCapability to i64
+  %ln1Mw = add i64 %ln1Mv, 856
+  %ln1Mx = inttoptr i64 %ln1Mw to i64*
+  %ln1My = load i64* %ln1Mx, !tbaa !5
+  %ln1Mz = add i64 %ln1My, -16
+  %ln1MA = ptrtoint i8* @stg_bh_upd_frame_info to i64
+  %ln1MB = inttoptr i64 %ln1Mz to i64*
+  store i64 %ln1MA, i64* %ln1MB, !tbaa !5
+  %ln1MC = ptrtoint i8* @MainCapability to i64
+  %ln1MD = add i64 %ln1MC, 856
+  %ln1ME = inttoptr i64 %ln1MD to i64*
+  %ln1MF = load i64* %ln1ME, !tbaa !5
+  %ln1MG = add i64 %ln1MF, -8
+  %ln1MH = load i64* %lc1JA
+  %ln1MI = inttoptr i64 %ln1MG to i64*
+  store i64 %ln1MH, i64* %ln1MI, !tbaa !5
+  %ln1MJ = ptrtoint i8* @MainCapability to i64
+  %ln1MK = add i64 %ln1MJ, 872
+  %ln1ML = inttoptr i64 %ln1MK to i64*
+  %ln1MM = load i64* %ln1ML, !tbaa !5
+  %ln1MN = add i64 %ln1MM, -24
+  %ln1MO = ptrtoint %s1bP_info_struct* @s1bP_info$def to i64
+  %ln1MP = inttoptr i64 %ln1MN to i64*
+  store i64 %ln1MO, i64* %ln1MP, !tbaa !5
+  %ln1MQ = ptrtoint i8* @MainCapability to i64
+  %ln1MR = add i64 %ln1MQ, 872
+  %ln1MS = inttoptr i64 %ln1MR to i64*
+  %ln1MT = load i64* %ln1MS, !tbaa !5
+  %ln1MU = add i64 %ln1MT, -24
+  store i64 %ln1MU, i64* %lc1JD
+  %ln1MV = ptrtoint i8* @MainCapability to i64
+  %ln1MW = add i64 %ln1MV, 872
+  %ln1MX = inttoptr i64 %ln1MW to i64*
+  %ln1MY = load i64* %ln1MX, !tbaa !5
+  %ln1MZ = add i64 %ln1MY, -8
+  %ln1N0 = ptrtoint %s1bO_info_struct* @s1bO_info$def to i64
+  %ln1N1 = inttoptr i64 %ln1MZ to i64*
+  store i64 %ln1N0, i64* %ln1N1, !tbaa !5
+  %ln1N2 = ptrtoint i8* @MainCapability to i64
+  %ln1N3 = add i64 %ln1N2, 872
+  %ln1N4 = inttoptr i64 %ln1N3 to i64*
+  %ln1N5 = load i64* %ln1N4, !tbaa !5
+  %ln1N6 = add i64 %ln1N5, -8
+  store i64 %ln1N6, i64* %lc1JL
+  %ln1N7 = ptrtoint i8* @MainCapability to i64
+  %ln1N8 = add i64 %ln1N7, 24
+  %ln1N9 = ptrtoint i8* @base_SystemziIO_print_closure to i64
+  %ln1Na = inttoptr i64 %ln1N8 to i64*
+  store i64 %ln1N9, i64* %ln1Na, !tbaa !5
+  %ln1Nb = ptrtoint i8* @MainCapability to i64
+  %ln1Nc = add i64 %ln1Nb, 856
+  %ln1Nd = inttoptr i64 %ln1Nc to i64*
+  %ln1Ne = load i64* %ln1Nd, !tbaa !5
+  %ln1Nf = add i64 %ln1Ne, -32
+  %ln1Ng = load i64* %lc1JL
+  %ln1Nh = inttoptr i64 %ln1Nf to i64*
+  store i64 %ln1Ng, i64* %ln1Nh, !tbaa !5
+  %ln1Ni = ptrtoint i8* @MainCapability to i64
+  %ln1Nj = add i64 %ln1Ni, 856
+  %ln1Nk = inttoptr i64 %ln1Nj to i64*
+  %ln1Nl = load i64* %ln1Nk, !tbaa !5
+  %ln1Nm = add i64 %ln1Nl, -24
+  %ln1Nn = load i64* %lc1JD
+  %ln1No = inttoptr i64 %ln1Nm to i64*
+  store i64 %ln1Nn, i64* %ln1No, !tbaa !5
+  %ln1Np = ptrtoint i8* @MainCapability to i64
+  %ln1Nq = add i64 %ln1Np, 856
+  %ln1Nr = ptrtoint i8* @MainCapability to i64
+  %ln1Ns = add i64 %ln1Nr, 856
+  %ln1Nt = inttoptr i64 %ln1Ns to i64*
+  %ln1Nu = load i64* %ln1Nt, !tbaa !5
+  %ln1Nv = add i64 %ln1Nu, -32
+  %ln1Nw = inttoptr i64 %ln1Nq to i64*
+  store i64 %ln1Nv, i64* %ln1Nw, !tbaa !5
+  %ln1Nx = bitcast i8* @stg_ap_pp_fast to void ()*
+  tail call ccc void ()* %ln1Nx( ) nounwind
+  ret void
+c1JC:
+  %ln1Ny = load i64* %ls1bQ
+  %ln1Nz = inttoptr i64 %ln1Ny to i64*
+  %ln1NA = load i64* %ln1Nz, !tbaa !5
+  %ln1NB = inttoptr i64 %ln1NA to i64*
+  %ln1NC = load i64* %ln1NB, !tbaa !5
+  %ln1ND = inttoptr i64 %ln1NC to void ()*
+  tail call ccc void ()* %ln1ND( ) nounwind
+  ret void
+c1JW:
+  %ln1NE = ptrtoint i8* @MainCapability to i64
+  %ln1NF = add i64 %ln1NE, 928
+  %ln1NG = inttoptr i64 %ln1NF to i64*
+  store i64 32, i64* %ln1NG, !tbaa !5
+  br label %c1JT
+c1JT:
+  %ln1NH = ptrtoint i8* @MainCapability to i64
+  %ln1NI = add i64 %ln1NH, 24
+  %ln1NJ = load i64* %ls1bQ
+  %ln1NK = inttoptr i64 %ln1NI to i64*
+  store i64 %ln1NJ, i64* %ln1NK, !tbaa !5
+  %ln1NL = ptrtoint i8* @MainCapability to i64
+  %ln1NM = add i64 %ln1NL, 8
+  %ln1NN = inttoptr i64 %ln1NM to i64*
+  %ln1NO = load i64* %ln1NN, !tbaa !5
+  %ln1NP = inttoptr i64 %ln1NO to void ()*
+  tail call ccc void ()* %ln1NP( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.74899 UTC
+
+%Main_main_closure_struct = type <{i64, i64, i64, i64}>
+%Main_main_info_struct = type <{i64, i64, i64, i64}>
+@Main_main_closure$def = internal global %Main_main_closure_struct<{i64 ptrtoint (i8* @Main_main_info to i64), i64 0, i64 0, i64 0}>
+@Main_main_closure = alias i8* bitcast (%Main_main_closure_struct* @Main_main_closure$def to i8*)
+@Main_main_info$def = internal global %Main_main_info_struct<{i64 ptrtoint (void ()* @Main_main_entry$def to i64), i64 0, i64 1653562408982, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 104)}>
+@Main_main_info = alias i8* bitcast (%Main_main_info_struct* @Main_main_info$def to i8*)
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.76022 UTC
+
+@Main_main_entry = alias i8* bitcast (void ()* @Main_main_entry$def to i8*)
+define ccc void @Main_main_entry$def() align 8 nounwind
+{
+c1NW:
+  %lrnW = alloca i64, i32 1
+  %lc1NT = alloca i64, i32 1
+  %ln1NZ = ptrtoint i8* @MainCapability to i64
+  %ln1O0 = add i64 %ln1NZ, 24
+  %ln1O1 = inttoptr i64 %ln1O0 to i64*
+  %ln1O2 = load i64* %ln1O1, !tbaa !5
+  store i64 %ln1O2, i64* %lrnW
+  %ln1O3 = ptrtoint i8* @MainCapability to i64
+  %ln1O4 = add i64 %ln1O3, 856
+  %ln1O5 = inttoptr i64 %ln1O4 to i64*
+  %ln1O6 = load i64* %ln1O5, !tbaa !5
+  %ln1O7 = add i64 %ln1O6, 8
+  %ln1O8 = sub i64 %ln1O7, 56
+  %ln1O9 = ptrtoint i8* @MainCapability to i64
+  %ln1Oa = add i64 %ln1O9, 864
+  %ln1Ob = inttoptr i64 %ln1Oa to i64*
+  %ln1Oc = load i64* %ln1Ob, !tbaa !5
+  %ln1Od = icmp ult i64 %ln1O8, %ln1Oc
+  br i1 %ln1Od, label %c1NX, label %c1NY
+c1NY:
+  %ln1Oe = ptrtoint i8* @MainCapability to i64
+  %ln1Of = add i64 %ln1Oe, 24
+  %ln1Og = inttoptr i64 %ln1Of to i8*
+  %ln1Oh = load i64* %lrnW
+  %ln1Oi = inttoptr i64 %ln1Oh to i8*
+  %ln1Oj = bitcast i8* @newCAF to i8* (i8*, i8*)*
+  %ln1Ok = call ccc i8* (i8*, i8*)* %ln1Oj( i8* %ln1Og, i8* %ln1Oi ) nounwind
+  %ln1Ol = ptrtoint i8* %ln1Ok to i64
+  store i64 %ln1Ol, i64* %lc1NT
+  %ln1Om = load i64* %lc1NT
+  %ln1On = icmp eq i64 %ln1Om, 0
+  br i1 %ln1On, label %c1NV, label %c1NU
+c1NU:
+  %ln1Oo = ptrtoint i8* @MainCapability to i64
+  %ln1Op = add i64 %ln1Oo, 856
+  %ln1Oq = inttoptr i64 %ln1Op to i64*
+  %ln1Or = load i64* %ln1Oq, !tbaa !5
+  %ln1Os = add i64 %ln1Or, -16
+  %ln1Ot = ptrtoint i8* @stg_bh_upd_frame_info to i64
+  %ln1Ou = inttoptr i64 %ln1Os to i64*
+  store i64 %ln1Ot, i64* %ln1Ou, !tbaa !5
+  %ln1Ov = ptrtoint i8* @MainCapability to i64
+  %ln1Ow = add i64 %ln1Ov, 856
+  %ln1Ox = inttoptr i64 %ln1Ow to i64*
+  %ln1Oy = load i64* %ln1Ox, !tbaa !5
+  %ln1Oz = add i64 %ln1Oy, -8
+  %ln1OA = load i64* %lc1NT
+  %ln1OB = inttoptr i64 %ln1Oz to i64*
+  store i64 %ln1OA, i64* %ln1OB, !tbaa !5
+  %ln1OC = ptrtoint i8* @MainCapability to i64
+  %ln1OD = add i64 %ln1OC, 856
+  %ln1OE = inttoptr i64 %ln1OD to i64*
+  %ln1OF = load i64* %ln1OE, !tbaa !5
+  %ln1OG = add i64 %ln1OF, -48
+  %ln1OH = ptrtoint i8* @base_GHCziBase_zdfMonadIO_closure to i64
+  %ln1OI = inttoptr i64 %ln1OG to i64*
+  store i64 %ln1OH, i64* %ln1OI, !tbaa !5
+  %ln1OJ = ptrtoint i8* @MainCapability to i64
+  %ln1OK = add i64 %ln1OJ, 856
+  %ln1OL = inttoptr i64 %ln1OK to i64*
+  %ln1OM = load i64* %ln1OL, !tbaa !5
+  %ln1ON = add i64 %ln1OM, -40
+  %ln1OO = ptrtoint i8* @stg_ap_pp_info to i64
+  %ln1OP = inttoptr i64 %ln1ON to i64*
+  store i64 %ln1OO, i64* %ln1OP, !tbaa !5
+  %ln1OQ = ptrtoint i8* @MainCapability to i64
+  %ln1OR = add i64 %ln1OQ, 856
+  %ln1OS = inttoptr i64 %ln1OR to i64*
+  %ln1OT = load i64* %ln1OS, !tbaa !5
+  %ln1OU = add i64 %ln1OT, -32
+  %ln1OV = ptrtoint %s1bQ_closure_struct* @s1bQ_closure$def to i64
+  %ln1OW = inttoptr i64 %ln1OU to i64*
+  store i64 %ln1OV, i64* %ln1OW, !tbaa !5
+  %ln1OX = ptrtoint i8* @MainCapability to i64
+  %ln1OY = add i64 %ln1OX, 856
+  %ln1OZ = inttoptr i64 %ln1OY to i64*
+  %ln1P0 = load i64* %ln1OZ, !tbaa !5
+  %ln1P1 = add i64 %ln1P0, -24
+  %ln1P2 = ptrtoint %s1c5_closure_struct* @s1c5_closure$def to i64
+  %ln1P3 = inttoptr i64 %ln1P1 to i64*
+  store i64 %ln1P2, i64* %ln1P3, !tbaa !5
+  %ln1P4 = ptrtoint i8* @MainCapability to i64
+  %ln1P5 = add i64 %ln1P4, 856
+  %ln1P6 = ptrtoint i8* @MainCapability to i64
+  %ln1P7 = add i64 %ln1P6, 856
+  %ln1P8 = inttoptr i64 %ln1P7 to i64*
+  %ln1P9 = load i64* %ln1P8, !tbaa !5
+  %ln1Pa = add i64 %ln1P9, -48
+  %ln1Pb = inttoptr i64 %ln1P5 to i64*
+  store i64 %ln1Pa, i64* %ln1Pb, !tbaa !5
+  %ln1Pc = bitcast i8* @base_GHCziBase_zgzg_entry to void ()*
+  tail call ccc void ()* %ln1Pc( ) nounwind
+  ret void
+c1NV:
+  %ln1Pd = load i64* %lrnW
+  %ln1Pe = inttoptr i64 %ln1Pd to i64*
+  %ln1Pf = load i64* %ln1Pe, !tbaa !5
+  %ln1Pg = inttoptr i64 %ln1Pf to i64*
+  %ln1Ph = load i64* %ln1Pg, !tbaa !5
+  %ln1Pi = inttoptr i64 %ln1Ph to void ()*
+  tail call ccc void ()* %ln1Pi( ) nounwind
+  ret void
+c1NX:
+  %ln1Pj = ptrtoint i8* @MainCapability to i64
+  %ln1Pk = add i64 %ln1Pj, 24
+  %ln1Pl = load i64* %lrnW
+  %ln1Pm = inttoptr i64 %ln1Pk to i64*
+  store i64 %ln1Pl, i64* %ln1Pm, !tbaa !5
+  %ln1Pn = ptrtoint i8* @MainCapability to i64
+  %ln1Po = add i64 %ln1Pn, 8
+  %ln1Pp = inttoptr i64 %ln1Po to i64*
+  %ln1Pq = load i64* %ln1Pp, !tbaa !5
+  %ln1Pr = inttoptr i64 %ln1Pq to void ()*
+  tail call ccc void ()* %ln1Pr( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.80987 UTC
+
+%ZCMain_main_closure_struct = type <{i64, i64, i64, i64}>
+%ZCMain_main_info_struct = type <{i64, i64, i64, i64}>
+@ZCMain_main_closure$def = internal global %ZCMain_main_closure_struct<{i64 ptrtoint (i8* @ZCMain_main_info to i64), i64 0, i64 0, i64 0}>
+@ZCMain_main_closure = alias i8* bitcast (%ZCMain_main_closure_struct* @ZCMain_main_closure$def to i8*)
+@ZCMain_main_info$def = internal global %ZCMain_main_info_struct<{i64 ptrtoint (void ()* @ZCMain_main_entry$def to i64), i64 0, i64 12884901910, i64 add (i64 ptrtoint (i8* @S1f3_srt to i64),i64 176)}>
+@ZCMain_main_info = alias i8* bitcast (%ZCMain_main_info_struct* @ZCMain_main_info$def to i8*)
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.819767 UTC
+
+@ZCMain_main_entry = alias i8* bitcast (void ()* @ZCMain_main_entry$def to i8*)
+define ccc void @ZCMain_main_entry$def() align 8 nounwind
+{
+c1Py:
+  %l01D = alloca i64, i32 1
+  %lc1Pv = alloca i64, i32 1
+  %ln1PB = ptrtoint i8* @MainCapability to i64
+  %ln1PC = add i64 %ln1PB, 24
+  %ln1PD = inttoptr i64 %ln1PC to i64*
+  %ln1PE = load i64* %ln1PD, !tbaa !5
+  store i64 %ln1PE, i64* %l01D
+  %ln1PF = ptrtoint i8* @MainCapability to i64
+  %ln1PG = add i64 %ln1PF, 856
+  %ln1PH = inttoptr i64 %ln1PG to i64*
+  %ln1PI = load i64* %ln1PH, !tbaa !5
+  %ln1PJ = add i64 %ln1PI, 8
+  %ln1PK = sub i64 %ln1PJ, 32
+  %ln1PL = ptrtoint i8* @MainCapability to i64
+  %ln1PM = add i64 %ln1PL, 864
+  %ln1PN = inttoptr i64 %ln1PM to i64*
+  %ln1PO = load i64* %ln1PN, !tbaa !5
+  %ln1PP = icmp ult i64 %ln1PK, %ln1PO
+  br i1 %ln1PP, label %c1Pz, label %c1PA
+c1PA:
+  %ln1PQ = ptrtoint i8* @MainCapability to i64
+  %ln1PR = add i64 %ln1PQ, 24
+  %ln1PS = inttoptr i64 %ln1PR to i8*
+  %ln1PT = load i64* %l01D
+  %ln1PU = inttoptr i64 %ln1PT to i8*
+  %ln1PV = bitcast i8* @newCAF to i8* (i8*, i8*)*
+  %ln1PW = call ccc i8* (i8*, i8*)* %ln1PV( i8* %ln1PS, i8* %ln1PU ) nounwind
+  %ln1PX = ptrtoint i8* %ln1PW to i64
+  store i64 %ln1PX, i64* %lc1Pv
+  %ln1PY = load i64* %lc1Pv
+  %ln1PZ = icmp eq i64 %ln1PY, 0
+  br i1 %ln1PZ, label %c1Px, label %c1Pw
+c1Pw:
+  %ln1Q0 = ptrtoint i8* @MainCapability to i64
+  %ln1Q1 = add i64 %ln1Q0, 856
+  %ln1Q2 = inttoptr i64 %ln1Q1 to i64*
+  %ln1Q3 = load i64* %ln1Q2, !tbaa !5
+  %ln1Q4 = add i64 %ln1Q3, -16
+  %ln1Q5 = ptrtoint i8* @stg_bh_upd_frame_info to i64
+  %ln1Q6 = inttoptr i64 %ln1Q4 to i64*
+  store i64 %ln1Q5, i64* %ln1Q6, !tbaa !5
+  %ln1Q7 = ptrtoint i8* @MainCapability to i64
+  %ln1Q8 = add i64 %ln1Q7, 856
+  %ln1Q9 = inttoptr i64 %ln1Q8 to i64*
+  %ln1Qa = load i64* %ln1Q9, !tbaa !5
+  %ln1Qb = add i64 %ln1Qa, -8
+  %ln1Qc = load i64* %lc1Pv
+  %ln1Qd = inttoptr i64 %ln1Qb to i64*
+  store i64 %ln1Qc, i64* %ln1Qd, !tbaa !5
+  %ln1Qe = ptrtoint i8* @MainCapability to i64
+  %ln1Qf = add i64 %ln1Qe, 24
+  %ln1Qg = ptrtoint i8* @base_GHCziTopHandler_runMainIO_closure to i64
+  %ln1Qh = inttoptr i64 %ln1Qf to i64*
+  store i64 %ln1Qg, i64* %ln1Qh, !tbaa !5
+  %ln1Qi = ptrtoint i8* @MainCapability to i64
+  %ln1Qj = add i64 %ln1Qi, 856
+  %ln1Qk = inttoptr i64 %ln1Qj to i64*
+  %ln1Ql = load i64* %ln1Qk, !tbaa !5
+  %ln1Qm = add i64 %ln1Ql, -24
+  %ln1Qn = ptrtoint %Main_main_closure_struct* @Main_main_closure$def to i64
+  %ln1Qo = inttoptr i64 %ln1Qm to i64*
+  store i64 %ln1Qn, i64* %ln1Qo, !tbaa !5
+  %ln1Qp = ptrtoint i8* @MainCapability to i64
+  %ln1Qq = add i64 %ln1Qp, 856
+  %ln1Qr = ptrtoint i8* @MainCapability to i64
+  %ln1Qs = add i64 %ln1Qr, 856
+  %ln1Qt = inttoptr i64 %ln1Qs to i64*
+  %ln1Qu = load i64* %ln1Qt, !tbaa !5
+  %ln1Qv = add i64 %ln1Qu, -24
+  %ln1Qw = inttoptr i64 %ln1Qq to i64*
+  store i64 %ln1Qv, i64* %ln1Qw, !tbaa !5
+  %ln1Qx = bitcast i8* @stg_ap_p_fast to void ()*
+  tail call ccc void ()* %ln1Qx( ) nounwind
+  ret void
+c1Px:
+  %ln1Qy = load i64* %l01D
+  %ln1Qz = inttoptr i64 %ln1Qy to i64*
+  %ln1QA = load i64* %ln1Qz, !tbaa !5
+  %ln1QB = inttoptr i64 %ln1QA to i64*
+  %ln1QC = load i64* %ln1QB, !tbaa !5
+  %ln1QD = inttoptr i64 %ln1QC to void ()*
+  tail call ccc void ()* %ln1QD( ) nounwind
+  ret void
+c1Pz:
+  %ln1QE = ptrtoint i8* @MainCapability to i64
+  %ln1QF = add i64 %ln1QE, 24
+  %ln1QG = load i64* %l01D
+  %ln1QH = inttoptr i64 %ln1QF to i64*
+  store i64 %ln1QG, i64* %ln1QH, !tbaa !5
+  %ln1QI = ptrtoint i8* @MainCapability to i64
+  %ln1QJ = add i64 %ln1QI, 8
+  %ln1QK = inttoptr i64 %ln1QJ to i64*
+  %ln1QL = load i64* %ln1QK, !tbaa !5
+  %ln1QM = inttoptr i64 %ln1QL to void ()*
+  tail call ccc void ()* %ln1QM( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.862308 UTC
+
+%Main_Foo_closure_struct = type <{i64}>
+%Main_Foo_info_struct = type <{i64, i64, i64, i64}>
+@Main_Foo_closure$def = internal global %Main_Foo_closure_struct<{i64 ptrtoint (i8* @Main_Foo_info to i64)}>
+@Main_Foo_closure = alias i8* bitcast (%Main_Foo_closure_struct* @Main_Foo_closure$def to i8*)
+@Main_Foo_info$def = internal global %Main_Foo_info_struct<{i64 ptrtoint (void ()* @Main_Foo_entry$def to i64), i64 0, i64 15, i64 4294967301}>
+@Main_Foo_info = alias internal i8* bitcast (%Main_Foo_info_struct* @Main_Foo_info$def to i8*)
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.871364 UTC
+
+@Main_Foo_entry = alias internal i8* bitcast (void ()* @Main_Foo_entry$def to i8*)
+define internal ccc void @Main_Foo_entry$def() align 8 nounwind
+{
+c1QS:
+  %lB1 = alloca i64, i32 1
+  %lc1QR = alloca i64, i32 1
+  %ln1QX = ptrtoint i8* @MainCapability to i64
+  %ln1QY = add i64 %ln1QX, 856
+  %ln1QZ = inttoptr i64 %ln1QY to i64*
+  %ln1R0 = load i64* %ln1QZ, !tbaa !5
+  %ln1R1 = inttoptr i64 %ln1R0 to i64*
+  %ln1R2 = load i64* %ln1R1, !tbaa !5
+  store i64 %ln1R2, i64* %lB1
+  br label %c1QU
+c1QU:
+  %ln1R3 = ptrtoint i8* @MainCapability to i64
+  %ln1R4 = add i64 %ln1R3, 872
+  %ln1R5 = ptrtoint i8* @MainCapability to i64
+  %ln1R6 = add i64 %ln1R5, 872
+  %ln1R7 = inttoptr i64 %ln1R6 to i64*
+  %ln1R8 = load i64* %ln1R7, !tbaa !5
+  %ln1R9 = add i64 %ln1R8, 16
+  %ln1Ra = inttoptr i64 %ln1R4 to i64*
+  store i64 %ln1R9, i64* %ln1Ra, !tbaa !5
+  %ln1Rb = ptrtoint i8* @MainCapability to i64
+  %ln1Rc = add i64 %ln1Rb, 872
+  %ln1Rd = inttoptr i64 %ln1Rc to i64*
+  %ln1Re = load i64* %ln1Rd, !tbaa !5
+  %ln1Rf = ptrtoint i8* @MainCapability to i64
+  %ln1Rg = add i64 %ln1Rf, 880
+  %ln1Rh = inttoptr i64 %ln1Rg to i64*
+  %ln1Ri = load i64* %ln1Rh, !tbaa !5
+  %ln1Rj = icmp ugt i64 %ln1Re, %ln1Ri
+  br i1 %ln1Rj, label %c1QW, label %c1QV
+c1QV:
+  %ln1Rk = ptrtoint i8* @MainCapability to i64
+  %ln1Rl = add i64 %ln1Rk, 872
+  %ln1Rm = inttoptr i64 %ln1Rl to i64*
+  %ln1Rn = load i64* %ln1Rm, !tbaa !5
+  %ln1Ro = add i64 %ln1Rn, -8
+  %ln1Rp = ptrtoint i8* @Main_Foo_con_info to i64
+  %ln1Rq = inttoptr i64 %ln1Ro to i64*
+  store i64 %ln1Rp, i64* %ln1Rq, !tbaa !5
+  %ln1Rr = ptrtoint i8* @MainCapability to i64
+  %ln1Rs = add i64 %ln1Rr, 872
+  %ln1Rt = inttoptr i64 %ln1Rs to i64*
+  %ln1Ru = load i64* %ln1Rt, !tbaa !5
+  %ln1Rv = load i64* %lB1
+  %ln1Rw = inttoptr i64 %ln1Ru to i64*
+  store i64 %ln1Rv, i64* %ln1Rw, !tbaa !5
+  %ln1Rx = ptrtoint i8* @MainCapability to i64
+  %ln1Ry = add i64 %ln1Rx, 872
+  %ln1Rz = inttoptr i64 %ln1Ry to i64*
+  %ln1RA = load i64* %ln1Rz, !tbaa !5
+  %ln1RB = add i64 %ln1RA, -7
+  store i64 %ln1RB, i64* %lc1QR
+  %ln1RC = ptrtoint i8* @MainCapability to i64
+  %ln1RD = add i64 %ln1RC, 24
+  %ln1RE = load i64* %lc1QR
+  %ln1RF = inttoptr i64 %ln1RD to i64*
+  store i64 %ln1RE, i64* %ln1RF, !tbaa !5
+  %ln1RG = ptrtoint i8* @MainCapability to i64
+  %ln1RH = add i64 %ln1RG, 856
+  %ln1RI = ptrtoint i8* @MainCapability to i64
+  %ln1RJ = add i64 %ln1RI, 856
+  %ln1RK = inttoptr i64 %ln1RJ to i64*
+  %ln1RL = load i64* %ln1RK, !tbaa !5
+  %ln1RM = add i64 %ln1RL, 8
+  %ln1RN = inttoptr i64 %ln1RH to i64*
+  store i64 %ln1RM, i64* %ln1RN, !tbaa !5
+  %ln1RO = ptrtoint i8* @MainCapability to i64
+  %ln1RP = add i64 %ln1RO, 856
+  %ln1RQ = inttoptr i64 %ln1RP to i64*
+  %ln1RR = load i64* %ln1RQ, !tbaa !5
+  %ln1RS = inttoptr i64 %ln1RR to i64*
+  %ln1RT = load i64* %ln1RS, !tbaa !5
+  %ln1RU = inttoptr i64 %ln1RT to i64*
+  %ln1RV = load i64* %ln1RU, !tbaa !5
+  %ln1RW = inttoptr i64 %ln1RV to void ()*
+  tail call ccc void ()* %ln1RW( ) nounwind
+  ret void
+c1QW:
+  %ln1RX = ptrtoint i8* @MainCapability to i64
+  %ln1RY = add i64 %ln1RX, 928
+  %ln1RZ = inttoptr i64 %ln1RY to i64*
+  store i64 16, i64* %ln1RZ, !tbaa !5
+  br label %c1QT
+c1QT:
+  %ln1S0 = ptrtoint i8* @MainCapability to i64
+  %ln1S1 = add i64 %ln1S0, 24
+  %ln1S2 = ptrtoint %Main_Foo_closure_struct* @Main_Foo_closure$def to i64
+  %ln1S3 = inttoptr i64 %ln1S1 to i64*
+  store i64 %ln1S2, i64* %ln1S3, !tbaa !5
+  %ln1S4 = ptrtoint i8* @MainCapability to i64
+  %ln1S5 = add i64 %ln1S4, 16
+  %ln1S6 = inttoptr i64 %ln1S5 to i64*
+  %ln1S7 = load i64* %ln1S6, !tbaa !5
+  %ln1S8 = inttoptr i64 %ln1S7 to void ()*
+  tail call ccc void ()* %ln1S8( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.914035 UTC
+
+%i1Sb_str_struct = type <{[14 x i8]}>
+%Main_Foo_con_info_struct = type <{i64, i64, i64, i64}>
+%i1Sc_str_struct = type <{[14 x i8]}>
+%Main_Foo_static_info_struct = type <{i64, i64, i64, i64}>
+@i1Sb_str$def = internal constant %i1Sb_str_struct<{[14 x i8] [i8 109, i8 97, i8 105, i8 110, i8 58, i8 77, i8 97, i8 105, i8 110, i8 46, i8 70, i8 111, i8 111, i8 0]}>
+@i1Sb_str = alias internal i8* bitcast (%i1Sb_str_struct* @i1Sb_str$def to i8*)
+@Main_Foo_con_info$def = internal global %Main_Foo_con_info_struct<{i64 ptrtoint (void ()* @Main_Foo_con_entry$def to i64), i64 1, i64 2, i64 ptrtoint (i8* @i1Sb_str to i64)}>
+@Main_Foo_con_info = alias i8* bitcast (%Main_Foo_con_info_struct* @Main_Foo_con_info$def to i8*)
+@i1Sc_str$def = internal constant %i1Sc_str_struct<{[14 x i8] [i8 109, i8 97, i8 105, i8 110, i8 58, i8 77, i8 97, i8 105, i8 110, i8 46, i8 70, i8 111, i8 111, i8 0]}>
+@i1Sc_str = alias internal i8* bitcast (%i1Sc_str_struct* @i1Sc_str$def to i8*)
+@Main_Foo_static_info$def = internal global %Main_Foo_static_info_struct<{i64 ptrtoint (void ()* @Main_Foo_static_entry$def to i64), i64 1, i64 7, i64 ptrtoint (i8* @i1Sc_str to i64)}>
+@Main_Foo_static_info = alias i8* bitcast (%Main_Foo_static_info_struct* @Main_Foo_static_info$def to i8*)
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.920967 UTC
+
+@Main_Foo_con_entry = alias i8* bitcast (void ()* @Main_Foo_con_entry$def to i8*)
+define ccc void @Main_Foo_con_entry$def() align 8 nounwind
+{
+c1S9:
+  %ln1Sd = ptrtoint i8* @MainCapability to i64
+  %ln1Se = add i64 %ln1Sd, 24
+  %ln1Sf = ptrtoint i8* @MainCapability to i64
+  %ln1Sg = add i64 %ln1Sf, 24
+  %ln1Sh = inttoptr i64 %ln1Sg to i64*
+  %ln1Si = load i64* %ln1Sh, !tbaa !5
+  %ln1Sj = add i64 %ln1Si, 1
+  %ln1Sk = inttoptr i64 %ln1Se to i64*
+  store i64 %ln1Sj, i64* %ln1Sk, !tbaa !5
+  %ln1Sl = ptrtoint i8* @MainCapability to i64
+  %ln1Sm = add i64 %ln1Sl, 856
+  %ln1Sn = inttoptr i64 %ln1Sm to i64*
+  %ln1So = load i64* %ln1Sn, !tbaa !5
+  %ln1Sp = inttoptr i64 %ln1So to i64*
+  %ln1Sq = load i64* %ln1Sp, !tbaa !5
+  %ln1Sr = inttoptr i64 %ln1Sq to i64*
+  %ln1Ss = load i64* %ln1Sr, !tbaa !5
+  %ln1St = inttoptr i64 %ln1Ss to void ()*
+  tail call ccc void ()* %ln1St( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.926437 UTC
+
+@Main_Foo_static_entry = alias i8* bitcast (void ()* @Main_Foo_static_entry$def to i8*)
+define ccc void @Main_Foo_static_entry$def() align 8 nounwind
+{
+c1Sa:
+  %ln1Su = ptrtoint i8* @MainCapability to i64
+  %ln1Sv = add i64 %ln1Su, 24
+  %ln1Sw = ptrtoint i8* @MainCapability to i64
+  %ln1Sx = add i64 %ln1Sw, 24
+  %ln1Sy = inttoptr i64 %ln1Sx to i64*
+  %ln1Sz = load i64* %ln1Sy, !tbaa !5
+  %ln1SA = add i64 %ln1Sz, 1
+  %ln1SB = inttoptr i64 %ln1Sv to i64*
+  store i64 %ln1SA, i64* %ln1SB, !tbaa !5
+  %ln1SC = ptrtoint i8* @MainCapability to i64
+  %ln1SD = add i64 %ln1SC, 856
+  %ln1SE = inttoptr i64 %ln1SD to i64*
+  %ln1SF = load i64* %ln1SE, !tbaa !5
+  %ln1SG = inttoptr i64 %ln1SF to i64*
+  %ln1SH = load i64* %ln1SG, !tbaa !5
+  %ln1SI = inttoptr i64 %ln1SH to i64*
+  %ln1SJ = load i64* %ln1SI, !tbaa !5
+  %ln1SK = inttoptr i64 %ln1SJ to void ()*
+  tail call ccc void ()* %ln1SK( ) nounwind
+  ret void
+}
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.933675 UTC
+
+%S1f3_srt_struct = type <{i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64}>
+@S1f3_srt$def = internal constant %S1f3_srt_struct<{i64 ptrtoint (i8* @base_GHCziShow_zdfShowInt_closure to i64), i64 ptrtoint (i8* @ghczmprim_GHCziCString_unpackCStringzh_closure to i64), i64 ptrtoint (i8* @base_GHCziShow_showString_closure to i64), i64 ptrtoint (i8* @base_GHCziBase_zi_closure to i64), i64 ptrtoint (i8* @ghczmprim_GHCziClasses_zdfOrdInt_closure to i64), i64 ptrtoint (i8* @base_GHCziShow_showParen_closure to i64), i64 ptrtoint (%r18d_closure_struct* @r18d_closure$def to i64), i64 ptrtoint (%Main_zdfShowFoo_closure_struct* @Main_zdfShowFoo_closure$def to i64), i64 ptrtoint (i8* @base_GHCziShow_showListzuzu_closure to i64), i64 ptrtoint (%s1bN_closure_struct* @s1bN_closure$def to i64), i64 ptrtoint (i8* @base_GHCziShow_zddmshow_closure to i64), i64 ptrtoint (i8* @base_SystemziIO_print_closure to i64), i64 ptrtoint (i8* @base_GHCziIORef_readIORef_closure to i64), i64 ptrtoint (i8* @base_GHCziBase_zdfMonadIO_closure to i64), i64 ptrtoint (i8* @base_GHCziIORef_writeIORef_closure to i64), i64 ptrtoint (i8* @base_GHCziBase_zdzn_closure to i64), i64 ptrtoint (i8* @base_GHCziConcziSync_forkIO_closure to i64), i64 ptrtoint (i8* @base_GHCziIORef_newIORef_closure to i64), i64 ptrtoint (i8* @base_GHCziShow_zdfShowZMZN_closure to i64), i64 ptrtoint (i8* @base_GHCziShow_zdfShowChar_closure to i64), i64 ptrtoint (%s1bQ_closure_struct* @s1bQ_closure$def to i64), i64 ptrtoint (%s1c5_closure_struct* @s1c5_closure$def to i64), i64 ptrtoint (i8* @base_GHCziTopHandler_runMainIO_closure to i64), i64 ptrtoint (%Main_main_closure_struct* @Main_main_closure$def to i64)}>
+@S1f3_srt = alias internal i8* bitcast (%S1f3_srt_struct* @S1f3_srt$def to i8*)
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.938352 UTC
+
+@MainCapability = external global i8
+@stg_gc_unpt_r1 = external global i8
+@stg_upd_frame_info = external global i8
+@base_GHCziShow_zdfShowInt_closure = external global i8
+@stg_ap_pp_info = external global i8
+@stg_INTLIKE_closure = external global i8
+@base_GHCziShow_showsPrec_entry = external global i8
+@ghczmprim_GHCziCString_unpackCStringzh_closure = external global i8
+@stg_ap_n_fast = external global i8
+@base_GHCziShow_showString_closure = external global i8
+@stg_ap_p_fast = external global i8
+@base_GHCziBase_zi_closure = external global i8
+@stg_ap_pp_fast = external global i8
+@ghczmprim_GHCziClasses_zdfOrdInt_closure = external global i8
+@ghczmprim_GHCziClasses_zgze_entry = external global i8
+@base_GHCziShow_showParen_closure = external global i8
+@newCAF = external global i8
+@base_GHCziShow_DZCShow_static_info = external global i8
+@stg_bh_upd_frame_info = external global i8
+@stg_ap_p_info = external global i8
+@base_GHCziShow_showListzuzu_closure = external global i8
+@base_GHCziShow_zddmshow_closure = external global i8
+@base_SystemziIO_print_closure = external global i8
+@base_GHCziIORef_readIORef_closure = external global i8
+@base_GHCziBase_zdfMonadIO_closure = external global i8
+@base_GHCziBase_zgzgze_entry = external global i8
+@base_GHCziIORef_writeIORef_closure = external global i8
+@base_GHCziBase_zdzn_closure = external global i8
+@base_GHCziConcziSync_forkIO_closure = external global i8
+@base_GHCziBase_zgzg_entry = external global i8
+@base_GHCziIORef_newIORef_closure = external global i8
+@base_GHCziShow_zdfShowZMZN_closure = external global i8
+@base_GHCziShow_zdfShowChar_closure = external global i8
+@base_GHCziTopHandler_runMainIO_closure = external global i8
+
+
+==================== LLVM Code ====================
+2016-08-01 18:20:38.943113 UTC
+
+@llvm.used = appending constant [46 x i8*] [i8* bitcast (%S1f3_srt_struct* @S1f3_srt$def to i8*), i8* bitcast (%Main_Foo_static_info_struct* @Main_Foo_static_info$def to i8*), i8* bitcast (%i1Sc_str_struct* @i1Sc_str$def to i8*), i8* bitcast (%Main_Foo_con_info_struct* @Main_Foo_con_info$def to i8*), i8* bitcast (%i1Sb_str_struct* @i1Sb_str$def to i8*), i8* bitcast (%Main_Foo_info_struct* @Main_Foo_info$def to i8*), i8* bitcast (%Main_Foo_closure_struct* @Main_Foo_closure$def to i8*), i8* bitcast (%ZCMain_main_info_struct* @ZCMain_main_info$def to i8*), i8* bitcast (%ZCMain_main_closure_struct* @ZCMain_main_closure$def to i8*), i8* bitcast (%Main_main_info_struct* @Main_main_info$def to i8*), i8* bitcast (%Main_main_closure_struct* @Main_main_closure$def to i8*), i8* bitcast (%s1bQ_info_struct* @s1bQ_info$def to i8*), i8* bitcast (%s1bO_info_struct* @s1bO_info$def to i8*), i8* bitcast (%s1bP_info_struct* @s1bP_info$def to i8*), i8* bitcast (%c1JH_str_struct* @c1JH_str$def to i8*), i8* bitcast (%s1bQ_closure_struct* @s1bQ_closure$def to i8*), i8* bitcast (%s1c5_info_struct* @s1c5_info$def to i8*), i8* bitcast (%s1bT_info_struct* @s1bT_info$def to i8*), i8* bitcast (%s1c4_info_struct* @s1c4_info$def to i8*), i8* bitcast (%s1bZ_info_struct* @s1bZ_info$def to i8*), i8* bitcast (%s1bY_info_struct* @s1bY_info$def to i8*), i8* bitcast (%s1bV_info_struct* @s1bV_info$def to i8*), i8* bitcast (%s1bX_info_struct* @s1bX_info$def to i8*), i8* bitcast (%s1c3_info_struct* @s1c3_info$def to i8*), i8* bitcast (%s1c0_info_struct* @s1c0_info$def to i8*), i8* bitcast (%s1c2_info_struct* @s1c2_info$def to i8*), i8* bitcast (%s1c5_closure_struct* @s1c5_closure$def to i8*), i8* bitcast (%r1bh_info_struct* @r1bh_info$def to i8*), i8* bitcast (%r1bh_closure_struct* @r1bh_closure$def to i8*), i8* bitcast (%r1bg_info_struct* @r1bg_info$def to i8*), i8* bitcast (%r1bg_closure_struct* @r1bg_closure$def to i8*), i8* bitcast (%Main_zdfShowFoo_closure_struct* @Main_zdfShowFoo_closure$def to i8*), i8* bitcast (%s1bN_info_struct* @s1bN_info$def to i8*), i8* bitcast (%s1bN_closure_struct* @s1bN_closure$def to i8*), i8* bitcast (%c1ed_info_struct* @c1ed_info$def to i8*), i8* bitcast (%r18d_info_struct* @r18d_info$def to i8*), i8* bitcast (%s1bG_info_struct* @s1bG_info$def to i8*), i8* bitcast (%s1bL_info_struct* @s1bL_info$def to i8*), i8* bitcast (%s1bI_info_struct* @s1bI_info$def to i8*), i8* bitcast (%s1bH_info_struct* @s1bH_info$def to i8*), i8* bitcast (%c1eB_str_struct* @c1eB_str$def to i8*), i8* bitcast (%s1bK_info_struct* @s1bK_info$def to i8*), i8* bitcast (%r18d_closure_struct* @r18d_closure$def to i8*), i8* bitcast (%rnV_info_struct* @rnV_info$def to i8*), i8* bitcast (%rnV_closure_struct* @rnV_closure$def to i8*), i8* bitcast (%__stginit_Main_struct* @__stginit_Main$def to i8*)], section "llvm.metadata"
+

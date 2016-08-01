@@ -1,0 +1,17 @@
+
+==================== Grand total simplifier statistics ====================
+2016-08-01 18:20:37.232784 UTC
+
+Total ticks:     7
+
+2 PreInlineUnconditionally
+  1 tpl_B1
+  1 tpl_B2
+1 UnfoldingDone 1 $
+4 BetaReduction
+  1 a_12
+  1 b_13
+  1 tpl_B1
+  1 tpl_B2
+2 SimplifierDone 2
+

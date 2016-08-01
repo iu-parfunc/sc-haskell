@@ -1,0 +1,855 @@
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:37.419653 UTC
+
+mkfoo_rnV_entry() //  []
+        { []
+        }
+    {offset
+      c1cS:
+          _B1::P64 = P64[I64[MainCapability+856]];
+          goto c1cU;
+      c1cU:
+          P64[MainCapability+872] = P64[MainCapability+872] + 16;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c1cW; else goto c1cV;
+      c1cW:
+          I64[MainCapability+928] = 16;
+          goto c1cT;
+      c1cT:
+          P64[MainCapability+24] = mkfoo_rnV_closure;
+          call (I64[MainCapability+16])(R1) args: 16, res: 0, upd: 8;
+      c1cV:
+          I64[P64[MainCapability+872] - 8] = Foo_con_info;
+          P64[P64[MainCapability+872]] = _B1::P64;
+          _c1cR::P64 = P64[MainCapability+872] - 7;
+          P64[MainCapability+24] = _c1cR::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] + 8;
+          call (I64[P64[I64[MainCapability+856]]])(R1) args: 8, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:37.659512 UTC
+
+sat_s1bK_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1eq:
+          _s1bK::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 56 < I64[MainCapability+864]) goto c1er; else goto c1es;
+      c1er:
+          P64[MainCapability+24] = _s1bK::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1es:
+          I64[I64[MainCapability+856] - 16] = stg_upd_frame_info;
+          P64[I64[MainCapability+856] - 8] = _s1bK::P64;
+          _s1bE::P64 = P64[_s1bK::P64 + 16];
+          P64[I64[MainCapability+856] - 48] = $fShowInt_closure;
+          I64[I64[MainCapability+856] - 40] = stg_ap_pp_info;
+          P64[I64[MainCapability+856] - 32] = stg_INTLIKE_closure+433;
+          P64[I64[MainCapability+856] - 24] = _s1bE::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 48;
+          call showsPrec_entry() args: 56, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:37.679075 UTC
+
+sat_s1bH_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1eC:
+          _s1bH::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 32 < I64[MainCapability+864]) goto c1eD; else goto c1eE;
+      c1eD:
+          P64[MainCapability+24] = _s1bH::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1eE:
+          I64[I64[MainCapability+856] - 16] = stg_upd_frame_info;
+          P64[I64[MainCapability+856] - 8] = _s1bH::P64;
+          P64[MainCapability+24] = unpackCString#_closure;
+          I64[I64[MainCapability+856] - 24] = c1eB_str;
+          I64[MainCapability+856] = I64[MainCapability+856] - 24;
+          call stg_ap_n_fast(R1) args: 32, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:37.695086 UTC
+
+sat_s1bI_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1eF:
+          _s1bI::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 32 < I64[MainCapability+864]) goto c1eG; else goto c1eH;
+      c1eH:
+          P64[MainCapability+872] = P64[MainCapability+872] + 16;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c1eJ; else goto c1eI;
+      c1eJ:
+          I64[MainCapability+928] = 16;
+          goto c1eG;
+      c1eG:
+          P64[MainCapability+24] = _s1bI::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1eI:
+          I64[I64[MainCapability+856] - 16] = stg_upd_frame_info;
+          P64[I64[MainCapability+856] - 8] = _s1bI::P64;
+          I64[P64[MainCapability+872] - 8] = sat_s1bH_info;
+          _c1ex::P64 = P64[MainCapability+872] - 8;
+          P64[MainCapability+24] = showString_closure;
+          P64[I64[MainCapability+856] - 24] = _c1ex::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 24;
+          call stg_ap_p_fast(R1) args: 32, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:37.716783 UTC
+
+sat_s1bL_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1eK:
+          _s1bL::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 40 < I64[MainCapability+864]) goto c1eL; else goto c1eM;
+      c1eM:
+          P64[MainCapability+872] = P64[MainCapability+872] + 40;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c1eO; else goto c1eN;
+      c1eO:
+          I64[MainCapability+928] = 40;
+          goto c1eL;
+      c1eL:
+          P64[MainCapability+24] = _s1bL::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1eN:
+          I64[I64[MainCapability+856] - 16] = stg_upd_frame_info;
+          P64[I64[MainCapability+856] - 8] = _s1bL::P64;
+          _s1bE::P64 = P64[_s1bL::P64 + 16];
+          I64[P64[MainCapability+872] - 32] = sat_s1bK_info;
+          P64[P64[MainCapability+872] - 16] = _s1bE::P64;
+          _c1em::P64 = P64[MainCapability+872] - 32;
+          I64[P64[MainCapability+872] - 8] = sat_s1bI_info;
+          _c1et::P64 = P64[MainCapability+872] - 8;
+          P64[MainCapability+24] = ._closure;
+          P64[I64[MainCapability+856] - 32] = _c1et::P64;
+          P64[I64[MainCapability+856] - 24] = _c1em::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 32;
+          call stg_ap_pp_fast(R1) args: 40, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:37.746196 UTC
+
+sat_s1bG_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1eT:
+          _s1bG::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 56 < I64[MainCapability+864]) goto c1eU; else goto c1eV;
+      c1eU:
+          P64[MainCapability+24] = _s1bG::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1eV:
+          I64[I64[MainCapability+856] - 16] = stg_upd_frame_info;
+          P64[I64[MainCapability+856] - 8] = _s1bG::P64;
+          _s1bB::P64 = P64[_s1bG::P64 + 16];
+          P64[I64[MainCapability+856] - 48] = $fOrdInt_closure;
+          I64[I64[MainCapability+856] - 40] = stg_ap_pp_info;
+          P64[I64[MainCapability+856] - 32] = _s1bB::P64;
+          P64[I64[MainCapability+856] - 24] = stg_INTLIKE_closure+433;
+          I64[MainCapability+856] = I64[MainCapability+856] - 48;
+          call >=_entry() args: 56, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:37.765506 UTC
+
+$cshowsPrec_r18d_entry() //  []
+        { []
+        }
+    {offset
+      c1eW:
+          _s1bB::P64 = P64[I64[MainCapability+856]];
+          _s1bC::P64 = P64[I64[MainCapability+856] + 8];
+          if (I64[MainCapability+856] + 24 - 32 < I64[MainCapability+864]) goto c1eX; else goto c1eY;
+      c1eX:
+          P64[MainCapability+24] = $cshowsPrec_r18d_closure;
+          call (I64[MainCapability+16])(R1) args: 24, res: 0, upd: 8;
+      c1eY:
+          I64[I64[MainCapability+856] - 8] = block_c1ed_info;
+          P64[MainCapability+24] = _s1bC::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 8;
+          if (P64[MainCapability+24] & 7 != 0) goto u1f2; else goto c1ee;
+      u1f2:
+          call block_c1ed_entry(R1) args: 0, res: 0, upd: 0;
+      c1ee:
+          call (I64[I64[P64[MainCapability+24]]])(R1) args: 8, res: 8, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:37.783293 UTC
+
+block_c1ed_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1ed:
+          _s1bB::P64 = P64[I64[MainCapability+856] + 8];
+          _s1bD::P64 = P64[MainCapability+24];
+          P64[MainCapability+872] = P64[MainCapability+872] + 48;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c1f1; else goto c1f0;
+      c1f1:
+          I64[MainCapability+928] = 48;
+          P64[MainCapability+24] = _s1bD::P64;
+          call stg_gc_unpt_r1(R1) args: 8, res: 8, upd: 8;
+      c1f0:
+          _s1bE::P64 = P64[_s1bD::P64 + 7];
+          I64[P64[MainCapability+872] - 40] = sat_s1bL_info;
+          P64[P64[MainCapability+872] - 24] = _s1bE::P64;
+          _c1ei::P64 = P64[MainCapability+872] - 40;
+          I64[P64[MainCapability+872] - 16] = sat_s1bG_info;
+          P64[P64[MainCapability+872]] = _s1bB::P64;
+          _c1eP::P64 = P64[MainCapability+872] - 16;
+          P64[MainCapability+24] = showParen_closure;
+          P64[I64[MainCapability+856] + 8] = _c1eP::P64;
+          P64[I64[MainCapability+856] + 16] = _c1ei::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] + 8;
+          call stg_ap_pp_fast(R1) args: 24, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:37.922303 UTC
+
+sat_s1bN_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1oQ:
+          _s1bN::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 48 < I64[MainCapability+864]) goto c1oR; else goto c1oS;
+      c1oR:
+          P64[MainCapability+24] = _s1bN::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1oS:
+          (_c1oN::I64) = call "ccall" arg hints:  [PtrHint,
+                                                   PtrHint]  result hints:  [PtrHint] newCAF(MainCapability+24, _s1bN::P64);
+          if (_c1oN::I64 == 0) goto c1oP; else goto c1oO;
+      c1oP:
+          call (I64[I64[_s1bN::P64]])() args: 8, res: 0, upd: 8;
+      c1oO:
+          I64[I64[MainCapability+856] - 16] = stg_bh_upd_frame_info;
+          I64[I64[MainCapability+856] - 8] = _c1oN::I64;
+          P64[I64[MainCapability+856] - 40] = $fShowFoo_closure+1;
+          I64[I64[MainCapability+856] - 32] = stg_ap_p_info;
+          P64[I64[MainCapability+856] - 24] = stg_INTLIKE_closure+257;
+          I64[MainCapability+856] = I64[MainCapability+856] - 40;
+          call showsPrec_entry() args: 48, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:37.943711 UTC
+
+$cshowList_r1bg_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1oZ:
+          _r1bg::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 32 < I64[MainCapability+864]) goto c1p0; else goto c1p1;
+      c1p0:
+          P64[MainCapability+24] = _r1bg::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1p1:
+          (_c1oW::I64) = call "ccall" arg hints:  [PtrHint,
+                                                   PtrHint]  result hints:  [PtrHint] newCAF(MainCapability+24, _r1bg::P64);
+          if (_c1oW::I64 == 0) goto c1oY; else goto c1oX;
+      c1oY:
+          call (I64[I64[_r1bg::P64]])() args: 8, res: 0, upd: 8;
+      c1oX:
+          I64[I64[MainCapability+856] - 16] = stg_bh_upd_frame_info;
+          I64[I64[MainCapability+856] - 8] = _c1oW::I64;
+          P64[MainCapability+24] = showList___closure;
+          P64[I64[MainCapability+856] - 24] = sat_s1bN_closure;
+          I64[MainCapability+856] = I64[MainCapability+856] - 24;
+          call stg_ap_p_fast(R1) args: 32, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:37.963521 UTC
+
+$cshow_r1bh_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1p8:
+          _r1bh::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 32 < I64[MainCapability+864]) goto c1p9; else goto c1pa;
+      c1p9:
+          P64[MainCapability+24] = _r1bh::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1pa:
+          (_c1p5::I64) = call "ccall" arg hints:  [PtrHint,
+                                                   PtrHint]  result hints:  [PtrHint] newCAF(MainCapability+24, _r1bh::P64);
+          if (_c1p5::I64 == 0) goto c1p7; else goto c1p6;
+      c1p7:
+          call (I64[I64[_r1bh::P64]])() args: 8, res: 0, upd: 8;
+      c1p6:
+          I64[I64[MainCapability+856] - 16] = stg_bh_upd_frame_info;
+          I64[I64[MainCapability+856] - 8] = _c1p5::I64;
+          P64[MainCapability+24] = $dmshow_closure;
+          P64[I64[MainCapability+856] - 24] = $fShowFoo_closure+1;
+          I64[MainCapability+856] = I64[MainCapability+856] - 24;
+          call stg_ap_p_fast(R1) args: 32, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.318408 UTC
+
+sat_s1c2_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1ti:
+          _s1c2::P64 = P64[MainCapability+24];
+          _s1c1::P64 = P64[I64[MainCapability+856]];
+          if (I64[MainCapability+856] + 16 - 24 < I64[MainCapability+864]) goto c1tj; else goto c1tk;
+      c1tj:
+          P64[MainCapability+24] = _s1c2::P64;
+          call (I64[MainCapability+16])(R1) args: 16, res: 0, upd: 8;
+      c1tk:
+          P64[MainCapability+24] = print_closure;
+          P64[I64[MainCapability+856] - 8] = $fShowFoo_closure+1;
+          I64[MainCapability+856] = I64[MainCapability+856] - 8;
+          call stg_ap_pp_fast(R1) args: 24, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.332075 UTC
+
+sat_s1c0_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1tp:
+          _s1c0::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 32 < I64[MainCapability+864]) goto c1tq; else goto c1tr;
+      c1tq:
+          P64[MainCapability+24] = _s1c0::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1tr:
+          I64[I64[MainCapability+856] - 16] = stg_upd_frame_info;
+          P64[I64[MainCapability+856] - 8] = _s1c0::P64;
+          _s1bU::P64 = P64[_s1c0::P64 + 16];
+          P64[MainCapability+24] = readIORef_closure;
+          P64[I64[MainCapability+856] - 24] = _s1bU::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 24;
+          call stg_ap_p_fast(R1) args: 32, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.348917 UTC
+
+sat_s1c3_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1ts:
+          _s1c3::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 56 < I64[MainCapability+864]) goto c1tt; else goto c1tu;
+      c1tu:
+          P64[MainCapability+872] = P64[MainCapability+872] + 40;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c1tw; else goto c1tv;
+      c1tw:
+          I64[MainCapability+928] = 40;
+          goto c1tt;
+      c1tt:
+          P64[MainCapability+24] = _s1c3::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1tv:
+          I64[I64[MainCapability+856] - 16] = stg_upd_frame_info;
+          P64[I64[MainCapability+856] - 8] = _s1c3::P64;
+          _s1bU::P64 = P64[_s1c3::P64 + 16];
+          I64[P64[MainCapability+872] - 32] = sat_s1c2_info;
+          _c1td::P64 = P64[MainCapability+872] - 31;
+          I64[P64[MainCapability+872] - 16] = sat_s1c0_info;
+          P64[P64[MainCapability+872]] = _s1bU::P64;
+          _c1tl::P64 = P64[MainCapability+872] - 16;
+          P64[I64[MainCapability+856] - 48] = $fMonadIO_closure;
+          I64[I64[MainCapability+856] - 40] = stg_ap_pp_info;
+          P64[I64[MainCapability+856] - 32] = _c1tl::P64;
+          P64[I64[MainCapability+856] - 24] = _c1td::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 48;
+          call >>=_entry() args: 56, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.37865 UTC
+
+sat_s1bX_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1tJ:
+          _s1bX::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 32 < I64[MainCapability+864]) goto c1tK; else goto c1tL;
+      c1tK:
+          P64[MainCapability+24] = _s1bX::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1tL:
+          I64[I64[MainCapability+856] - 16] = stg_upd_frame_info;
+          P64[I64[MainCapability+856] - 8] = _s1bX::P64;
+          P64[I64[MainCapability+856] - 24] = stg_INTLIKE_closure+321;
+          I64[MainCapability+856] = I64[MainCapability+856] - 24;
+          call mkfoo_rnV_entry() args: 32, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.393333 UTC
+
+sat_s1bV_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1tQ:
+          _s1bV::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 32 < I64[MainCapability+864]) goto c1tR; else goto c1tS;
+      c1tR:
+          P64[MainCapability+24] = _s1bV::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1tS:
+          I64[I64[MainCapability+856] - 16] = stg_upd_frame_info;
+          P64[I64[MainCapability+856] - 8] = _s1bV::P64;
+          _s1bU::P64 = P64[_s1bV::P64 + 16];
+          P64[MainCapability+24] = writeIORef_closure;
+          P64[I64[MainCapability+856] - 24] = _s1bU::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 24;
+          call stg_ap_p_fast(R1) args: 32, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.40897 UTC
+
+sat_s1bY_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1tT:
+          _s1bY::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 40 < I64[MainCapability+864]) goto c1tU; else goto c1tV;
+      c1tV:
+          P64[MainCapability+872] = P64[MainCapability+872] + 40;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c1tX; else goto c1tW;
+      c1tX:
+          I64[MainCapability+928] = 40;
+          goto c1tU;
+      c1tU:
+          P64[MainCapability+24] = _s1bY::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1tW:
+          I64[I64[MainCapability+856] - 16] = stg_upd_frame_info;
+          P64[I64[MainCapability+856] - 8] = _s1bY::P64;
+          _s1bU::P64 = P64[_s1bY::P64 + 16];
+          I64[P64[MainCapability+872] - 32] = sat_s1bX_info;
+          _c1tF::P64 = P64[MainCapability+872] - 32;
+          I64[P64[MainCapability+872] - 16] = sat_s1bV_info;
+          P64[P64[MainCapability+872]] = _s1bU::P64;
+          _c1tM::P64 = P64[MainCapability+872] - 16;
+          P64[MainCapability+24] = $!_closure;
+          P64[I64[MainCapability+856] - 32] = _c1tM::P64;
+          P64[I64[MainCapability+856] - 24] = _c1tF::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 32;
+          call stg_ap_pp_fast(R1) args: 40, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.437672 UTC
+
+sat_s1bZ_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1tY:
+          _s1bZ::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 32 < I64[MainCapability+864]) goto c1tZ; else goto c1u0;
+      c1u0:
+          P64[MainCapability+872] = P64[MainCapability+872] + 24;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c1u2; else goto c1u1;
+      c1u2:
+          I64[MainCapability+928] = 24;
+          goto c1tZ;
+      c1tZ:
+          P64[MainCapability+24] = _s1bZ::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1u1:
+          I64[I64[MainCapability+856] - 16] = stg_upd_frame_info;
+          P64[I64[MainCapability+856] - 8] = _s1bZ::P64;
+          _s1bU::P64 = P64[_s1bZ::P64 + 16];
+          I64[P64[MainCapability+872] - 16] = sat_s1bY_info;
+          P64[P64[MainCapability+872]] = _s1bU::P64;
+          _c1tB::P64 = P64[MainCapability+872] - 16;
+          P64[MainCapability+24] = forkIO_closure;
+          P64[I64[MainCapability+856] - 24] = _c1tB::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 24;
+          call stg_ap_p_fast(R1) args: 32, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.461562 UTC
+
+sat_s1c4_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1u3:
+          _s1c4::P64 = P64[MainCapability+24];
+          _s1bU::P64 = P64[I64[MainCapability+856]];
+          if (I64[MainCapability+856] + 16 - 40 < I64[MainCapability+864]) goto c1u4; else goto c1u5;
+      c1u5:
+          P64[MainCapability+872] = P64[MainCapability+872] + 48;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c1u7; else goto c1u6;
+      c1u7:
+          I64[MainCapability+928] = 48;
+          goto c1u4;
+      c1u4:
+          P64[MainCapability+24] = _s1c4::P64;
+          call (I64[MainCapability+16])(R1) args: 16, res: 0, upd: 8;
+      c1u6:
+          I64[P64[MainCapability+872] - 40] = sat_s1c3_info;
+          P64[P64[MainCapability+872] - 24] = _s1bU::P64;
+          _c1t9::P64 = P64[MainCapability+872] - 40;
+          I64[P64[MainCapability+872] - 16] = sat_s1bZ_info;
+          P64[P64[MainCapability+872]] = _s1bU::P64;
+          _c1tx::P64 = P64[MainCapability+872] - 16;
+          P64[I64[MainCapability+856] - 24] = $fMonadIO_closure;
+          I64[I64[MainCapability+856] - 16] = stg_ap_pp_info;
+          P64[I64[MainCapability+856] - 8] = _c1tx::P64;
+          P64[I64[MainCapability+856]] = _c1t9::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 24;
+          call >>_entry() args: 40, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.49111 UTC
+
+sat_s1bT_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1ud:
+          _s1bT::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 40 < I64[MainCapability+864]) goto c1ue; else goto c1uf;
+      c1uf:
+          P64[MainCapability+872] = P64[MainCapability+872] + 16;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c1uh; else goto c1ug;
+      c1uh:
+          I64[MainCapability+928] = 16;
+          goto c1ue;
+      c1ue:
+          P64[MainCapability+24] = _s1bT::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1ug:
+          I64[I64[MainCapability+856] - 16] = stg_upd_frame_info;
+          P64[I64[MainCapability+856] - 8] = _s1bT::P64;
+          I64[P64[MainCapability+872] - 8] = Foo_con_info;
+          P64[P64[MainCapability+872]] = stg_INTLIKE_closure+305;
+          _c1uc::P64 = P64[MainCapability+872] - 7;
+          P64[MainCapability+24] = $!_closure;
+          P64[I64[MainCapability+856] - 32] = newIORef_closure;
+          P64[I64[MainCapability+856] - 24] = _c1uc::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 32;
+          call stg_ap_pp_fast(R1) args: 40, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.516467 UTC
+
+sat_s1c5_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1ui:
+          _s1c5::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 56 < I64[MainCapability+864]) goto c1uj; else goto c1uk;
+      c1uk:
+          P64[MainCapability+872] = P64[MainCapability+872] + 32;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c1um; else goto c1ul;
+      c1um:
+          I64[MainCapability+928] = 32;
+          goto c1uj;
+      c1uj:
+          P64[MainCapability+24] = _s1c5::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1ul:
+          (_c1t1::I64) = call "ccall" arg hints:  [PtrHint,
+                                                   PtrHint]  result hints:  [PtrHint] newCAF(MainCapability+24, _s1c5::P64);
+          if (_c1t1::I64 == 0) goto c1t3; else goto c1t2;
+      c1t3:
+          call (I64[I64[_s1c5::P64]])() args: 8, res: 0, upd: 8;
+      c1t2:
+          I64[I64[MainCapability+856] - 16] = stg_bh_upd_frame_info;
+          I64[I64[MainCapability+856] - 8] = _c1t1::I64;
+          I64[P64[MainCapability+872] - 24] = sat_s1c4_info;
+          _c1t4::P64 = P64[MainCapability+872] - 23;
+          I64[P64[MainCapability+872] - 8] = sat_s1bT_info;
+          _c1u8::P64 = P64[MainCapability+872] - 8;
+          P64[I64[MainCapability+856] - 48] = $fMonadIO_closure;
+          I64[I64[MainCapability+856] - 40] = stg_ap_pp_info;
+          P64[I64[MainCapability+856] - 32] = _c1u8::P64;
+          P64[I64[MainCapability+856] - 24] = _c1t4::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 48;
+          call >>=_entry() args: 56, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.647948 UTC
+
+sat_s1bP_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1JI:
+          _s1bP::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 32 < I64[MainCapability+864]) goto c1JJ; else goto c1JK;
+      c1JJ:
+          P64[MainCapability+24] = _s1bP::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1JK:
+          I64[I64[MainCapability+856] - 16] = stg_upd_frame_info;
+          P64[I64[MainCapability+856] - 8] = _s1bP::P64;
+          P64[MainCapability+24] = unpackCString#_closure;
+          I64[I64[MainCapability+856] - 24] = c1JH_str;
+          I64[MainCapability+856] = I64[MainCapability+856] - 24;
+          call stg_ap_n_fast(R1) args: 32, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.663784 UTC
+
+sat_s1bO_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1JP:
+          _s1bO::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 32 < I64[MainCapability+864]) goto c1JQ; else goto c1JR;
+      c1JQ:
+          P64[MainCapability+24] = _s1bO::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1JR:
+          I64[I64[MainCapability+856] - 16] = stg_upd_frame_info;
+          P64[I64[MainCapability+856] - 8] = _s1bO::P64;
+          P64[MainCapability+24] = $fShow[]_closure;
+          P64[I64[MainCapability+856] - 24] = $fShowChar_closure;
+          I64[MainCapability+856] = I64[MainCapability+856] - 24;
+          call stg_ap_p_fast(R1) args: 32, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.678538 UTC
+
+sat_s1bQ_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1JS:
+          _s1bQ::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 40 < I64[MainCapability+864]) goto c1JT; else goto c1JU;
+      c1JU:
+          P64[MainCapability+872] = P64[MainCapability+872] + 32;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c1JW; else goto c1JV;
+      c1JW:
+          I64[MainCapability+928] = 32;
+          goto c1JT;
+      c1JT:
+          P64[MainCapability+24] = _s1bQ::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1JV:
+          (_c1JA::I64) = call "ccall" arg hints:  [PtrHint,
+                                                   PtrHint]  result hints:  [PtrHint] newCAF(MainCapability+24, _s1bQ::P64);
+          if (_c1JA::I64 == 0) goto c1JC; else goto c1JB;
+      c1JC:
+          call (I64[I64[_s1bQ::P64]])() args: 8, res: 0, upd: 8;
+      c1JB:
+          I64[I64[MainCapability+856] - 16] = stg_bh_upd_frame_info;
+          I64[I64[MainCapability+856] - 8] = _c1JA::I64;
+          I64[P64[MainCapability+872] - 24] = sat_s1bP_info;
+          _c1JD::P64 = P64[MainCapability+872] - 24;
+          I64[P64[MainCapability+872] - 8] = sat_s1bO_info;
+          _c1JL::P64 = P64[MainCapability+872] - 8;
+          P64[MainCapability+24] = print_closure;
+          P64[I64[MainCapability+856] - 32] = _c1JL::P64;
+          P64[I64[MainCapability+856] - 24] = _c1JD::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 32;
+          call stg_ap_pp_fast(R1) args: 40, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.750832 UTC
+
+main_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1NW:
+          _rnW::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 56 < I64[MainCapability+864]) goto c1NX; else goto c1NY;
+      c1NX:
+          P64[MainCapability+24] = _rnW::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1NY:
+          (_c1NT::I64) = call "ccall" arg hints:  [PtrHint,
+                                                   PtrHint]  result hints:  [PtrHint] newCAF(MainCapability+24, _rnW::P64);
+          if (_c1NT::I64 == 0) goto c1NV; else goto c1NU;
+      c1NV:
+          call (I64[I64[_rnW::P64]])() args: 8, res: 0, upd: 8;
+      c1NU:
+          I64[I64[MainCapability+856] - 16] = stg_bh_upd_frame_info;
+          I64[I64[MainCapability+856] - 8] = _c1NT::I64;
+          P64[I64[MainCapability+856] - 48] = $fMonadIO_closure;
+          I64[I64[MainCapability+856] - 40] = stg_ap_pp_info;
+          P64[I64[MainCapability+856] - 32] = sat_s1bQ_closure;
+          P64[I64[MainCapability+856] - 24] = sat_s1c5_closure;
+          I64[MainCapability+856] = I64[MainCapability+856] - 48;
+          call >>_entry() args: 56, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.811775 UTC
+
+main_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1Py:
+          _01D::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] + 8 - 32 < I64[MainCapability+864]) goto c1Pz; else goto c1PA;
+      c1Pz:
+          P64[MainCapability+24] = _01D::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c1PA:
+          (_c1Pv::I64) = call "ccall" arg hints:  [PtrHint,
+                                                   PtrHint]  result hints:  [PtrHint] newCAF(MainCapability+24, _01D::P64);
+          if (_c1Pv::I64 == 0) goto c1Px; else goto c1Pw;
+      c1Px:
+          call (I64[I64[_01D::P64]])() args: 8, res: 0, upd: 8;
+      c1Pw:
+          I64[I64[MainCapability+856] - 16] = stg_bh_upd_frame_info;
+          I64[I64[MainCapability+856] - 8] = _c1Pv::I64;
+          P64[MainCapability+24] = runMainIO_closure;
+          P64[I64[MainCapability+856] - 24] = main_closure;
+          I64[MainCapability+856] = I64[MainCapability+856] - 24;
+          call stg_ap_p_fast(R1) args: 32, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.863856 UTC
+
+Foo_entry() //  []
+        { []
+        }
+    {offset
+      c1QS:
+          _B1::P64 = P64[I64[MainCapability+856]];
+          goto c1QU;
+      c1QU:
+          P64[MainCapability+872] = P64[MainCapability+872] + 16;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c1QW; else goto c1QV;
+      c1QW:
+          I64[MainCapability+928] = 16;
+          goto c1QT;
+      c1QT:
+          P64[MainCapability+24] = Foo_closure;
+          call (I64[MainCapability+16])(R1) args: 16, res: 0, upd: 8;
+      c1QV:
+          I64[P64[MainCapability+872] - 8] = Foo_con_info;
+          P64[P64[MainCapability+872]] = _B1::P64;
+          _c1QR::P64 = P64[MainCapability+872] - 7;
+          P64[MainCapability+24] = _c1QR::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] + 8;
+          call (I64[P64[I64[MainCapability+856]]])(R1) args: 8, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.917618 UTC
+
+Foo_con_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1S9:
+          P64[MainCapability+24] = P64[MainCapability+24] + 1;
+          call (I64[P64[I64[MainCapability+856]]])(R1) args: 8, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-01 18:20:38.924081 UTC
+
+Foo_static_entry() //  [R1]
+        { []
+        }
+    {offset
+      c1Sa:
+          P64[MainCapability+24] = P64[MainCapability+24] + 1;
+          call (I64[P64[I64[MainCapability+856]]])(R1) args: 8, res: 0, upd: 8;
+    }
+}
+

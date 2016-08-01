@@ -1,0 +1,77 @@
+
+==================== Tidy Core ====================
+2016-08-01 18:20:37.235454 UTC
+
+Result size of Tidy Core = {terms: 73, types: 60, coercions: 0}
+
+mkfoo_rnV :: Int -> Foo
+[GblId, Arity=1, Caf=NoCafRefs, Str=DmdType]
+mkfoo_rnV = Foo
+
+$cshowsPrec_r18d :: Int -> Foo -> ShowS
+[GblId, Arity=2, Str=DmdType]
+$cshowsPrec_r18d =
+  \ (a_aS8 :: Int) (ds_d1ba :: Foo) ->
+    case ds_d1ba of _ [Occ=Dead] { Foo b1_aS9 ->
+    showParen
+      (>= @ Int $fOrdInt a_aS8 (I# 11))
+      (. @ String
+         @ String
+         @ String
+         (showString (unpackCString# "Foo "#))
+         (showsPrec @ Int $fShowInt (I# 11) b1_aS9))
+    }
+
+Rec {
+$fShowFoo [InlPrag=[ALWAYS] CONLIKE] :: Show Foo
+[GblId[DFunId], Str=DmdType]
+$fShowFoo =
+  D:Show @ Foo $cshowsPrec_r18d $cshow_r1bh $cshowList_r1bg
+
+$cshowList_r1bg :: [Foo] -> ShowS
+[GblId, Str=DmdType]
+$cshowList_r1bg =
+  showList__ @ Foo (showsPrec @ Foo $fShowFoo (I# 0))
+
+$cshow_r1bh :: Foo -> String
+[GblId, Str=DmdType]
+$cshow_r1bh = $dmshow @ Foo $fShowFoo
+end Rec }
+
+main :: IO ()
+[GblId, Str=DmdType]
+main =
+  >>
+    @ IO
+    $fMonadIO
+    @ ()
+    @ ()
+    (print
+       @ [Char] ($fShow[] @ Char $fShowChar) (unpackCString# "hi"#))
+    (>>=
+       @ IO
+       $fMonadIO
+       @ (IORef Foo)
+       @ ()
+       ($! @ Foo @ (IO (IORef Foo)) (newIORef @ Foo) (Foo (I# 3)))
+       (\ (r_aAA :: IORef Foo) ->
+          >>
+            @ IO
+            $fMonadIO
+            @ ThreadId
+            @ ()
+            (forkIO
+               ($! @ Foo @ (IO ()) (writeIORef @ Foo r_aAA) (mkfoo_rnV (I# 4))))
+            (>>=
+               @ IO
+               $fMonadIO
+               @ Foo
+               @ ()
+               (readIORef @ Foo r_aAA)
+               (\ (x_aHp :: Foo) -> print @ Foo $fShowFoo x_aHp))))
+
+main :: IO ()
+[GblId, Str=DmdType]
+main = runMainIO @ () main
+
+

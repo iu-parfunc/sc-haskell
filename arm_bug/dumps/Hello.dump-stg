@@ -1,0 +1,163 @@
+
+==================== STG syntax: ====================
+2016-08-01 18:20:37.260858 UTC
+
+mkfoo_rnV :: Int -> Foo
+[GblId, Arity=1, Caf=NoCafRefs, Str=DmdType, Unf=OtherCon []] =
+    sat-only \r srt:SRT:[] [eta_B1] Foo [eta_B1];
+$cshowsPrec_r18d :: Int -> Foo -> ShowS
+[GblId, Arity=2, Str=DmdType, Unf=OtherCon []] =
+    \r srt:SRT:[0k :-> unpackCString#, r1R :-> showString,
+                r1S :-> showParen, r2C :-> ., ro5 :-> $fShowInt,
+                rSf :-> $fOrdInt] [a_s1bB ds_s1bC]
+        case ds_s1bC of _ [Occ=Dead] {
+          Foo b1_s1bE [Occ=Once] ->
+              let {
+                sat_s1bL [Occ=Once] :: ShowS
+                [LclId, Str=DmdType] =
+                    \u srt:SRT:[0k :-> unpackCString#, r1R :-> showString, r2C :-> .,
+                                ro5 :-> $fShowInt] []
+                        let {
+                          sat_s1bK [Occ=Once] :: String -> String
+                          [LclId, Str=DmdType] =
+                              \u srt:SRT:[ro5 :-> $fShowInt] []
+                                  let {
+                                    sat_s1bJ [Occ=Once] :: Int
+                                    [LclId, Str=DmdType] =
+                                        NO_CCS I#! [11];
+                                  } in  showsPrec $fShowInt sat_s1bJ b1_s1bE; } in
+                        let {
+                          sat_s1bI [Occ=Once] :: String -> String
+                          [LclId, Str=DmdType] =
+                              \u srt:SRT:[0k :-> unpackCString#, r1R :-> showString] []
+                                  let {
+                                    sat_s1bH [Occ=Once] :: String
+                                    [LclId, Str=DmdType] =
+                                        \u srt:SRT:[0k :-> unpackCString#] []
+                                            unpackCString# "Foo "#;
+                                  } in  showString sat_s1bH;
+                        } in  . sat_s1bI sat_s1bK; } in
+              let {
+                sat_s1bG [Occ=Once] :: Bool
+                [LclId, Str=DmdType] =
+                    \u srt:SRT:[rSf :-> $fOrdInt] []
+                        let {
+                          sat_s1bF [Occ=Once] :: Int
+                          [LclId, Str=DmdType] =
+                              NO_CCS I#! [11];
+                        } in  >= $fOrdInt a_s1bB sat_s1bF;
+              } in  showParen sat_s1bG sat_s1bL;
+        };
+sat_s1bN :: Foo -> ShowS
+[LclId, Str=DmdType] =
+    \u srt:SRT:[rHA :-> $fShowFoo] []
+        let {
+          sat_s1bM [Occ=Once] :: Int
+          [LclId, Str=DmdType] =
+              NO_CCS I#! [0];
+        } in  showsPrec $fShowFoo sat_s1bM;
+$fShowFoo [InlPrag=[ALWAYS] CONLIKE] :: Show Foo
+[GblId[DFunId], Str=DmdType, Unf=OtherCon []] =
+    NO_CCS D:Show! [$cshowsPrec_r18d $cshow_r1bh $cshowList_r1bg];
+$cshowList_r1bg :: [Foo] -> ShowS
+[GblId, Str=DmdType] =
+    \u srt:SRT:[reh :-> showList__, s1bN :-> sat_s1bN] []
+        showList__ sat_s1bN;
+$cshow_r1bh :: Foo -> String
+[GblId, Str=DmdType] =
+    \u srt:SRT:[rrV :-> $dmshow, rHA :-> $fShowFoo] []
+        $dmshow $fShowFoo;
+sat_s1c5 :: IO ()
+[LclId, Str=DmdType] =
+    \u srt:SRT:[0B :-> print, r2D :-> $!, r38 :-> writeIORef,
+                r39 :-> readIORef, r3a :-> newIORef, r4p :-> forkIO,
+                r5K :-> $fMonadIO, rHA :-> $fShowFoo] []
+        let {
+          sat_s1c4 [Occ=Once] :: IORef Foo -> IO ()
+          [LclId, Str=DmdType] =
+              \r srt:SRT:[0B :-> print, r2D :-> $!, r38 :-> writeIORef,
+                          r39 :-> readIORef, r4p :-> forkIO, r5K :-> $fMonadIO,
+                          rHA :-> $fShowFoo] [r_s1bU]
+                  let {
+                    sat_s1c3 [Occ=Once] :: IO ()
+                    [LclId, Str=DmdType] =
+                        \u srt:SRT:[0B :-> print, r39 :-> readIORef, r5K :-> $fMonadIO,
+                                    rHA :-> $fShowFoo] []
+                            let {
+                              sat_s1c2 [Occ=Once] :: Foo -> IO ()
+                              [LclId, Str=DmdType] =
+                                  \r srt:SRT:[0B :-> print, rHA :-> $fShowFoo] [x_s1c1]
+                                      print $fShowFoo x_s1c1; } in
+                            let {
+                              sat_s1c0 [Occ=Once] :: IO Foo
+                              [LclId, Str=DmdType] =
+                                  \u srt:SRT:[r39 :-> readIORef] [] readIORef r_s1bU;
+                            } in  >>= $fMonadIO sat_s1c0 sat_s1c2; } in
+                  let {
+                    sat_s1bZ [Occ=Once] :: IO ThreadId
+                    [LclId, Str=DmdType] =
+                        \u srt:SRT:[r2D :-> $!, r38 :-> writeIORef, r4p :-> forkIO] []
+                            let {
+                              sat_s1bY [Occ=Once] :: IO ()
+                              [LclId, Str=DmdType] =
+                                  \u srt:SRT:[r2D :-> $!, r38 :-> writeIORef] []
+                                      let {
+                                        sat_s1bX [Occ=Once] :: Foo
+                                        [LclId, Str=DmdType] =
+                                            \u srt:SRT:[] []
+                                                let {
+                                                  sat_s1bW [Occ=Once] :: Int
+                                                  [LclId, Str=DmdType] =
+                                                      NO_CCS I#! [4];
+                                                } in  mkfoo_rnV sat_s1bW; } in
+                                      let {
+                                        sat_s1bV [Occ=Once] :: Foo -> IO ()
+                                        [LclId, Str=DmdType] =
+                                            \u srt:SRT:[r38 :-> writeIORef] [] writeIORef r_s1bU;
+                                      } in  $! sat_s1bV sat_s1bX;
+                            } in  forkIO sat_s1bY;
+                  } in  >> $fMonadIO sat_s1bZ sat_s1c3; } in
+        let {
+          sat_s1bT [Occ=Once] :: IO (IORef Foo)
+          [LclId, Str=DmdType] =
+              \u srt:SRT:[r2D :-> $!, r3a :-> newIORef] []
+                  let {
+                    sat_s1bR [Occ=Once] :: Int
+                    [LclId, Str=DmdType] =
+                        NO_CCS I#! [3]; } in
+                  let {
+                    sat_s1bS [Occ=Once] :: Foo
+                    [LclId, Str=DmdType] =
+                        NO_CCS Foo! [sat_s1bR];
+                  } in  $! newIORef sat_s1bS;
+        } in  >>= $fMonadIO sat_s1bT sat_s1c4;
+sat_s1bQ :: IO ()
+[LclId, Str=DmdType] =
+    \u srt:SRT:[0k :-> unpackCString#, 0B :-> print, ro0 :-> $fShow[],
+                ro6 :-> $fShowChar] []
+        let {
+          sat_s1bP [Occ=Once] :: [Char]
+          [LclId, Str=DmdType] =
+              \u srt:SRT:[0k :-> unpackCString#] [] unpackCString# "hi"#; } in
+        let {
+          sat_s1bO [Occ=Once] :: Show [Char]
+          [LclId, Str=DmdType] =
+              \u srt:SRT:[ro0 :-> $fShow[], ro6 :-> $fShowChar] []
+                  $fShow[] $fShowChar;
+        } in  print sat_s1bO sat_s1bP;
+main :: IO ()
+[GblId, Str=DmdType] =
+    \u srt:SRT:[r5K :-> $fMonadIO, s1bQ :-> sat_s1bQ,
+                s1c5 :-> sat_s1c5] []
+        >> $fMonadIO sat_s1bQ sat_s1c5;
+main :: IO ()
+[GblId, Str=DmdType] =
+    \u srt:SRT:[01E :-> runMainIO, rnW :-> main] [] runMainIO main;
+Foo :: Int -> Foo
+[GblId[DataCon],
+ Arity=1,
+ Caf=NoCafRefs,
+ Str=DmdType <L,U>m,
+ Unf=OtherCon []] =
+    \r srt:SRT:[] [eta_B1] Foo [eta_B1];
+
