@@ -21,7 +21,7 @@ FLAGS= -keep-tmp-files -dsuppress-module-prefixes -ddump-to-file \
 all: Hello.exe
 
 Hello.exe: Hello.hs
-	$(GHC) -fforce-recomp $(FLAGS) -v $^ -o $@
+	$(GHC) -O2 -fforce-recomp $(FLAGS) -v $^ -o $@
 
 clean:
 	rm -f Hello.exe *.hi *.o *.dump* *~
