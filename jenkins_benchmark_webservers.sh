@@ -14,7 +14,7 @@ if [ "$VARIANT" == stock-ghc ]; then
     COMMIT=180d44e1064abc6fe8c703b05e065c0564e6ee05
 elif [ "$VARIANT" == sc-v0.4 ]; then
     # This should test all four Haskell implementations with SC GHC v0.4:
-    COMMIT=79eaca80914499230ea4b1b61a38af6d09187803
+    COMMIT=3f80eb421c03e21c6db43dbac5de1647561e8cd6
 elif [ "$VARIANT" == HEAD ]; then
     COMMIT=`git rev-parse --verify HEAD`
 else
@@ -41,7 +41,9 @@ tests=" wai yesod spock snap "
 # HACK: We haven't stopped the vagrant provisioner from pointing this
 # repository BACK at the parent of our fork.  We let it happen and
 # then force it back:
-vagrant ssh -- "cd FrameworkBenchmarks; git remote add fork git@github.com:iu-parfunc/FrameworkBenchmarks" || echo ok
+# FORKURL=git@github.com:iu-parfunc/FrameworkBenchmarks.git
+FORKURL=https://github.com/iu-parfunc/FrameworkBenchmarks.git
+vagrant ssh -- "cd FrameworkBenchmarks; git remote add fork $FORKURL" || echo ok
 vagrant ssh -- "cd FrameworkBenchmarks; git fetch fork" || echo ok
 vagrant ssh -- "cd FrameworkBenchmarks; git checkout $COMMIT"
 vagrant ssh -- "cd FrameworkBenchmarks; sudo git clean -fxd"

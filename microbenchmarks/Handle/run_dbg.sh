@@ -8,7 +8,11 @@ rm -f *.eventlog;
 
 # IMG=parfunc/sc-haskell:v0.4-dbg
 # IMG=parfunc/sc-haskell:v0.4-opt-dbg
+
+# Seeing 2010 barirers here for put/get 1000:
 IMG=parfunc/sc-haskell:v0.5-dbg
+# Seeing zero barriers here:
+# IMG=parfunc/sc-haskell:v0.5-opt-dbg
 
 docker run -it $IMG ghc --version
 stack --docker --docker-image=$IMG bench --benchmark-arguments="--iters 1 from-disk/put-1000_get-1000"
