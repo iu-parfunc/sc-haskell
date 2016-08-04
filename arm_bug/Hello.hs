@@ -9,10 +9,10 @@ data Foo = Foo Int deriving Show
 mkfoo x = Foo x
 
 {-# NOINLINE dowrite #-}
-dowrite r = writeIORef r $! mkfoo 4
+dowrite r n = writeIORef r $! mkfoo n
 
 main = 
   do r <- newIORef $! (Foo 3)
-     forkIO (dowrite r)
+     forkIO (dowrite r 4)
      x <- readIORef r
      print x
