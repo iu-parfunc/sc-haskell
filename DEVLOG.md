@@ -4,7 +4,7 @@
 
 Here is the cmm from the "mkfoo" function from 7.6.3:
 
-```
+```C
  mkfoo_rgE_entry()
          { label: mkfoo_rgE_info
            rep:HeapRep static { Fun {arity: 1 fun_type: ArgSpec 5} }
@@ -28,37 +28,37 @@ Here is the cmm from the "mkfoo" function from 7.6.3:
 
 Here it is from 7.10.3:
 
-```
+```C
 [section "data" {
-     mkfoo_rnV_closure:
-         const mkfoo_rnV_info;
- },
- mkfoo_rnV_entry() //  []
-  { info_tbl: [(c1cS,
-                       label: mkfoo_rnV_info
-                       rep:HeapRep static { Fun {arity: 1 fun_type: ArgSpec 5} })]
-           stack_info: arg_space: 0 updfr_space: Nothing
-         }
-     {offset
-       c1cS:
-           _B1::P64 = P64[Sp];
-           goto c1cU;
-       c1cU:
-           Hp = Hp + 16;
-           if (Hp > HpLim) goto c1cW; else goto c1cV;
-       c1cW:
-           HpAlloc = 16;
-           goto c1cT;
-       c1cT:
-           R1 = mkfoo_rnV_closure;
-           call (stg_gc_fun)(R1) args: 16, res: 0, upd: 8;
-       c1cV:
-           I64[Hp - 8] = Foo_con_info;
-           P64[Hp] = _B1::P64;
-           _c1cR::P64 = Hp - 7;
-	      R1 = _c1cR::P64;
-           Sp = Sp + 8;
-           call (I64[P64[Sp]])(R1) args: 8, res: 0, upd: 8;
-     }
- }]
+    mkfoo_rnV_closure:
+        const mkfoo_rnV_info;
+},
+mkfoo_rnV_entry() //  []
+ { info_tbl: [(c1cS,
+                      label: mkfoo_rnV_info
+                      rep:HeapRep static { Fun {arity: 1 fun_type: ArgSpec 5} })]
+          stack_info: arg_space: 0 updfr_space: Nothing
+        }
+    {offset
+      c1cS:
+          _B1::P64 = P64[Sp];
+          goto c1cU;
+      c1cU:
+          Hp = Hp + 16;
+          if (Hp > HpLim) goto c1cW; else goto c1cV;
+      c1cW:
+          HpAlloc = 16;
+          goto c1cT;
+      c1cT:
+          R1 = mkfoo_rnV_closure;
+          call (stg_gc_fun)(R1) args: 16, res: 0, upd: 8;
+      c1cV:
+          I64[Hp - 8] = Foo_con_info;
+          P64[Hp] = _B1::P64;
+          _c1cR::P64 = Hp - 7;
+         R1 = _c1cR::P64;
+          Sp = Sp + 8;
+          call (I64[P64[Sp]])(R1) args: 8, res: 0, upd: 8;
+    }
+}]
 ```
