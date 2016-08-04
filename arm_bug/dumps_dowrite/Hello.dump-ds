@@ -1,0 +1,86 @@
+
+==================== Desugar (after optimization) ====================
+2016-08-04 14:10:07.22441 UTC
+
+Result size of Desugar (after optimization)
+  = {terms: 77, types: 66, coercions: 0}
+
+mkfoo [InlPrag=NOINLINE] :: Int -> Foo
+[LclId, Str=DmdType]
+mkfoo = Foo
+
+dowrite [InlPrag=NOINLINE] :: IORef Foo -> IO ()
+[LclId, Str=DmdType]
+dowrite =
+  \ (r_ayd :: IORef Foo) ->
+    $! @ Foo @ (IO ()) (writeIORef @ Foo r_ayd) (mkfoo (I# 4))
+
+$cshowsPrec_a1dv :: Int -> Foo -> ShowS
+[LclId, Str=DmdType]
+$cshowsPrec_a1dv =
+  \ (a_aY9 :: Int) (ds_d1mI :: Foo) ->
+    case ds_d1mI of _ [Occ=Dead] { Foo b1_aYa ->
+    showParen
+      (>= @ Int $fOrdInt a_aY9 (I# 11))
+      (. @ String
+         @ String
+         @ String
+         (showString (unpackCString# "Foo "#))
+         (showsPrec @ Int $fShowInt (I# 11) b1_aYa))
+    }
+
+Rec {
+$fShowFoo [InlPrag=[ALWAYS] CONLIKE] :: Show Foo
+[LclIdX[DFunId],
+ Str=DmdType,
+ Unf=DFun: \ ->
+       D:Show TYPE Foo $cshowsPrec_a1dv $cshow_a1e3 $cshowList_a1e7]
+$fShowFoo =
+  D:Show @ Foo $cshowsPrec_a1dv $cshow_a1e3 $cshowList_a1e7
+
+$cshowList_a1e7 [Occ=LoopBreaker] :: [Foo] -> ShowS
+[LclId, Str=DmdType]
+$cshowList_a1e7 =
+  showList__ @ Foo (showsPrec @ Foo $fShowFoo (I# 0))
+
+$cshow_a1e3 [Occ=LoopBreaker] :: Foo -> String
+[LclId, Str=DmdType]
+$cshow_a1e3 = $dmshow @ Foo $fShowFoo
+end Rec }
+
+main :: IO ()
+[LclIdX, Str=DmdType]
+main =
+  >>
+    @ IO
+    $fMonadIO
+    @ ()
+    @ ()
+    (print
+       @ [Char] ($fShow[] @ Char $fShowChar) (unpackCString# "hi"#))
+    (>>=
+       @ IO
+       $fMonadIO
+       @ (IORef Foo)
+       @ ()
+       ($! @ Foo @ (IO (IORef Foo)) (newIORef @ Foo) (Foo (I# 3)))
+       (\ (r_aC9 :: IORef Foo) ->
+          >>
+            @ IO
+            $fMonadIO
+            @ ThreadId
+            @ ()
+            (forkIO (dowrite r_aC9))
+            (>>=
+               @ IO
+               $fMonadIO
+               @ Foo
+               @ ()
+               (readIORef @ Foo r_aC9)
+               (\ (x_aJ4 :: Foo) -> print @ Foo $fShowFoo x_aJ4))))
+
+main :: IO ()
+[LclIdX, Str=DmdType]
+main = runMainIO @ () main
+
+

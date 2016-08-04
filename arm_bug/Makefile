@@ -3,8 +3,10 @@ GHC=$(HOME)/opt/ghc-7.10.3/bin/ghc
 
 FLAGS= -keep-tmp-files -dsuppress-module-prefixes -ddump-to-file \
   -ddump-core-stats -ddump-simpl-stats -dcore-lint -dcmm-lint -ddump-ds \
-  -ddump-simpl -ddump-stg  -ddump-bcos -ddump-cmm -ddump-opt-cmm -ddump-inlinings -rtsopts \
-  -ddump-asm -ddump-asm-conflicts -ddump-asm-expanded -ddump-asm-liveness -ddump-asm-native -ddump-asm-regalloc -ddump-asm-regalloc-stages -ddump-asm-stats \
+  -ddump-simpl -ddump-stg  -ddump-bcos -ddump-cmm -ddump-opt-cmm -ddump-inlinings -rtsopts 
+
+# Problems with compilation not terminating:
+#  -ddump-asm -ddump-asm-conflicts -ddump-asm-expanded -ddump-asm-liveness -ddump-asm-native -ddump-asm-regalloc -ddump-asm-regalloc-stages -ddump-asm-stats \
   -ddump-llvm 
 
 # -ddump-asm                     -ddump-cmm                     -ddump-cmm-split               -ddump-hi-diffs                -ddump-parsed                  -ddump-simpl-iterations        -ddump-ticked
@@ -20,8 +22,11 @@ FLAGS= -keep-tmp-files -dsuppress-module-prefixes -ddump-to-file \
 
 all: Hello.exe
 
+# OPT= -O0
+OPT= -O2
+
 Hello.exe: Hello.hs
-	$(GHC) -O2 -fforce-recomp $(FLAGS) -v $^ -o $@
+	$(GHC) $(OPT) -fforce-recomp $(FLAGS) $^ -o $@
 
 clean:
 	rm -f Hello.exe *.hi *.o *.dump* *~

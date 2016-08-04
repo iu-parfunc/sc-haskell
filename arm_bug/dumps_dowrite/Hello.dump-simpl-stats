@@ -1,0 +1,243 @@
+
+==================== FloatOut stats: ====================
+2016-08-04 14:10:07.291892 UTC
+
+8 Lets floated to top level; 0 Lets floated elsewhere; from 7 Lambda groups
+
+
+==================== FloatOut stats: ====================
+2016-08-04 14:10:07.864052 UTC
+
+6 Lets floated to top level; 0 Lets floated elsewhere; from 9 Lambda groups
+
+
+==================== Grand total simplifier statistics ====================
+2016-08-04 14:10:07.947388 UTC
+
+Total ticks:     319
+
+84 PreInlineUnconditionally
+  3 w_s3Ch
+  3 w_s3Ci
+  2 f_a1mL
+  2 x_a1mM
+  2 x_a1o8
+  2 a_a1oG
+  2 g_a1oN
+  2 w_a1oU
+  2 w1_a1oV
+  2 w2_a1oW
+  2 $dShow_a1pO
+  2 $dShow_a1ru
+  2 x_a1rv
+  2 eta_a1rw
+  2 ds_a1Lx
+  2 k_a1Ly
+  2 ds_a1P5
+  2 k_a1P6
+  2 s_a1P7
+  2 a_a3AJ
+  2 w_s3Cj
+  1 eta_B1
+  1 x_aJ4
+  1 a_aY9
+  1 vx_a1mN
+  1 b_a1nT
+  1 ds_a1ow
+  1 ds1_a1ox
+  1 $dShow_a1pr
+  1 xs_a1qb
+  1 ys_a1qc
+  1 c_a1qh
+  1 n_a1qi
+  1 g_a1qq
+  1 xs_a1qs
+  1 ds_a1rj
+  1 val_a1rk
+  1 eta_a1rl
+  1 x_a1Lh
+  1 v_a1Lm
+  1 s_a1Ln
+  1 s_a1Lz
+  1 action_a1LF
+  1 s_a1LG
+  1 ds_a1Pf
+  1 eta_a1Pg
+  1 ys_a3AO
+  1 xs_a3AP
+  1 ds_d1mI
+  1 a_s1pH
+  1 $dShow_s1pU
+  1 lvl_s1q0
+  1 lvl_s1q4
+  1 lvl_s1q5
+  1 lvl_s1q6
+  1 lvl_s1q7
+  1 lvl_s1q8
+  1 lvl_s1q9
+  1 a_s1Lk
+  1 a_s1Pp
+  1 a_s1Ps
+20 PostInlineUnconditionally
+  4 ww_s3Cm
+  2 ww1_a1oZ
+  2 w_s3Ch
+  1 eta_B1
+  1 r_aC9
+  1 b1_aYa
+  1 $dShow_a1nd
+  1 f_a1o6
+  1 g_a1o7
+  1 x_a1oA
+  1 y_a1oE
+  1 ipv_a1LC
+  1 ipv_a1Pa
+  1 ipv1_a1Pb
+  1 var#_a1Pj
+51 UnfoldingDone
+  4 $cshowsPrec_a1dv
+  2 build
+  2 bindIO
+  2 print
+  2 thenIO
+  2 p_a1nU
+  2 shows
+  2 $!
+  2 thenIO1
+  2 bindIO1
+  2 showSignedInt
+  2 print1
+  1 augment
+  1 runMainIO
+  1 showString
+  1 showParen
+  1 .
+  1 writeIORef
+  1 readIORef
+  1 newIORef
+  1 forkIO
+  1 geInt
+  1 main
+  1 $fShow[]_$s$cshow1
+  1 $dmshow
+  1 writeSTRef1
+  1 readSTRef1
+  1 newIORef1
+  1 forkIO1
+  1 a_s1pG
+  1 a_s1pI
+  1 a_s1pJ
+  1 a_s1pK
+  1 lvl_s1q2
+  1 a_s1Lj
+  1 a_s1Lu
+  1 a_s1Pn
+21 RuleFired
+  6 Class op showsPrec
+  2 Class op >>
+  2 Class op >>=
+  2 Class op show
+  2 unpack
+  2 unpack-list
+  1 ++
+  1 Class op >=
+  1 SPEC $fShow[]
+  1 SPEC/Main shows @ Foo
+  1 foldr/app
+14 LetFloatFromLet 14
+3 EtaExpansion
+  1 x_aJ4
+  1 $cshowsPrec_a1dv
+  1 dowrite
+1 EtaReduction 1 e1_a1OV
+111 BetaReduction
+  4 w_s3Ch
+  2 eta_B1
+  2 a_a1mJ
+  2 b_a1mK
+  2 f_a1mL
+  2 x_a1mM
+  2 x_a1o8
+  2 a_a1oG
+  2 b_a1oK
+  2 a_a1oM
+  2 g_a1oN
+  2 w_a1oU
+  2 w1_a1oV
+  2 w2_a1oW
+  2 a_a1pN
+  2 $dShow_a1pO
+  2 a_a1rt
+  2 $dShow_a1ru
+  2 x_a1rv
+  2 eta_a1rw
+  2 a_a1Lv
+  2 b_a1Lw
+  2 ds_a1Lx
+  2 k_a1Ly
+  2 a_a1P3
+  2 b_a1P4
+  2 ds_a1P5
+  2 k_a1P6
+  2 s_a1P7
+  2 a_a3AJ
+  2 w_s3Ci
+  2 w_s3Cj
+  1 r_aC9
+  1 x_aJ4
+  1 a_aY9
+  1 a_a1nc
+  1 $dShow_a1nd
+  1 b_a1nT
+  1 p_a1nU
+  1 b_a1o3
+  1 c_a1o4
+  1 a_a1o5
+  1 f_a1o6
+  1 g_a1o7
+  1 ds_a1ow
+  1 ds1_a1ox
+  1 $dShow_a1pr
+  1 a_a1qa
+  1 xs_a1qb
+  1 ys_a1qc
+  1 b_a1qg
+  1 c_a1qh
+  1 n_a1qi
+  1 a_a1qp
+  1 g_a1qq
+  1 xs_a1qs
+  1 s_a1rh
+  1 a_a1ri
+  1 ds_a1rj
+  1 val_a1rk
+  1 eta_a1rl
+  1 x_a1Lh
+  1 a_a1Ll
+  1 v_a1Lm
+  1 s_a1Ln
+  1 s_a1Lz
+  1 action_a1LF
+  1 s_a1LG
+  1 s_a1Pd
+  1 a_a1Pe
+  1 ds_a1Pf
+  1 eta_a1Pg
+  1 a_a3AN
+  1 ys_a3AO
+  1 xs_a3AP
+  1 ds_d1mI
+  1 $dShow_s1pU
+13 KnownBranch
+  4 ww_s3Cl
+  2 ww_a1oX
+  1 wild_Xd
+  1 vx_a1mN
+  1 wild_a1oy
+  1 wild1_a1oC
+  1 ds1_a1LA
+  1 ds1_a1P8
+  1 wild_a1Ph
+1 FillInCaseDefault 1 vx_a1mN
+15 SimplifierDone 15
+

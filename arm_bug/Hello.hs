@@ -3,23 +3,16 @@
 import Data.IORef
 import Control.Concurrent
 
-data Foo = Foo Int
-  deriving Show
-
-{- 
-{-# NOINLINE mul #-}
-mul :: Foo -> Foo -> Int
-mul (Foo x) (Foo y) = x * y
--}
+data Foo = Foo Int deriving Show
 
 {-# NOINLINE mkfoo #-}
-mkfoo x = 
-  Foo x
+mkfoo x = Foo x
+
+{-# NOINLINE dowrite #-}
+dowrite r = writeIORef r $! mkfoo 4
 
 main = 
-  do print "hi"
-     r <- newIORef $! (Foo 3)
-     forkIO $ writeIORef r $! mkfoo 4
+  do r <- newIORef $! (Foo 3)
+     forkIO (dowrite r)
      x <- readIORef r
      print x
---     print (mul x x)
