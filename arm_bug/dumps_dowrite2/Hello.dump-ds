@@ -1,0 +1,79 @@
+
+==================== Desugar (after optimization) ====================
+2016-08-04 14:18:38.967944 UTC
+
+Result size of Desugar (after optimization)
+  = {terms: 72, types: 62, coercions: 0}
+
+mkfoo [InlPrag=NOINLINE] :: Int -> Foo
+[LclId, Str=DmdType]
+mkfoo = Foo
+
+dowrite [InlPrag=NOINLINE] :: IORef Foo -> Int -> IO ()
+[LclId, Str=DmdType]
+dowrite =
+  \ (r_ayt :: IORef Foo) (n_ayu :: Int) ->
+    $! @ Foo @ (IO ()) (writeIORef @ Foo r_ayt) (mkfoo n_ayu)
+
+$cshowsPrec_a1dw :: Int -> Foo -> ShowS
+[LclId, Str=DmdType]
+$cshowsPrec_a1dw =
+  \ (a_aYl :: Int) (ds_d1mF :: Foo) ->
+    case ds_d1mF of _ [Occ=Dead] { Foo b1_aYm ->
+    showParen
+      (>= @ Int $fOrdInt a_aYl (I# 11))
+      (. @ String
+         @ String
+         @ String
+         (showString (unpackCString# "Foo "#))
+         (showsPrec @ Int $fShowInt (I# 11) b1_aYm))
+    }
+
+Rec {
+$fShowFoo [InlPrag=[ALWAYS] CONLIKE] :: Show Foo
+[LclIdX[DFunId],
+ Str=DmdType,
+ Unf=DFun: \ ->
+       D:Show TYPE Foo $cshowsPrec_a1dw $cshow_a1e4 $cshowList_a1e8]
+$fShowFoo =
+  D:Show @ Foo $cshowsPrec_a1dw $cshow_a1e4 $cshowList_a1e8
+
+$cshowList_a1e8 [Occ=LoopBreaker] :: [Foo] -> ShowS
+[LclId, Str=DmdType]
+$cshowList_a1e8 =
+  showList__ @ Foo (showsPrec @ Foo $fShowFoo (I# 0))
+
+$cshow_a1e4 [Occ=LoopBreaker] :: Foo -> String
+[LclId, Str=DmdType]
+$cshow_a1e4 = $dmshow @ Foo $fShowFoo
+end Rec }
+
+main :: IO ()
+[LclIdX, Str=DmdType]
+main =
+  >>=
+    @ IO
+    $fMonadIO
+    @ (IORef Foo)
+    @ ()
+    ($! @ Foo @ (IO (IORef Foo)) (newIORef @ Foo) (Foo (I# 3)))
+    (\ (r_ayR :: IORef Foo) ->
+       >>
+         @ IO
+         $fMonadIO
+         @ ThreadId
+         @ ()
+         (forkIO (dowrite r_ayR (I# 4)))
+         (>>=
+            @ IO
+            $fMonadIO
+            @ Foo
+            @ ()
+            (readIORef @ Foo r_ayR)
+            (\ (x_aFM :: Foo) -> print @ Foo $fShowFoo x_aFM)))
+
+main :: IO ()
+[LclIdX, Str=DmdType]
+main = runMainIO @ () main
+
+

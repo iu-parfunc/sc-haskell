@@ -1,0 +1,230 @@
+
+==================== FloatOut stats: ====================
+2016-08-04 14:18:39.037367 UTC
+
+7 Lets floated to top level; 0 Lets floated elsewhere; from 6 Lambda groups
+
+
+==================== FloatOut stats: ====================
+2016-08-04 14:18:39.562774 UTC
+
+4 Lets floated to top level; 0 Lets floated elsewhere; from 9 Lambda groups
+
+
+==================== Grand total simplifier statistics ====================
+2016-08-04 14:18:39.624332 UTC
+
+Total ticks:     270
+
+69 PreInlineUnconditionally
+  3 w_s3BJ
+  3 w_s3BK
+  2 f_a1mI
+  2 x_a1mJ
+  2 x_a1nZ
+  2 w_a1oL
+  2 w1_a1oM
+  2 w2_a1oN
+  2 $dShow_a1pu
+  2 ds_a1OG
+  2 k_a1OH
+  2 w_s3BL
+  1 eta_B1
+  1 x_aFM
+  1 a_aYl
+  1 vx_a1mK
+  1 b_a1nK
+  1 ds_a1on
+  1 ds1_a1oo
+  1 a_a1ox
+  1 g_a1oE
+  1 xs_a1pP
+  1 ys_a1pQ
+  1 c_a1pV
+  1 n_a1pW
+  1 g_a1q4
+  1 xs_a1q6
+  1 ds_a1qX
+  1 val_a1qY
+  1 eta_a1qZ
+  1 v_a1r9
+  1 s_a1ra
+  1 $dShow_a1rj
+  1 x_a1rk
+  1 eta_a1rl
+  1 ds_a1L8
+  1 k_a1L9
+  1 s_a1La
+  1 action_a1Lg
+  1 s_a1Lh
+  1 s_a1OI
+  1 ds_a1OQ
+  1 eta_a1OR
+  1 a_a3Ag
+  1 ys_a3Al
+  1 xs_a3Am
+  1 ds_d1mF
+  1 $dShow_s1pA
+  1 lvl_s1pG
+  1 lvl_s1pK
+  1 lvl_s1pL
+  1 lvl_s1pM
+  1 lvl_s1pN
+  1 a_s1r7
+  1 a_s1P0
+20 PostInlineUnconditionally
+  4 ww_s3BO
+  2 ww1_a1oQ
+  2 w_s3BJ
+  1 eta_B1
+  1 r_ayR
+  1 b1_aYm
+  1 $dShow_a1na
+  1 f_a1nX
+  1 g_a1nY
+  1 x_a1or
+  1 y_a1ov
+  1 ipv_a1Ld
+  1 ipv_a1OL
+  1 ipv1_a1OM
+  1 var#_a1OU
+42 UnfoldingDone
+  4 $cshowsPrec_a1dw
+  2 bindIO
+  2 p_a1nL
+  2 shows
+  2 $!
+  2 bindIO1
+  2 showSignedInt
+  1 augment
+  1 build
+  1 print
+  1 runMainIO
+  1 thenIO
+  1 main
+  1 showString
+  1 showParen
+  1 .
+  1 writeIORef
+  1 readIORef
+  1 newIORef
+  1 forkIO
+  1 thenIO1
+  1 geInt
+  1 $dmshow
+  1 writeSTRef1
+  1 readSTRef1
+  1 newIORef1
+  1 forkIO1
+  1 print1
+  1 a_s1pp
+  1 a_s1pq
+  1 lvl_s1pI
+  1 a_s1rh
+  1 a_s1OY
+16 RuleFired
+  6 Class op showsPrec
+  2 Class op >>=
+  1 ++
+  1 Class op >=
+  1 Class op >>
+  1 Class op show
+  1 SPEC/Main shows @ Foo
+  1 foldr/app
+  1 unpack
+  1 unpack-list
+10 LetFloatFromLet 10
+3 EtaExpansion
+  1 x_aFM
+  1 $cshowsPrec_a1dw
+  1 dowrite
+1 EtaReduction 1 e1_a1Ow
+95 BetaReduction
+  4 w_s3BJ
+  2 eta_B1
+  2 a_a1mG
+  2 b_a1mH
+  2 f_a1mI
+  2 x_a1mJ
+  2 x_a1nZ
+  2 w_a1oL
+  2 w1_a1oM
+  2 w2_a1oN
+  2 a_a1pt
+  2 $dShow_a1pu
+  2 a_a1OE
+  2 b_a1OF
+  2 ds_a1OG
+  2 k_a1OH
+  2 w_s3BK
+  2 w_s3BL
+  1 r_ayR
+  1 x_aFM
+  1 a_aYl
+  1 a_a1n9
+  1 $dShow_a1na
+  1 b_a1nK
+  1 p_a1nL
+  1 b_a1nU
+  1 c_a1nV
+  1 a_a1nW
+  1 f_a1nX
+  1 g_a1nY
+  1 ds_a1on
+  1 ds1_a1oo
+  1 a_a1ox
+  1 b_a1oB
+  1 a_a1oD
+  1 g_a1oE
+  1 a_a1pO
+  1 xs_a1pP
+  1 ys_a1pQ
+  1 b_a1pU
+  1 c_a1pV
+  1 n_a1pW
+  1 a_a1q3
+  1 g_a1q4
+  1 xs_a1q6
+  1 s_a1qV
+  1 a_a1qW
+  1 ds_a1qX
+  1 val_a1qY
+  1 eta_a1qZ
+  1 a_a1r8
+  1 v_a1r9
+  1 s_a1ra
+  1 a_a1ri
+  1 $dShow_a1rj
+  1 x_a1rk
+  1 eta_a1rl
+  1 a_a1L6
+  1 b_a1L7
+  1 ds_a1L8
+  1 k_a1L9
+  1 s_a1La
+  1 action_a1Lg
+  1 s_a1Lh
+  1 s_a1OI
+  1 s_a1OO
+  1 a_a1OP
+  1 ds_a1OQ
+  1 eta_a1OR
+  1 a_a3Ag
+  1 a_a3Ak
+  1 ys_a3Al
+  1 xs_a3Am
+  1 ds_d1mF
+  1 $dShow_s1pA
+13 KnownBranch
+  4 ww_s3BN
+  2 ww_a1oO
+  1 wild_Xd
+  1 vx_a1mK
+  1 wild_a1op
+  1 wild1_a1ot
+  1 ds1_a1Lb
+  1 ds1_a1OJ
+  1 wild_a1OS
+1 FillInCaseDefault 1 vx_a1mK
+14 SimplifierDone 14
+

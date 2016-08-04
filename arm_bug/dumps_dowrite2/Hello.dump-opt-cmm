@@ -1,0 +1,763 @@
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:39.806237 UTC
+
+$fShowFoo2_entry() //  [R1]
+        { []
+        }
+    {offset
+      c3FO:
+          if (I64[MainCapability+856] - 24 < I64[MainCapability+864]) goto c3FP; else goto c3FQ;
+      c3FP:
+          P64[MainCapability+24] = P64[MainCapability+24];
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c3FQ:
+          (_c3FK::I64) = call "ccall" arg hints:  [PtrHint,
+                                                   PtrHint]  result hints:  [PtrHint] newCAF(MainCapability+24, P64[MainCapability+24]);
+          if (_c3FK::I64 == 0) goto c3FM; else goto c3FL;
+      c3FM:
+          call (I64[I64[P64[MainCapability+24]]])() args: 8, res: 0, upd: 8;
+      c3FL:
+          I64[I64[MainCapability+856] - 16] = stg_bh_upd_frame_info;
+          I64[I64[MainCapability+856] - 8] = _c3FK::I64;
+          I64[I64[MainCapability+856] - 24] = c3FN_str;
+          I64[MainCapability+856] = I64[MainCapability+856] - 24;
+          call unpackCString#_entry() args: 32, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.100319 UTC
+
+sat_s3E2_entry() //  [R1]
+        { []
+        }
+    {offset
+      c3Hj:
+          if (I64[MainCapability+856] - 32 < I64[MainCapability+864]) goto c3Hp; else goto c3Hq;
+      c3Hp:
+          P64[MainCapability+24] = P64[MainCapability+24];
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c3Hq:
+          I64[I64[MainCapability+856] - 16] = block_c3Hg_info;
+          _s3DU::P64 = P64[P64[MainCapability+24] + 24];
+          P64[MainCapability+24] = P64[P64[MainCapability+24] + 16];
+          P64[I64[MainCapability+856] - 8] = _s3DU::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 16;
+          if (P64[MainCapability+24] & 7 != 0) goto u3Id; else goto c3Hh;
+      u3Id:
+          call block_c3Hg_entry(R1) args: 0, res: 0, upd: 0;
+      c3Hh:
+          call (I64[I64[P64[MainCapability+24]]])(R1) args: 8, res: 8, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.118513 UTC
+
+block_c3Hg_entry() //  [R1]
+        { []
+        }
+    {offset
+      c3Hg:
+          _s3DU::P64 = P64[I64[MainCapability+856] + 8];
+          I64[I64[MainCapability+856] + 8] = block_c3Hm_info;
+          I64[I64[MainCapability+856] - 16] = 11;
+          I64[I64[MainCapability+856] - 8] = I64[P64[MainCapability+24] + 7];
+          P64[I64[MainCapability+856]] = _s3DU::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 16;
+          call $wshowSignedInt_entry() args: 32, res: 16, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.130246 UTC
+
+block_c3Hm_entry() //  [R1]
+        { []
+        }
+    {offset
+      c3Hm:
+          P64[MainCapability+872] = P64[MainCapability+872] + 24;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c3Hu; else goto c3Ht;
+      c3Hu:
+          I64[MainCapability+928] = 24;
+          P64[MainCapability+24] = P64[MainCapability+24];
+          call stg_gc_pp(R1) args: 16, res: 16, upd: 8;
+      c3Ht:
+          I64[P64[MainCapability+872] - 16] = :_con_info;
+          P64[P64[MainCapability+872] - 8] = P64[MainCapability+24];
+          P64[P64[MainCapability+872]] = P64[I64[MainCapability+856]];
+          P64[MainCapability+24] = P64[MainCapability+872] - 14;
+          I64[MainCapability+856] = I64[MainCapability+856] + 16;
+          call (I64[P64[I64[MainCapability+856]]])(R1) args: 8, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.1493 UTC
+
+sat_s3E9_entry() //  [R1]
+        { []
+        }
+    {offset
+      c3HH:
+          if (I64[MainCapability+856] - 32 < I64[MainCapability+864]) goto c3HO; else goto c3HP;
+      c3HO:
+          P64[MainCapability+24] = P64[MainCapability+24];
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c3HP:
+          I64[I64[MainCapability+856] - 16] = block_c3HE_info;
+          _s3DU::P64 = P64[P64[MainCapability+24] + 24];
+          P64[MainCapability+24] = P64[P64[MainCapability+24] + 16];
+          P64[I64[MainCapability+856] - 8] = _s3DU::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 16;
+          if (P64[MainCapability+24] & 7 != 0) goto u3Ie; else goto c3HF;
+      u3Ie:
+          call block_c3HE_entry(R1) args: 0, res: 0, upd: 0;
+      c3HF:
+          call (I64[I64[P64[MainCapability+24]]])(R1) args: 8, res: 8, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.167312 UTC
+
+block_c3HE_entry() //  [R1]
+        { []
+        }
+    {offset
+      c3HE:
+          P64[MainCapability+872] = P64[MainCapability+872] + 24;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c3HS; else goto c3HR;
+      c3HS:
+          I64[MainCapability+928] = 24;
+          P64[MainCapability+24] = P64[MainCapability+24];
+          call stg_gc_unpt_r1(R1) args: 8, res: 8, upd: 8;
+      c3HR:
+          _s3E4::I64 = I64[P64[MainCapability+24] + 7];
+          I64[P64[MainCapability+872] - 16] = :_con_info;
+          P64[P64[MainCapability+872] - 8] = shows8_closure;
+          P64[P64[MainCapability+872]] = P64[I64[MainCapability+856] + 8];
+          I64[I64[MainCapability+856] + 8] = block_c3HL_info;
+          I64[I64[MainCapability+856] - 16] = 11;
+          I64[I64[MainCapability+856] - 8] = _s3E4::I64;
+          P64[I64[MainCapability+856]] = P64[MainCapability+872] - 14;
+          I64[MainCapability+856] = I64[MainCapability+856] - 16;
+          call $wshowSignedInt_entry() args: 32, res: 16, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.189676 UTC
+
+block_c3HL_entry() //  [R1]
+        { []
+        }
+    {offset
+      c3HL:
+          P64[MainCapability+872] = P64[MainCapability+872] + 24;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c3HV; else goto c3HU;
+      c3HV:
+          I64[MainCapability+928] = 24;
+          P64[MainCapability+24] = P64[MainCapability+24];
+          call stg_gc_pp(R1) args: 16, res: 16, upd: 8;
+      c3HU:
+          I64[P64[MainCapability+872] - 16] = :_con_info;
+          P64[P64[MainCapability+872] - 8] = P64[MainCapability+24];
+          P64[P64[MainCapability+872]] = P64[I64[MainCapability+856]];
+          P64[MainCapability+24] = P64[MainCapability+872] - 14;
+          I64[MainCapability+856] = I64[MainCapability+856] + 16;
+          call (I64[P64[I64[MainCapability+856]]])(R1) args: 8, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.208684 UTC
+
+sat_s3Ea_entry() //  [R1]
+        { []
+        }
+    {offset
+      c3HW:
+          _s3Ea::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] - 32 < I64[MainCapability+864]) goto c3HX; else goto c3HY;
+      c3HY:
+          P64[MainCapability+872] = P64[MainCapability+872] + 32;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c3I0; else goto c3HZ;
+      c3I0:
+          I64[MainCapability+928] = 32;
+          goto c3HX;
+      c3HX:
+          P64[MainCapability+24] = _s3Ea::P64;
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c3HZ:
+          I64[I64[MainCapability+856] - 16] = stg_upd_frame_info;
+          P64[I64[MainCapability+856] - 8] = _s3Ea::P64;
+          _s3DT::P64 = P64[_s3Ea::P64 + 16];
+          _s3DU::P64 = P64[_s3Ea::P64 + 24];
+          I64[P64[MainCapability+872] - 24] = sat_s3E9_info;
+          P64[P64[MainCapability+872] - 8] = _s3DT::P64;
+          P64[P64[MainCapability+872]] = _s3DU::P64;
+          P64[I64[MainCapability+856] - 32] = $fShowFoo2_closure;
+          P64[I64[MainCapability+856] - 24] = P64[MainCapability+872] - 24;
+          I64[MainCapability+856] = I64[MainCapability+856] - 32;
+          call ++_entry() args: 40, res: 0, upd: 24;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.234241 UTC
+
+$w$cshowsPrec_entry() //  []
+        { []
+        }
+    {offset
+      c3I1:
+          P64[MainCapability+872] = P64[MainCapability+872] + 56;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c3I5; else goto c3I4;
+      c3I5:
+          I64[MainCapability+928] = 56;
+          P64[MainCapability+24] = $w$cshowsPrec_closure;
+          call (I64[MainCapability+16])(R1) args: 32, res: 0, upd: 8;
+      c3I4:
+          _s3DT::P64 = P64[I64[MainCapability+856] + 8];
+          _s3DU::P64 = P64[I64[MainCapability+856] + 16];
+          if (%MO_S_Ge_W64(I64[I64[MainCapability+856]],
+                           11)) goto c3Ib; else goto c3Ic;
+      c3Ib:
+          I64[P64[MainCapability+872] - 48] = sat_s3Ea_info;
+          P64[P64[MainCapability+872] - 32] = _s3DT::P64;
+          P64[P64[MainCapability+872] - 24] = _s3DU::P64;
+          I64[P64[MainCapability+872] - 16] = :_con_info;
+          P64[P64[MainCapability+872] - 8] = shows9_closure;
+          P64[P64[MainCapability+872]] = P64[MainCapability+872] - 48;
+          P64[MainCapability+24] = P64[MainCapability+872] - 14;
+          I64[MainCapability+856] = I64[MainCapability+856] + 24;
+          call (I64[P64[I64[MainCapability+856]]])(R1) args: 8, res: 0, upd: 8;
+      c3Ic:
+          I64[P64[MainCapability+872] - 48] = sat_s3E2_info;
+          P64[P64[MainCapability+872] - 32] = _s3DT::P64;
+          P64[P64[MainCapability+872] - 24] = _s3DU::P64;
+          _c3Hc::P64 = P64[MainCapability+872] - 48;
+          P64[MainCapability+872] = P64[MainCapability+872] - 24;
+          P64[I64[MainCapability+856] + 8] = $fShowFoo2_closure;
+          P64[I64[MainCapability+856] + 16] = _c3Hc::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] + 8;
+          call ++_entry() args: 24, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.341367 UTC
+
+$fShowFoo_$cshowsPrec_entry() //  []
+        { []
+        }
+    {offset
+      c3Uw:
+          _s3Eb::P64 = P64[I64[MainCapability+856]];
+          I64[I64[MainCapability+856]] = block_c3Ut_info;
+          P64[MainCapability+24] = _s3Eb::P64;
+          if (P64[MainCapability+24] & 7 != 0) goto u3UJ; else goto c3Uu;
+      u3UJ:
+          call block_c3Ut_entry(R1) args: 0, res: 0, upd: 0;
+      c3Uu:
+          call (I64[I64[P64[MainCapability+24]]])(R1) args: 8, res: 8, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.351537 UTC
+
+block_c3Ut_entry() //  [R1]
+        { []
+        }
+    {offset
+      c3Ut:
+          I64[I64[MainCapability+856]] = block_c3Uz_info;
+          _s3Ef::I64 = I64[P64[MainCapability+24] + 7];
+          P64[MainCapability+24] = P64[I64[MainCapability+856] + 8];
+          I64[I64[MainCapability+856] + 8] = _s3Ef::I64;
+          if (P64[MainCapability+24] & 7 != 0) goto u3UI; else goto c3UD;
+      u3UI:
+          call block_c3Uz_entry(R1) args: 0, res: 0, upd: 0;
+      c3UD:
+          call (I64[I64[P64[MainCapability+24]]])(R1) args: 8, res: 8, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.363295 UTC
+
+block_c3Uz_entry() //  [R1]
+        { []
+        }
+    {offset
+      c3Uz:
+          I64[I64[MainCapability+856]] = I64[I64[MainCapability+856] + 8];
+          P64[I64[MainCapability+856] + 8] = P64[P64[MainCapability+24] + 7];
+          call $w$cshowsPrec_entry() args: 32, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.420845 UTC
+
+$fShowFoo1_entry() //  []
+        { []
+        }
+    {offset
+      c3Wx:
+          if (I64[MainCapability+856] - 8 < I64[MainCapability+864]) goto c3Wy; else goto c3Wz;
+      c3Wy:
+          P64[MainCapability+24] = $fShowFoo1_closure;
+          call (I64[MainCapability+16])(R1) args: 24, res: 0, upd: 8;
+      c3Wz:
+          _s3Ei::P64 = P64[I64[MainCapability+856]];
+          I64[I64[MainCapability+856]] = block_c3Wu_info;
+          P64[MainCapability+24] = _s3Ei::P64;
+          if (P64[MainCapability+24] & 7 != 0) goto u3WD; else goto c3Wv;
+      u3WD:
+          call block_c3Wu_entry(R1) args: 0, res: 0, upd: 0;
+      c3Wv:
+          call (I64[I64[P64[MainCapability+24]]])(R1) args: 8, res: 8, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.434247 UTC
+
+block_c3Wu_entry() //  [R1]
+        { []
+        }
+    {offset
+      c3Wu:
+          I64[I64[MainCapability+856] - 8] = 0;
+          P64[I64[MainCapability+856]] = P64[P64[MainCapability+24] + 7];
+          I64[MainCapability+856] = I64[MainCapability+856] - 8;
+          call $w$cshowsPrec_entry() args: 32, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.473824 UTC
+
+$fShowFoo_$cshowList_entry() //  []
+        { []
+        }
+    {offset
+      c3XY:
+          if (I64[MainCapability+856] - 8 < I64[MainCapability+864]) goto c3XZ; else goto c3Y0;
+      c3XZ:
+          P64[MainCapability+24] = $fShowFoo_$cshowList_closure;
+          call (I64[MainCapability+16])(R1) args: 24, res: 0, upd: 8;
+      c3Y0:
+          P64[I64[MainCapability+856] - 8] = $fShowFoo1_closure+2;
+          I64[MainCapability+856] = I64[MainCapability+856] - 8;
+          call showList___entry() args: 32, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.533613 UTC
+
+$fShowFoo_$cshow_entry() //  []
+        { []
+        }
+    {offset
+      c3YI:
+          if (I64[MainCapability+856] - 16 < I64[MainCapability+864]) goto c3YJ; else goto c3YK;
+      c3YJ:
+          P64[MainCapability+24] = $fShowFoo_$cshow_closure;
+          call (I64[MainCapability+16])(R1) args: 16, res: 0, upd: 8;
+      c3YK:
+          _s3Em::P64 = P64[I64[MainCapability+856]];
+          I64[I64[MainCapability+856]] = block_c3YF_info;
+          P64[MainCapability+24] = _s3Em::P64;
+          if (P64[MainCapability+24] & 7 != 0) goto u3YO; else goto c3YG;
+      u3YO:
+          call block_c3YF_entry(R1) args: 0, res: 0, upd: 0;
+      c3YG:
+          call (I64[I64[P64[MainCapability+24]]])(R1) args: 8, res: 8, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.546978 UTC
+
+block_c3YF_entry() //  [R1]
+        { []
+        }
+    {offset
+      c3YF:
+          I64[I64[MainCapability+856] - 16] = 0;
+          P64[I64[MainCapability+856] - 8] = P64[P64[MainCapability+24] + 7];
+          P64[I64[MainCapability+856]] = []_closure+1;
+          I64[MainCapability+856] = I64[MainCapability+856] - 16;
+          call $w$cshowsPrec_entry() args: 32, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.597982 UTC
+
+mkfoo_rn1_entry() //  []
+        { []
+        }
+    {offset
+      c40i:
+          P64[MainCapability+872] = P64[MainCapability+872] + 16;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c40m; else goto c40l;
+      c40m:
+          I64[MainCapability+928] = 16;
+          P64[MainCapability+24] = mkfoo_rn1_closure;
+          call (I64[MainCapability+16])(R1) args: 16, res: 0, upd: 8;
+      c40l:
+          I64[P64[MainCapability+872] - 8] = Foo_con_info;
+          P64[P64[MainCapability+872]] = P64[I64[MainCapability+856]];
+          P64[MainCapability+24] = P64[MainCapability+872] - 7;
+          I64[MainCapability+856] = I64[MainCapability+856] + 8;
+          call (I64[P64[I64[MainCapability+856]]])(R1) args: 8, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.687726 UTC
+
+a_r3Dy_entry() //  [R1]
+        { []
+        }
+    {offset
+      c41D:
+          if (I64[MainCapability+856] - 16 < I64[MainCapability+864]) goto c41H; else goto c41I;
+      c41H:
+          P64[MainCapability+24] = a_r3Dy_closure;
+          call (I64[MainCapability+16])(R1) args: 24, res: 0, upd: 8;
+      c41I:
+          I64[I64[MainCapability+856] - 8] = block_c41B_info;
+          P64[I64[MainCapability+856] - 16] = P64[I64[MainCapability+856] + 8];
+          I64[MainCapability+856] = I64[MainCapability+856] - 16;
+          call mkfoo_rn1_entry() args: 16, res: 8, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.699755 UTC
+
+block_c41B_entry() //  [R1]
+        { []
+        }
+    {offset
+      c41B:
+          _s3Ep::P64 = P64[I64[MainCapability+856] + 8];
+          I64[I64[MainCapability+856] + 8] = block_c41G_info;
+          _s3Es::P64 = P64[MainCapability+24];
+          P64[MainCapability+24] = _s3Ep::P64;
+          P64[I64[MainCapability+856] + 16] = _s3Es::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] + 8;
+          if (P64[MainCapability+24] & 7 != 0) goto u41S; else goto c41K;
+      u41S:
+          call block_c41G_entry(R1) args: 0, res: 0, upd: 0;
+      c41K:
+          call (I64[I64[P64[MainCapability+24]]])(R1) args: 8, res: 8, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.713223 UTC
+
+block_c41G_entry() //  [R1]
+        { []
+        }
+    {offset
+      c41G:
+          _s3Ev::P64 = P64[P64[MainCapability+24] + 7];
+          P64[_s3Ev::P64 + 8] = P64[I64[MainCapability+856] + 8];
+          call "ccall" arg hints:  [PtrHint,
+                                    PtrHint]  result hints:  [] dirty_MUT_VAR(MainCapability+24, _s3Ev::P64);
+          P64[MainCapability+24] = ()_closure+1;
+          I64[MainCapability+856] = I64[MainCapability+856] + 16;
+          call (I64[P64[I64[MainCapability+856]]])(R1) args: 8, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.749976 UTC
+
+dowrite_entry() //  []
+        { []
+        }
+    {offset
+      c44j:
+          call a_r3Dy_entry() args: 24, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.939666 UTC
+
+sat_s3ED_entry() //  [R1]
+        { []
+        }
+    {offset
+      c44E:
+          if (I64[MainCapability+856] - 16 < I64[MainCapability+864]) goto c44F; else goto c44G;
+      c44F:
+          P64[MainCapability+24] = P64[MainCapability+24];
+          call (I64[MainCapability+16])(R1) args: 8, res: 0, upd: 8;
+      c44G:
+          P64[I64[MainCapability+856] - 16] = P64[P64[MainCapability+24] + 7];
+          P64[I64[MainCapability+856] - 8] = main2_closure+1;
+          I64[MainCapability+856] = I64[MainCapability+856] - 16;
+          call dowrite_entry() args: 24, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.952414 UTC
+
+sat_s3EE_entry() //  [R1]
+        { []
+        }
+    {offset
+      c44H:
+          _s3EE::P64 = P64[MainCapability+24];
+          if (I64[MainCapability+856] - 8 < I64[MainCapability+864]) goto c44I; else goto c44J;
+      c44J:
+          P64[MainCapability+872] = P64[MainCapability+872] + 32;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c44L; else goto c44K;
+      c44L:
+          I64[MainCapability+928] = 32;
+          goto c44I;
+      c44I:
+          P64[MainCapability+24] = _s3EE::P64;
+          call (I64[MainCapability+16])(R1) args: 8, res: 0, upd: 8;
+      c44K:
+          _s3EA::P64 = P64[_s3EE::P64 + 7];
+          I64[P64[MainCapability+872] - 24] = STRef_con_info;
+          P64[P64[MainCapability+872] - 16] = _s3EA::P64;
+          I64[P64[MainCapability+872] - 8] = sat_s3ED_info;
+          P64[P64[MainCapability+872]] = P64[MainCapability+872] - 23;
+          P64[MainCapability+24] = P64[MainCapability+872] - 7;
+          P64[I64[MainCapability+856] - 8] = childHandler1_closure+2;
+          I64[MainCapability+856] = I64[MainCapability+856] - 8;
+          call stg_catch#(R1) args: 16, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.976805 UTC
+
+sat_s3EL_entry() //  [R1]
+        { []
+        }
+    {offset
+      c44S:
+          if (I64[MainCapability+856] - 8 < I64[MainCapability+864]) goto c44T; else goto c44U;
+      c44T:
+          P64[MainCapability+24] = P64[MainCapability+24];
+          call (I64[MainCapability+8])(R1) args: 8, res: 0, upd: 8;
+      c44U:
+          P64[I64[MainCapability+856] - 8] = P64[P64[MainCapability+24] + 16];
+          I64[MainCapability+856] = I64[MainCapability+856] - 8;
+          call $fShowFoo_$cshow_entry() args: 16, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.987756 UTC
+
+main1_entry() //  []
+        { []
+        }
+    {offset
+      c44V:
+          if (I64[MainCapability+856] - 24 < I64[MainCapability+864]) goto c44W; else goto c44X;
+      c44W:
+          P64[MainCapability+24] = main1_closure;
+          call (I64[MainCapability+16])(R1) args: 8, res: 0, upd: 8;
+      c44X:
+          I64[I64[MainCapability+856] - 8] = block_c44r_info;
+          P64[MainCapability+24] = main3_closure+1;
+          I64[MainCapability+856] = I64[MainCapability+856] - 8;
+          call stg_newMutVar#(R1) args: 8, res: 8, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:40.998531 UTC
+
+block_c44r_entry() //  [R1]
+        { []
+        }
+    {offset
+      c44r:
+          P64[MainCapability+872] = P64[MainCapability+872] + 16;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c450; else goto c44Z;
+      c450:
+          I64[MainCapability+928] = 16;
+          P64[MainCapability+24] = P64[MainCapability+24];
+          call stg_gc_unpt_r1(R1) args: 8, res: 8, upd: 8;
+      c44Z:
+          I64[P64[MainCapability+872] - 8] = sat_s3EE_info;
+          P64[P64[MainCapability+872]] = P64[MainCapability+24];
+          I64[I64[MainCapability+856] - 8] = block_c44M_info;
+          _s3EA::P64 = P64[MainCapability+24];
+          P64[MainCapability+24] = P64[MainCapability+872] - 7;
+          P64[I64[MainCapability+856]] = _s3EA::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] - 8;
+          call stg_fork#(R1) args: 8, res: 8, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:41.016702 UTC
+
+block_c44M_entry() //  [R1]
+        { []
+        }
+    {offset
+      c44M:
+          P64[MainCapability+872] = P64[MainCapability+872] + 24;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c453; else goto c452;
+      c453:
+          I64[MainCapability+928] = 24;
+          P64[MainCapability+24] = P64[MainCapability+24];
+          call stg_gc_unpt_r1(R1) args: 8, res: 8, upd: 8;
+      c452:
+          I64[P64[MainCapability+872] - 16] = sat_s3EL_info;
+          P64[P64[MainCapability+872]] = P64[P64[I64[MainCapability+856] + 8] + 8];
+          P64[I64[MainCapability+856] - 8] = stdout_closure;
+          P64[I64[MainCapability+856]] = P64[MainCapability+872] - 16;
+          P64[I64[MainCapability+856] + 8] = True_closure+2;
+          I64[MainCapability+856] = I64[MainCapability+856] - 8;
+          call hPutStr2_entry() args: 32, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:41.057795 UTC
+
+main_entry() //  []
+        { []
+        }
+    {offset
+      c4bB:
+          call main1_entry() args: 8, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:41.088149 UTC
+
+main5_entry() //  []
+        { []
+        }
+    {offset
+      c4bJ:
+          if (I64[MainCapability+856] - 8 < I64[MainCapability+864]) goto c4bK; else goto c4bL;
+      c4bK:
+          P64[MainCapability+24] = main5_closure;
+          call (I64[MainCapability+16])(R1) args: 8, res: 0, upd: 8;
+      c4bL:
+          P64[I64[MainCapability+856] - 8] = main1_closure+1;
+          I64[MainCapability+856] = I64[MainCapability+856] - 8;
+          call runMainIO1_entry() args: 16, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:41.119584 UTC
+
+main_entry() //  []
+        { []
+        }
+    {offset
+      c4cq:
+          call main5_entry() args: 8, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:41.156407 UTC
+
+Foo_entry() //  []
+        { []
+        }
+    {offset
+      c4cz:
+          P64[MainCapability+872] = P64[MainCapability+872] + 16;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c4cD; else goto c4cC;
+      c4cD:
+          I64[MainCapability+928] = 16;
+          P64[MainCapability+24] = Foo_closure;
+          call (I64[MainCapability+16])(R1) args: 16, res: 0, upd: 8;
+      c4cC:
+          I64[P64[MainCapability+872] - 8] = Foo_con_info;
+          P64[P64[MainCapability+872]] = P64[I64[MainCapability+856]];
+          P64[MainCapability+24] = P64[MainCapability+872] - 7;
+          I64[MainCapability+856] = I64[MainCapability+856] + 8;
+          call (I64[P64[I64[MainCapability+856]]])(R1) args: 8, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:41.212798 UTC
+
+Foo_con_entry() //  [R1]
+        { []
+        }
+    {offset
+      c4dO:
+          P64[MainCapability+24] = P64[MainCapability+24] + 1;
+          call (I64[P64[I64[MainCapability+856]]])(R1) args: 8, res: 0, upd: 8;
+    }
+}
+
+
+==================== Optimised Cmm ====================
+2016-08-04 14:18:41.218134 UTC
+
+Foo_static_entry() //  [R1]
+        { []
+        }
+    {offset
+      c4dP:
+          P64[MainCapability+24] = P64[MainCapability+24] + 1;
+          call (I64[P64[I64[MainCapability+856]]])(R1) args: 8, res: 0, upd: 8;
+    }
+}
+

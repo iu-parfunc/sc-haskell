@@ -1,0 +1,186 @@
+
+==================== STG syntax: ====================
+2016-08-04 14:18:39.698036 UTC
+
+$fShowFoo2 :: [Char]
+[GblId, Str=DmdType] =
+    \u srt:SRT:[] [] unpackCString# "Foo "#;
+$w$cshowsPrec [InlPrag=[0]] :: Int# -> Int -> String -> String
+[GblId,
+ Arity=3,
+ Str=DmdType <L,U><L,1*U(U)><L,U>,
+ Unf=OtherCon []] =
+    \r srt:SRT:[rj :-> $fShowFoo2] [ww_s3DS ww1_s3DT w_s3DU]
+        case >=# [ww_s3DS 11] of sat_s3DV {
+          __DEFAULT ->
+              case tagToEnum# [sat_s3DV] of _ [Occ=Dead] {
+                False ->
+                    let {
+                      sat_s3E2 [Occ=Once, Dmd=<L,1*U>] :: [Char]
+                      [LclId, Str=DmdType] =
+                          \s srt:SRT:[] []
+                              case ww1_s3DT of _ [Occ=Dead] {
+                                I# ww3_s3DY [Occ=Once] ->
+                                    case $wshowSignedInt 11 ww3_s3DY w_s3DU of _ [Occ=Dead] {
+                                      (#,#) ww5_s3E0 [Occ=Once] ww6_s3E1 [Occ=Once] ->
+                                          : [ww5_s3E0 ww6_s3E1];
+                                    };
+                              };
+                    } in  ++ $fShowFoo2 sat_s3E2;
+                True ->
+                    let {
+                      sat_s3Ea [Occ=Once] :: [Char]
+                      [LclId, Str=DmdType] =
+                          \u srt:SRT:[rj :-> $fShowFoo2] []
+                              let {
+                                sat_s3E9 [Occ=Once, Dmd=<L,1*U>] :: [Char]
+                                [LclId, Str=DmdType] =
+                                    \s srt:SRT:[] []
+                                        case ww1_s3DT of _ [Occ=Dead] {
+                                          I# ww3_s3E4 [Occ=Once] ->
+                                              let {
+                                                sat_s3E5 [Occ=Once] :: String
+                                                [LclId, Str=DmdType] =
+                                                    NO_CCS :! [shows8 w_s3DU];
+                                              } in 
+                                                case
+                                                    $wshowSignedInt 11 ww3_s3E4 sat_s3E5
+                                                of
+                                                _ [Occ=Dead]
+                                                { (#,#) ww5_s3E7 [Occ=Once] ww6_s3E8 [Occ=Once] ->
+                                                      : [ww5_s3E7 ww6_s3E8];
+                                                };
+                                        };
+                              } in  ++ $fShowFoo2 sat_s3E9;
+                    } in  : [shows9 sat_s3Ea];
+              };
+        };
+$fShowFoo_$cshowsPrec [InlPrag=INLINE[0]] :: Int -> Foo -> ShowS
+[GblId,
+ Arity=3,
+ Str=DmdType <S,1*U(U)><S,1*U(1*U(U))><L,U>,
+ Unf=OtherCon []] =
+    \r srt:SRT:[rn :-> $w$cshowsPrec] [w_s3Eb w1_s3Ec w2_s3Ed]
+        case w_s3Eb of _ [Occ=Dead] {
+          I# ww1_s3Ef [Occ=Once] ->
+              case w1_s3Ec of _ [Occ=Dead] {
+                Foo ww3_s3Eh [Occ=Once] -> $w$cshowsPrec ww1_s3Ef ww3_s3Eh w2_s3Ed;
+              };
+        };
+$fShowFoo1 :: Foo -> ShowS
+[GblId, Arity=2, Str=DmdType, Unf=OtherCon []] =
+    \r srt:SRT:[rn :-> $w$cshowsPrec] [w_s3Ei w1_s3Ej]
+        case w_s3Ei of _ [Occ=Dead] {
+          Foo ww1_s3El [Occ=Once] -> $w$cshowsPrec 0 ww1_s3El w1_s3Ej;
+        };
+$fShowFoo_$cshowList :: [Foo] -> ShowS
+[GblId, Arity=2, Str=DmdType, Unf=OtherCon []] =
+    \r srt:SRT:[rk :-> $fShowFoo1] [eta_B2 eta_B1]
+        showList__ $fShowFoo1 eta_B2 eta_B1;
+$fShowFoo_$cshow :: Foo -> String
+[GblId, Arity=1, Str=DmdType <S,1*U(1*U(U))>, Unf=OtherCon []] =
+    \r srt:SRT:[rn :-> $w$cshowsPrec] [x_s3Em]
+        case x_s3Em of _ [Occ=Dead] {
+          Foo ww1_s3Eo [Occ=Once] -> $w$cshowsPrec 0 ww1_s3Eo [];
+        };
+$fShowFoo [InlPrag=[ALWAYS] CONLIKE] :: Show Foo
+[GblId[DFunId], Str=DmdType m, Unf=OtherCon []] =
+    NO_CCS D:Show! [$fShowFoo_$cshowsPrec
+                    $fShowFoo_$cshow
+                    $fShowFoo_$cshowList];
+mkfoo_rn1 :: Int -> Foo
+[GblId,
+ Arity=1,
+ Caf=NoCafRefs,
+ Str=DmdType <L,U>m,
+ Unf=OtherCon []] =
+    sat-only \r srt:SRT:[] [eta_B1] Foo [eta_B1];
+a_r3Dy
+  :: IORef Foo
+     -> Int -> State# RealWorld -> (# State# RealWorld, () #)
+[GblId,
+ Arity=3,
+ Caf=NoCafRefs,
+ Str=DmdType <S,1*U(U)><L,U><L,U>,
+ Unf=OtherCon []] =
+    sat-only \r srt:SRT:[] [r_s3Ep n_s3Eq eta_s3Er]
+        case mkfoo_rn1 n_s3Eq of vx_s3Es {
+          Foo _ [Occ=Dead] ->
+              case r_s3Ep of _ [Occ=Dead] {
+                STRef var#_s3Ev [Occ=Once] ->
+                    case
+                        writeMutVar# [var#_s3Ev vx_s3Es eta_s3Er]
+                    of
+                    s2#_s3Ew [OS=OneShot]
+                    { __DEFAULT -> (#,#) [s2#_s3Ew ()];
+                    };
+              };
+        };
+dowrite [InlPrag=NOINLINE] :: IORef Foo -> Int -> IO ()
+[GblId,
+ Arity=3,
+ Caf=NoCafRefs,
+ Str=DmdType <S,1*U(U)><L,U><L,U>,
+ Unf=OtherCon []] =
+    \r srt:SRT:[] [eta_B3 eta_B2 eta_B1] a_r3Dy eta_B3 eta_B2 eta_B1;
+main2 :: Int
+[GblId, Caf=NoCafRefs, Str=DmdType, Unf=OtherCon []] =
+    NO_CCS I#! [4];
+main4 :: Int
+[GblId, Caf=NoCafRefs, Str=DmdType, Unf=OtherCon []] =
+    NO_CCS I#! [3];
+main3 :: Foo
+[GblId, Caf=NoCafRefs, Str=DmdType, Unf=OtherCon []] =
+    NO_CCS Foo! [main4];
+main1 :: State# RealWorld -> (# State# RealWorld, () #)
+[GblId, Arity=1, Str=DmdType <L,U>, Unf=OtherCon []] =
+    \r srt:SRT:[r4 :-> stdout, r5 :-> hPutStr2, r6 :-> childHandler1,
+                rr :-> $fShowFoo_$cshow] [s_s3Ex]
+        case newMutVar# [main3 s_s3Ex] of _ [Occ=Dead] {
+          (#,#) ipv_s3Ez [Occ=Once] ipv1_s3EA ->
+              let {
+                sat_s3EE [Occ=Once] :: IO ()
+                [LclId, Str=DmdType] =
+                    \r srt:SRT:[r6 :-> childHandler1] [eta_s3EB]
+                        let {
+                          sat_s3EC [Occ=Once] :: IORef Foo
+                          [LclId, Str=DmdType] =
+                              NO_CCS STRef! [ipv1_s3EA]; } in
+                        let {
+                          sat_s3ED [Occ=Once]
+                            :: State# RealWorld -> (# State# RealWorld, () #)
+                          [LclId, Str=DmdType] =
+                              \r srt:SRT:[] [eta_B1] dowrite sat_s3EC main2 eta_B1;
+                        } in  catch# [sat_s3ED childHandler1 eta_s3EB];
+              } in 
+                case fork# [sat_s3EE ipv_s3Ez] of _ [Occ=Dead] {
+                  (#,#) ipv2_s3EG [Occ=Once] _ [Occ=Dead] ->
+                      case readMutVar# [ipv1_s3EA ipv2_s3EG] of _ [Occ=Dead] {
+                        (#,#) ipv4_s3EJ [Occ=Once] ipv5_s3EK [Occ=Once] ->
+                            let {
+                              sat_s3EL [Occ=Once, Dmd=<L,1*U>] :: String
+                              [LclId, Str=DmdType] =
+                                  \s srt:SRT:[rr :-> $fShowFoo_$cshow] []
+                                      $fShowFoo_$cshow ipv5_s3EK;
+                            } in  hPutStr2 stdout sat_s3EL True ipv4_s3EJ;
+                      };
+                };
+        };
+main :: IO ()
+[GblId, Arity=1, Str=DmdType <L,U>, Unf=OtherCon []] =
+    \r srt:SRT:[re :-> main1] [eta_B1] main1 eta_B1;
+main5 :: State# RealWorld -> (# State# RealWorld, () #)
+[GblId, Arity=1, Str=DmdType, Unf=OtherCon []] =
+    \r srt:SRT:[r1 :-> runMainIO1, re :-> main1] [eta_B1]
+        runMainIO1 main1 eta_B1;
+main :: IO ()
+[GblId, Arity=1, Str=DmdType, Unf=OtherCon []] =
+    \r srt:SRT:[r3Dx :-> main5] [eta_B1] main5 eta_B1;
+Foo :: Int -> Foo
+[GblId[DataCon],
+ Arity=1,
+ Caf=NoCafRefs,
+ Str=DmdType <L,U>m,
+ Unf=OtherCon []] =
+    \r srt:SRT:[] [eta_B1] Foo [eta_B1];
+

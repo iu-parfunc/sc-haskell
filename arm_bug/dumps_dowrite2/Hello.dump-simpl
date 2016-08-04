@@ -1,0 +1,252 @@
+
+==================== Tidy Core ====================
+2016-08-04 14:18:39.638516 UTC
+
+Result size of Tidy Core = {terms: 157, types: 159, coercions: 27}
+
+$fShowFoo2 :: [Char]
+[GblId,
+ Str=DmdType,
+ Unf=Unf{Src=<vanilla>, TopLvl=True, Value=False, ConLike=False,
+         WorkFree=False, Expandable=False, Guidance=IF_ARGS [] 40 0}]
+$fShowFoo2 = unpackCString# "Foo "#
+
+$w$cshowsPrec [InlPrag=[0]] :: Int# -> Int -> String -> String
+[GblId,
+ Arity=3,
+ Str=DmdType <L,U><L,1*U(U)><L,U>,
+ Unf=Unf{Src=<vanilla>, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True, Guidance=IF_ARGS [0 40 0] 242 30}]
+$w$cshowsPrec =
+  \ (ww_s3BO :: Int#) (ww1_s3BS :: Int) (w_s3BL :: String) ->
+    case tagToEnum# @ Bool (>=# ww_s3BO 11) of _ [Occ=Dead] {
+      False ->
+        ++
+          @ Char
+          $fShowFoo2
+          (case ww1_s3BS of _ [Occ=Dead] { I# ww3_a1oV ->
+           case $wshowSignedInt 11 ww3_a1oV w_s3BL
+           of _ [Occ=Dead] { (# ww5_a1oZ, ww6_a1p0 #) ->
+           : @ Char ww5_a1oZ ww6_a1p0
+           }
+           });
+      True ->
+        : @ Char
+          shows9
+          (++
+             @ Char
+             $fShowFoo2
+             (case ww1_s3BS of _ [Occ=Dead] { I# ww3_a1oV ->
+              case $wshowSignedInt 11 ww3_a1oV (: @ Char shows8 w_s3BL)
+              of _ [Occ=Dead] { (# ww5_a1oZ, ww6_a1p0 #) ->
+              : @ Char ww5_a1oZ ww6_a1p0
+              }
+              }))
+    }
+
+$fShowFoo_$cshowsPrec [InlPrag=INLINE[0]] :: Int -> Foo -> ShowS
+[GblId,
+ Arity=3,
+ Str=DmdType <S,1*U(U)><S,1*U(1*U(U))><L,U>,
+ Unf=Unf{Src=InlineStable, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True,
+         Guidance=ALWAYS_IF(arity=3,unsat_ok=True,boring_ok=False)
+         Tmpl= \ (w_s3BJ [Occ=Once!] :: Int)
+                 (w1_s3BK [Occ=Once!] :: Foo)
+                 (w2_s3BL [Occ=Once] :: String) ->
+                 case w_s3BJ of _ [Occ=Dead] { I# ww1_s3BO [Occ=Once] ->
+                 case w1_s3BK of _ [Occ=Dead] { Foo ww3_s3BS [Occ=Once] ->
+                 $w$cshowsPrec ww1_s3BO ww3_s3BS w2_s3BL
+                 }
+                 }}]
+$fShowFoo_$cshowsPrec =
+  \ (w_s3BJ :: Int) (w1_s3BK :: Foo) (w2_s3BL :: String) ->
+    case w_s3BJ of _ [Occ=Dead] { I# ww1_s3BO ->
+    case w1_s3BK of _ [Occ=Dead] { Foo ww3_s3BS ->
+    $w$cshowsPrec ww1_s3BO ww3_s3BS w2_s3BL
+    }
+    }
+
+$fShowFoo1 :: Foo -> ShowS
+[GblId,
+ Arity=2,
+ Str=DmdType,
+ Unf=Unf{Src=<vanilla>, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True, Guidance=IF_ARGS [20 0] 50 0}]
+$fShowFoo1 =
+  \ (w_s3BK :: Foo) (w1_s3BL :: String) ->
+    case w_s3BK of _ [Occ=Dead] { Foo ww1_s3BS ->
+    $w$cshowsPrec 0 ww1_s3BS w1_s3BL
+    }
+
+$fShowFoo_$cshowList :: [Foo] -> ShowS
+[GblId,
+ Arity=2,
+ Str=DmdType,
+ Unf=Unf{Src=<vanilla>, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True, Guidance=IF_ARGS [] 20 60}]
+$fShowFoo_$cshowList = showList__ @ Foo $fShowFoo1
+
+$fShowFoo_$cshow :: Foo -> String
+[GblId,
+ Arity=1,
+ Str=DmdType <S,1*U(1*U(U))>,
+ Unf=Unf{Src=InlineStable, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True,
+         Guidance=ALWAYS_IF(arity=1,unsat_ok=True,boring_ok=False)
+         Tmpl= \ (x_a1nb [Occ=Once] :: Foo) ->
+                 $fShowFoo_$cshowsPrec shows18 x_a1nb ([] @ Char)}]
+$fShowFoo_$cshow =
+  \ (x_a1nb :: Foo) ->
+    case x_a1nb of _ [Occ=Dead] { Foo ww1_s3BS ->
+    $w$cshowsPrec 0 ww1_s3BS ([] @ Char)
+    }
+
+$fShowFoo [InlPrag=[ALWAYS] CONLIKE] :: Show Foo
+[GblId[DFunId],
+ Str=DmdType m,
+ Unf=DFun: \ ->
+       D:Show TYPE Foo
+              $fShowFoo_$cshowsPrec
+              $fShowFoo_$cshow
+              $fShowFoo_$cshowList]
+$fShowFoo =
+  D:Show
+    @ Foo $fShowFoo_$cshowsPrec $fShowFoo_$cshow $fShowFoo_$cshowList
+
+mkfoo_rn1 :: Int -> Foo
+[GblId, Arity=1, Caf=NoCafRefs, Str=DmdType <L,U>m]
+mkfoo_rn1 = Foo
+
+a_r3Dy
+  :: IORef Foo
+     -> Int -> State# RealWorld -> (# State# RealWorld, () #)
+[GblId, Arity=3, Caf=NoCafRefs, Str=DmdType <S,1*U(U)><L,U><L,U>]
+a_r3Dy =
+  \ (r_ayt :: IORef Foo)
+    (n_ayu :: Int)
+    (eta_B1 [OS=OneShot] :: State# RealWorld) ->
+    case mkfoo_rn1 n_ayu of vx_X1nj { Foo ipv_s1qT ->
+    case r_ayt
+         `cast` (NTCo:IORef[0] <Foo>_N :: IORef Foo ~R# STRef RealWorld Foo)
+    of _ [Occ=Dead] { STRef var#_a1r2 ->
+    case writeMutVar# @ RealWorld @ Foo var#_a1r2 vx_X1nj eta_B1
+    of s2#_a1r4 [OS=OneShot] { __DEFAULT ->
+    (# s2#_a1r4, () #)
+    }
+    }
+    }
+
+dowrite [InlPrag=NOINLINE] :: IORef Foo -> Int -> IO ()
+[GblId, Arity=3, Caf=NoCafRefs, Str=DmdType <S,1*U(U)><L,U><L,U>]
+dowrite =
+  a_r3Dy
+  `cast` (<IORef Foo>_R -> <Int>_R -> Sym (NTCo:IO[0] <()>_R)
+          :: (IORef Foo
+              -> Int -> State# RealWorld -> (# State# RealWorld, () #))
+             ~R# (IORef Foo -> Int -> IO ()))
+
+main2 :: Int
+[GblId,
+ Caf=NoCafRefs,
+ Str=DmdType,
+ Unf=Unf{Src=<vanilla>, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True, Guidance=IF_ARGS [] 10 20}]
+main2 = I# 4
+
+main4 :: Int
+[GblId,
+ Caf=NoCafRefs,
+ Str=DmdType,
+ Unf=Unf{Src=<vanilla>, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True, Guidance=IF_ARGS [] 10 20}]
+main4 = I# 3
+
+main3 :: Foo
+[GblId,
+ Caf=NoCafRefs,
+ Str=DmdType,
+ Unf=Unf{Src=<vanilla>, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True, Guidance=IF_ARGS [] 10 20}]
+main3 = Foo main4
+
+main1 :: State# RealWorld -> (# State# RealWorld, () #)
+[GblId,
+ Arity=1,
+ Str=DmdType <L,U>,
+ Unf=Unf{Src=<vanilla>, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True, Guidance=IF_ARGS [0] 131 0}]
+main1 =
+  \ (s_a1OI [OS=OneShot] :: State# RealWorld) ->
+    case newMutVar# @ Foo @ RealWorld main3 s_a1OI
+    of _ [Occ=Dead] { (# ipv_a1rd, ipv1_a1re #) ->
+    case fork#
+           @ (IO ())
+           ((\ (eta_a1Li [OS=OneShot] :: State# RealWorld) ->
+               catch#
+                 @ ()
+                 @ SomeException
+                 ((dowrite
+                     ((STRef @ RealWorld @ Foo ipv1_a1re)
+                      `cast` (Sym NTCo:IORef[0] <Foo>_N
+                              :: STRef RealWorld Foo ~R# IORef Foo))
+                     main2)
+                  `cast` (NTCo:IO[0] <()>_R
+                          :: IO () ~R# (State# RealWorld -> (# State# RealWorld, () #))))
+                 childHandler1
+                 eta_a1Li)
+            `cast` (Sym (NTCo:IO[0] <()>_R)
+                    :: (State# RealWorld -> (# State# RealWorld, () #)) ~R# IO ()))
+           ipv_a1rd
+    of _ [Occ=Dead] { (# ipv2_a1OA, ipv3_a1OB #) ->
+    case readMutVar# @ RealWorld @ Foo ipv1_a1re ipv2_a1OA
+    of _ [Occ=Dead] { (# ipv4_X1PN, ipv5_X1PP #) ->
+    hPutStr2 stdout ($fShowFoo_$cshow ipv5_X1PP) True ipv4_X1PN
+    }
+    }
+    }
+
+main :: IO ()
+[GblId,
+ Arity=1,
+ Str=DmdType <L,U>,
+ Unf=Unf{Src=InlineStable, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True,
+         Guidance=ALWAYS_IF(arity=0,unsat_ok=True,boring_ok=True)
+         Tmpl= main1
+               `cast` (Sym (NTCo:IO[0] <()>_R)
+                       :: (State# RealWorld -> (# State# RealWorld, () #)) ~R# IO ())}]
+main =
+  main1
+  `cast` (Sym (NTCo:IO[0] <()>_R)
+          :: (State# RealWorld -> (# State# RealWorld, () #)) ~R# IO ())
+
+main5 :: State# RealWorld -> (# State# RealWorld, () #)
+[GblId,
+ Arity=1,
+ Str=DmdType,
+ Unf=Unf{Src=<vanilla>, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True, Guidance=IF_ARGS [] 20 60}]
+main5 =
+  runMainIO1
+    @ ()
+    (main1
+     `cast` (Sym (NTCo:IO[0] <()>_R)
+             :: (State# RealWorld -> (# State# RealWorld, () #)) ~R# IO ()))
+
+main :: IO ()
+[GblId,
+ Arity=1,
+ Str=DmdType,
+ Unf=Unf{Src=InlineStable, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True,
+         Guidance=ALWAYS_IF(arity=0,unsat_ok=True,boring_ok=True)
+         Tmpl= main5
+               `cast` (Sym (NTCo:IO[0] <()>_R)
+                       :: (State# RealWorld -> (# State# RealWorld, () #)) ~R# IO ())}]
+main =
+  main5
+  `cast` (Sym (NTCo:IO[0] <()>_R)
+          :: (State# RealWorld -> (# State# RealWorld, () #)) ~R# IO ())
+
+
