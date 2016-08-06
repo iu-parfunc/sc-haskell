@@ -488,7 +488,20 @@ should go a long way.
 DRAFT BUG POST
 ================================================================================
 
-We recently began experimenting with GHC on ARM platforms.
+Memory fence on writeIORef appears missing on ARM.
+
+The memory model question has been debated now and again, and this
+thread from ten years back
+(https://mail.haskell.org/pipermail/haskell-prime/2006-April/001237.html)
+lays out the basic situation with thunk update, writeIORef, and memory fences.
+
+But we recently began experimenting with GHC on ARM platforms, and it
+seems to lack a memory fence that the participants in the cited thread
+expect it to have.
+
+Here's an attempt to construct a program which writes fields of a data
+structure, and then writes the pointer to that structure to an IORef,
+without the proper fence inbetween:
 
 ```Haskell
 import Data.IORef
@@ -508,6 +521,9 @@ main =
      x <- readIORef r
      print x
 ```
+
+Here's the relevant bits of the CMM that results when compiled on an
+ARM 64 machine:
 
 ```C
 mkfoo_rn1_entry() //  []
@@ -592,6 +608,30 @@ block_c41G_entry() //  [R1]
     }
 }
 ```
+
+The fence should happen before the write of the pointer into the
+IORef.  I can't find the fence, and can't find a codepath in the
+compiler that would insert it (i.e. with MO_WriteBarrier).
+
+`dirty_MUT_VAR` is actually too late to perform the fence, but it
+doesn't either:
+
+```C
+void
+dirty_MUT_VAR(StgRegTable *reg, StgClosure *p)
+{
+    Capability *cap = regTableToCapability(reg);
+    if (p->header.info == &stg_MUT_VAR_CLEAN_info) {
+        p->header.info = &stg_MUT_VAR_DIRTY_info;
+        recordClosureMutated(cap,p);
+    }
+}
+```
+
+(Neither does `recordClosureMutated`.)
+
+
+
 
 
 SCRAP 2
