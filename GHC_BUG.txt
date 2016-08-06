@@ -1,0 +1,720 @@
+
+
+[2016.08.04] {Posting the bug to GHC track}
+-----------------------------------------
+
+I'm currently having trouble digging up the old mailinglist post with
+Jan-Wilhelm Maessen...  Ah, here it is!
+
+  MSG1 https://mail.haskell.org/pipermail/haskell-prime/2006-April/001237.html
+  MSG2 https://mail.haskell.org/pipermail/haskell-prime/2006-April/001372.html
+
+Full messages appended below.
+
+Also, some other discussioncs around the web:
+
+  "Memory fence around stg_atomicModifyMutVarzh"
+  http://haskell.1045720.n5.nabble.com/Memory-fence-around-stg-atomicModifyMutVarzh-td5820455.html
+
+Here's a related stack overflow post:
+
+  "Reasoning about IORef operation reordering in concurrent programs"
+  http://stackoverflow.com/questions/21506748/reasoning-about-ioref-operation-reordering-in-concurrent-programs
+
+Which in turn cites this:
+
+  https://mail.haskell.org/pipermail/haskell-cafe/2011-May/091927.html
+
+Exercepts here:
+
+From David (Terei):
+
+    The reason I'm asking is that I want to make sure I never end up
+    having to pay the overhead of an MFENCE instruction or equivalent
+    every time I use unmaskAsyncExceptions#...
+
+Simon Marlow:
+
+     As far as memory consistency goes, we claim to provide sequential 
+     consistency for IORef and IOArray operations, but not for peeks and pokes.
+
+     > The reason I'm asking is that I want to make sure I never end up
+     > having to pay the overhead of an MFENCE instruction or equivalent
+     > every time I use unmaskAsyncExceptions#...
+
+     Right, I don't think that should be necessary.
+
+HUH!  SC was claimed back in 2011!  He goes on:
+
+     Yes, it's not actually documented as far as I know, and we should fix 
+     that.  But if you think about it, sequential consistency is really the 
+     only sensible policy: suppose one processor creates a heap object and 
+     writes a reference to it in the IORef, then another processor reads the 
+     IORef.  The writes that created the heap object must be visible to the 
+     second processor, otherwise it will encounter uninitialised memory and 
+     crash.  So sequential consistency is necessary to ensure concurrent 
+     programs can't crash.
+
+     Now perhaps it's possible to have a relaxed memory model that provides 
+     the no-crashes guarantee but still allows IORef writes to be reordered 
+     (e.g. some kind of causal consistency).  That might be important if 
+     there is some processor arcitecture that provides that memory model, but 
+     as far as I know there isn't.
+
+     For some background there was a discussion about this on the 
+     haskell-prime mailing list a few years ago, I think.
+
+Here's a quote from Lennart:
+
+   http://augustss.blogspot.com/2011/04/ugly-memoization-heres-problem-that-i.html
+
+    My real code can actually be multi-threaded, so the memo function had
+    better work in a multi-threaded setting. Well, it doesn't. There's no
+    guarantee about readIORef and writeIORef when doing multi-threading.
+
+David again, references the idea of memory barriers:
+
+     However, on other CPUs (e.g., the DEC alpha), there could maybe, maybe
+     be issues.  Though I'm not sure, since to avoid crashes, the alpha
+     implementation of IORef would need to include a memory barrier.  The
+     question is whether there is an architecture in which IORef avoids
+     crashes AND memoIO can give you the wrong answer.  Also, if Simon's
+     original post means that IORef operations all contain barrier
+     instructions, it could be that memoIO is simply correct and the blog
+     post is simply wrong about needing MVars.
+
+He goes on:
+
+     To prevent this deviation from sequential consistency, you would need
+     to do something like stick an MFENCE instruction at the end of
+     writeIORef, and that would slow down the common case where you don't
+     care about sequential consistency.  In fact, I would argue that if you
+     care about S.C., you should either be using atomicModifyIORef or
+     MVars.
+
+  (This one even has some C psuedoacode:)
+
+  https://mail.haskell.org/pipermail/haskell-cafe/2011-May/091945.html
+
+Eek, this point of David's should really be addressed:
+
+    There's nothing in the documentation for MVars that says anything
+    about sequential consistency.
+
+A nice conclusion from David:
+
+    Systems have memory models for a reason; you can't get away from them
+    entirely for all applications.  Haskell's strength, I think, is in
+    making sure that 99+% of code can't possibly depend on the memory
+    model.  For functional and ST code, you don't even need to look at the
+    code to know that this is true--safety is guaranteed by the types
+
+
+MSG 1:
+================================================================================
+
+Jan-Willem - thanks for your thoughts on this, it's greatly appreciated.
+
+On 31 March 2006 18:49, Jan-Willem Maessen wrote:
+
+> John -
+> 
+> You are, in effect, proposing a memory model for MVars and IORefs.
+> The high-level model for programmers is "In order to communicate data
+> between threads, you *must* use an MVar, and never an IORef."
+> 
+> But the devil is in the details.  I'd like to strongly urge *against*
+> adopting the extremely loose model you have proposed.  The following
+> things seem particularly important:
+> 
+> * reads and writes to IORefs should be atomic, meaning either a
+> complete update is observed or no change is observed.  In the absence
+> of this guarantee, misuse of IORefs can cause programs to crash in
+> unrepeatable ways.  If the machine doesn't make this easy, the
+> implementor ought to sweat a little so that Haskell programmers don't
+> have to sweat at all.
+> 
+> * I assume forkIO constitutes a sequence point.  I suspect throwTo et
+> al ought to as well.
+> 
+> * I would urge that atomicModifyIORef constitute a sequence point---I
+> suspect it loses a great deal of its utility otherwise.
+> 
+> Now, on to more difficult issues...  Consider the following example
+> (untested):
+> 
+> data RefList a = Nil | Cons a (IORef (RefList a))
+> 
+> cons :: a -> RefList a -> IO (RefList a)
+> cons x xs = do
+>    a <- newIORef xs
+>    return (Cons x a)
+> 
+> hd :: RefList a -> a
+> hd (Cons a _) = a
+> 
+> tl :: RefList a -> IO (RefList a)
+> tl (Cons a t) = readIORef a
+> 
+> setTl :: RefList a -> RefList a -> IO ()
+> setTl (Cons a t) t' = writeIORef t t'
+> 
+> main = do a <- cons 'a' Nil
+>            forkIO $ do
+>              c <- cons 'c' Nil
+>              b <- cons 'b' Nil
+> 	    setTl b c
+>              setTl a b
+>            at <- tl a
+>            case at of
+>              Nil -> return ()
+>              Cons _ _ -> do
+> 	      putChar (hd at)
+>                att <- tl at
+> 
+> This program is, by your informal model, buggy.  The question is
+> this: how badly wrong is it?
+> Let's say at happens to read b.  Is (hd at) well defined?  That's
+> assuming very strong consistency from the memory system already.  How
+> about the IORef in at?  Is that fully allocated, and properly
+> initialized?  Again, if it is, that implies some pretty strong
+> consistency from the memory system.
+> 
+> Now, what about att?  By your argument, it may or may not be c.  We
+> can ask the same questions about its contents assuming it happens to
+> be c.
+> 
+> People have talked a lot about weakly-ordered NUMA machines for more
+> than a decade, and they're always just a couple of years away.  In
+> practical terms, non-atomic NUMA memory models tend to be so hard to
+> program that these machines have never found any traction---you need
+> to throw away all of your software, including your OS, and start
+> afresh with programmers that are vastly more skilled than the ones
+> who wrote the stuff you've already got.
+> 
+> My feeling is that the purely-functional portion of the Haskell
+> language already makes pretty stringent demands of memory
+> consistency.
+
+This is true - in GHC we are required to add a memory barrier to thunk
+update on architectures that don't have strong memory ordering, just to
+ensure that when you follow the pointer in an indirection you can
+actually see the value at the end of the pointer.
+
+Since x86 & x86_64 can implement strong memory ordering without
+(seemingly) too much overhead, surely adding the barrier instruction for
+other architectures shouldn't impose too much of a penalty, at least in
+theory?
+
+> In light of those demands, and the fact that mutable
+> state is used in pretty tightly-controlled ways, it's worth
+> considering much stronger memory models than the one you propose.
+> I'd even go so far as to say "IORefs and IOArrays are sequentially
+> consistent".
+
+Certainly possible; again on x86 & x86_64 it's a no-op, on other
+architectures it means adding a barrier to writeIORef.  In GHC we're
+already doing a write barrier (of the generational GC kind, not the
+microprocessor kind) in writeIORef anyway.
+
+> The only argument against this behavior is their use in
+> the internals of arrays, file I/O, the FFI, etc., etc. (though really
+> it's all about IOUArrays in the latter cases) where we might
+> conceivably pay a bundle in performance.
+> 
+> Another possibility is an algebraic model based on commuting IO
+> actions.  That approach is a particular bias of mine, having tangled
+> with these issues extensively in the past.  It'd go something like
+>    this: * Any data written to an IORef can safely be read by another
+> thread; we cannot observe
+>        partially-written objects.
+>    * readIORef commutes with readIORef.
+>    * newIORef commutes with newIORef.
+>    * writeIORef and newIORef commute with writeIORef or readIORef to
+> a different IORef.
+>    * Nothing commutes with readMVar, writeMVar, or atomicModifyIORef.
+>    * Nothing before a forkIO can be commuted to after forkIO.
+
+Does this model mean anything to the runtime, or would it just affect
+compile-time optimisations?
+
+I imagine that, since the runtime still has to use barriers to prevent
+partially-written objects from being visible to other threads, in effect
+the runtime would end up providing full serialisation anyway.  But my
+tiny brain hasn't quite the capacity to think this through completely
+right now, I'm hoping someone else has.
+
+> I think it's a Good Idea to choose a model that is conceptually
+> simple now, at the cost of imposing a few constraints on
+> implementors, rather than a complex specification which permits
+> maximum implementation flexibility but is utterly opaque.
+
+I don't have a strong opinion, since as I said earlier the constraints
+aren't that onerous in practice.
+
+However, I don't completely understand why the more flexible model would
+be "complex" and "opaque".  Isn't it just a case of specifying certain
+interactions as resulting in undefined behaviour?  Or do you think it's
+too hard to specify exactly which interactions are undefined?
+
+Cheers,
+	Simon
+
+MSG 2:
+================================================================================
+
+Sorry for the long delay in responding to this message---this issue  
+takes all the brain cells I've got in one go.
+
+Ordinarily I'd trim the forgoing discussion, but it was rusty enough  
+that I've retained it:
+
+On Apr 4, 2006, at 7:12 AM, Simon Marlow wrote:
+
+> Jan-Willem - thanks for your thoughts on this, it's greatly  
+> appreciated.
+>
+> On 31 March 2006 18:49, Jan-Willem Maessen wrote:
+>
+>> John -
+>>
+>> You are, in effect, proposing a memory model for MVars and IORefs.
+>> The high-level model for programmers is "In order to communicate data
+>> between threads, you *must* use an MVar, and never an IORef."
+>>
+>> But the devil is in the details.  I'd like to strongly urge *against*
+>> adopting the extremely loose model you have proposed.  The following
+>> things seem particularly important:
+>>
+>> * reads and writes to IORefs should be atomic, meaning either a
+>> complete update is observed or no change is observed.  In the absence
+>> of this guarantee, misuse of IORefs can cause programs to crash in
+>> unrepeatable ways.  If the machine doesn't make this easy, the
+>> implementor ought to sweat a little so that Haskell programmers don't
+>> have to sweat at all.
+>>
+>> * I assume forkIO constitutes a sequence point.  I suspect throwTo et
+>> al ought to as well.
+>>
+>> * I would urge that atomicModifyIORef constitute a sequence point---I
+>> suspect it loses a great deal of its utility otherwise.
+>>
+>> Now, on to more difficult issues...  Consider the following example
+>> (untested):
+>>
+>> data RefList a = Nil | Cons a (IORef (RefList a))
+>>
+>> cons :: a -> RefList a -> IO (RefList a)
+>> cons x xs = do
+>>    a <- newIORef xs
+>>    return (Cons x a)
+>>
+>> hd :: RefList a -> a
+>> hd (Cons a _) = a
+>>
+>> tl :: RefList a -> IO (RefList a)
+>> tl (Cons a t) = readIORef a
+>>
+>> setTl :: RefList a -> RefList a -> IO ()
+>> setTl (Cons a t) t' = writeIORef t t'
+>>
+>> main = do a <- cons 'a' Nil
+>>            forkIO $ do
+>>              c <- cons 'c' Nil
+>>              b <- cons 'b' Nil
+>> 	    setTl b c
+>>              setTl a b
+>>            at <- tl a
+>>            case at of
+>>              Nil -> return ()
+>>              Cons _ _ -> do
+>> 	      putChar (hd at)
+>>                att <- tl at
+>>
+>> This program is, by your informal model, buggy.  The question is
+>> this: how badly wrong is it?
+>> Let's say at happens to read b.  Is (hd at) well defined?  That's
+>> assuming very strong consistency from the memory system already.  How
+>> about the IORef in at?  Is that fully allocated, and properly
+>> initialized?  Again, if it is, that implies some pretty strong
+>> consistency from the memory system.
+>>
+>> Now, what about att?  By your argument, it may or may not be c.  We
+>> can ask the same questions about its contents assuming it happens to
+>> be c.
+>>
+>> People have talked a lot about weakly-ordered NUMA machines for more
+>> than a decade, and they're always just a couple of years away.  In
+>> practical terms, non-atomic NUMA memory models tend to be so hard to
+>> program that these machines have never found any traction---you need
+>> to throw away all of your software, including your OS, and start
+>> afresh with programmers that are vastly more skilled than the ones
+>> who wrote the stuff you've already got.
+>>
+>> My feeling is that the purely-functional portion of the Haskell
+>> language already makes pretty stringent demands of memory
+>> consistency.
+>
+> This is true - in GHC we are required to add a memory barrier to thunk
+> update on architectures that don't have strong memory ordering,  
+> just to
+> ensure that when you follow the pointer in an indirection you can
+> actually see the value at the end of the pointer.
+>
+> Since x86 & x86_64 can implement strong memory ordering without
+> (seemingly) too much overhead, surely adding the barrier  
+> instruction for
+> other architectures shouldn't impose too much of a penalty, at  
+> least in
+> theory?
+
+Interesting question.  The currently-popular architectures can get by  
+without too many memory barriers, in large part by requiring stores  
+to commit to memory in order; my belief is that SPARC TSO can get by  
+with no memory barriers for thunk update/read, and that PowerPC  
+requires a write barrier (and perhaps read barriers).
+
+It remains to be seen whether multi-core pipelines will change this  
+equation; there are reasons an architect might prefer to use a single  
+store pipeline for multiple threads, satisfying loads from one thread  
+from pending stores for another thread.  The practical upshot would  
+be weaker memory models all around.
+
+Sadly, x86 has a bad record of bungling synchronization operations,  
+and clear documentation on the x86 memory model is conspicuous by its  
+absence.
+
+>> In light of those demands, and the fact that mutable
+>> state is used in pretty tightly-controlled ways, it's worth
+>> considering much stronger memory models than the one you propose.
+>> I'd even go so far as to say "IORefs and IOArrays are sequentially
+>> consistent".
+>
+> Certainly possible; again on x86 & x86_64 it's a no-op, on other
+> architectures it means adding a barrier to writeIORef.  In GHC we're
+> already doing a write barrier (of the generational GC kind, not the
+> microprocessor kind) in writeIORef anyway.
+
+It is certainly my hope that the memory barriers required by  
+writeIORef and company will be no worse than those required by thunk  
+update---ie, writeIORef should cost about as much as updating the  
+header word of a thunk.
+
+>> The only argument against this behavior is their use in
+>> the internals of arrays, file I/O, the FFI, etc., etc. (though really
+>> it's all about IOUArrays in the latter cases) where we might
+>> conceivably pay a bundle in performance.
+>>
+>> Another possibility is an algebraic model based on commuting IO
+>> actions.  That approach is a particular bias of mine, having tangled
+>> with these issues extensively in the past.  It'd go something like
+>>    this: * Any data written to an IORef can safely be read by another
+>> thread; we cannot observe
+>>        partially-written objects.
+>>    * readIORef commutes with readIORef.
+>>    * newIORef commutes with newIORef.
+>>    * writeIORef and newIORef commute with writeIORef or readIORef to
+>> a different IORef.
+>>    * Nothing commutes with readMVar, writeMVar, or atomicModifyIORef.
+>>    * Nothing before a forkIO can be commuted to after forkIO.
+>
+> Does this model mean anything to the runtime, or would it just affect
+> compile-time optimisations?
+
+On weakly ordered machines, it tells us where we must insert memory  
+barriers, and what sort of memory barriers are required.  In  
+practice, the easiest expedient is to bake those barriers in to  
+either the read or write operations.  On some machines, these  
+operations are no-ops and get erased.  On others, one can use  
+commutativity to hoist barriers, then take advantage of the fact that:
+
+barrier >> barrier === barrier
+
+> I imagine that, since the runtime still has to use barriers to prevent
+> partially-written objects from being visible to other threads, in  
+> effect
+> the runtime would end up providing full serialisation anyway.  But my
+> tiny brain hasn't quite the capacity to think this through completely
+> right now, I'm hoping someone else has.
+
+That is my belief as well.  But the synchronization may not be as  
+"full" as you imagine---a good thing for the implementor, but a  
+potentially surprising thing for the programmer.
+
+My particular concern here is actually array construction.   
+Conceptually, we'd like to avoid a barrier operation every time we  
+write a pointer into an IOArray or an STArray (the barrier ensures  
+that the data being stored in the array is properly formatted in  
+memory before the update occurs).  I suspect this can be avoided, but  
+it's tricky to come up with a graceful way to guarantee it in  
+general.  In the worst case, this would make constructing any kind of  
+array slow and clunky.  That's an eventuality to think about, and  
+avoid.  It might mean re-coding bulk updates to use something more  
+primitive (and unsafe) than writeIOArray / writeSTArray.
+
+>> I think it's a Good Idea to choose a model that is conceptually
+>> simple now, at the cost of imposing a few constraints on
+>> implementors, rather than a complex specification which permits
+>> maximum implementation flexibility but is utterly opaque.
+>
+> I don't have a strong opinion, since as I said earlier the constraints
+> aren't that onerous in practice.
+>
+> However, I don't completely understand why the more flexible model  
+> would
+> be "complex" and "opaque".  Isn't it just a case of specifying certain
+> interactions as resulting in undefined behaviour?  Or do you think  
+> it's
+> too hard to specify exactly which interactions are undefined?
+
+My assumption here is that bad synchronization should not cause  
+Haskell to crash with a seg fault (because we looked at something in  
+a partially-formed state).  Getting a loose spec which still  
+guarantees this is tricky in practice.  The other tricky part is  
+explaining to programmers why their code went wrong in some  
+unintuitive way.  Here, saying "use MVars / STRefs to synchronize"  
+should go a long way.
+
+-Jan
+
+>
+> Cheers,
+> 	Simon
+
+================================================================================
+
+
+
+DRAFT BUG POST
+================================================================================
+
+We recently began experimenting with GHC on ARM platforms.
+
+```Haskell
+import Data.IORef
+import Control.Concurrent
+
+data Foo = Foo Int deriving Show
+
+{-# NOINLINE mkfoo #-}
+mkfoo x = Foo x
+
+{-# NOINLINE dowrite #-}
+dowrite r n = writeIORef r $! mkfoo n
+
+main = 
+  do r <- newIORef (Foo 3)
+     forkIO (dowrite r 4)
+     x <- readIORef r
+     print x
+```
+
+```C
+mkfoo_rn1_entry() //  []
+        { []
+        }
+    {offset
+      c40i:
+          P64[MainCapability+872] = P64[MainCapability+872] + 16;
+          if (P64[MainCapability+872] > I64[MainCapability+880]) goto c40m; else goto c40l;
+      c40m:
+          I64[MainCapability+928] = 16;
+          P64[MainCapability+24] = mkfoo_rn1_closure;
+          call (I64[MainCapability+16])(R1) args: 16, res: 0, upd: 8;
+      c40l:
+          I64[P64[MainCapability+872] - 8] = Foo_con_info;
+          P64[P64[MainCapability+872]] = P64[I64[MainCapability+856]];
+          P64[MainCapability+24] = P64[MainCapability+872] - 7;
+          I64[MainCapability+856] = I64[MainCapability+856] + 8;
+          call (I64[P64[I64[MainCapability+856]]])(R1) args: 8, res: 0, upd: 8;
+    }
+}
+```
+
+```C
+dowrite_entry() //  []
+        { []
+        }
+    {offset
+      c44j:
+          call a_r3Dy_entry() args: 24, res: 0, upd: 8;
+    }
+}
+
+a_r3Dy_entry() //  [R1]
+        { []
+        }
+    {offset
+      c41D:
+          if (I64[MainCapability+856] - 16 < I64[MainCapability+864]) goto c41H; else goto c41I;
+      c41H:
+          P64[MainCapability+24] = a_r3Dy_closure;
+          call (I64[MainCapability+16])(R1) args: 24, res: 0, upd: 8;
+      c41I:
+          I64[I64[MainCapability+856] - 8] = block_c41B_info;
+          P64[I64[MainCapability+856] - 16] = P64[I64[MainCapability+856] + 8];
+          I64[MainCapability+856] = I64[MainCapability+856] - 16;
+          call mkfoo_rn1_entry() args: 16, res: 8, upd: 8;
+    }
+}
+
+block_c41B_entry() //  [R1]
+        { []
+        }
+    {offset
+      c41B:
+          _s3Ep::P64 = P64[I64[MainCapability+856] + 8];
+          I64[I64[MainCapability+856] + 8] = block_c41G_info;
+          _s3Es::P64 = P64[MainCapability+24];
+          P64[MainCapability+24] = _s3Ep::P64;
+          P64[I64[MainCapability+856] + 16] = _s3Es::P64;
+          I64[MainCapability+856] = I64[MainCapability+856] + 8;
+          if (P64[MainCapability+24] & 7 != 0) goto u41S; else goto c41K;
+      u41S:
+          call block_c41G_entry(R1) args: 0, res: 0, upd: 0;
+      c41K:
+          call (I64[I64[P64[MainCapability+24]]])(R1) args: 8, res: 8, upd: 8;
+    }
+}
+
+block_c41G_entry() //  [R1]
+        { []
+        }
+    {offset
+      c41G:
+          _s3Ev::P64 = P64[P64[MainCapability+24] + 7];
+          P64[_s3Ev::P64 + 8] = P64[I64[MainCapability+856] + 8];
+          call "ccall" arg hints:  [PtrHint,
+                                    PtrHint]  result hints:  [] dirty_MUT_VAR(MainCapability+24, _s3Ev::P64);
+          P64[MainCapability+24] = ()_closure+1;
+          I64[MainCapability+856] = I64[MainCapability+856] + 16;
+          call (I64[P64[I64[MainCapability+856]]])(R1) args: 8, res: 0, upd: 8;
+    }
+}
+```
+
+
+SCRAP 2
+================================================================================
+
+
+```Haskell
+import Data.IORef
+import Control.Concurrent
+
+data Foo = Foo Int  deriving Show
+
+{-# NOINLINE mkfoo #-}
+mkfoo x = Foo x
+
+main = 
+  do print "hi"
+     r <- newIORef $! (Foo 3)
+     forkIO $ writeIORef r $! mkfoo 4
+     x <- readIORef r
+     print x
+```
+
+Here is the CMM from the mkfoo function on 7.10.3:
+
+```C
+[section "data" {
+    mkfoo_rnV_closure:
+        const mkfoo_rnV_info;
+},
+mkfoo_rnV_entry() //  []
+ { info_tbl: [(c1cS,
+                      label: mkfoo_rnV_info
+                      rep:HeapRep static { Fun {arity: 1 fun_type: ArgSpec 5} })]
+          stack_info: arg_space: 0 updfr_space: Nothing
+        }
+    {offset
+      c1cS:
+          _B1::P64 = P64[Sp];
+          goto c1cU;
+      c1cU:
+          Hp = Hp + 16;
+          if (Hp > HpLim) goto c1cW; else goto c1cV;
+      c1cW:
+          HpAlloc = 16;
+          goto c1cT;
+      c1cT:
+          R1 = mkfoo_rnV_closure;
+          call (stg_gc_fun)(R1) args: 16, res: 0, upd: 8;
+      c1cV:
+          I64[Hp - 8] = Foo_con_info;
+          P64[Hp] = _B1::P64;
+          _c1cR::P64 = Hp - 7;
+         R1 = _c1cR::P64;
+          Sp = Sp + 8;
+          call (I64[P64[Sp]])(R1) args: 8, res: 0, upd: 8;
+    }
+}]
+```
+
+
+SCRAP 1: FROM SLACK:
+================================================================================
+
+Ok… I’ve traced through `prim_write_barrier` and lock/unlockClosure a bit
+
+[1:04]  
+But I can’t find evidence that it’s associated with `writeMutVar#`… which is actually mentioned in very few places in GHC as well
+
+[1:04]  
+Ah, one last thing to check for is if there’s any mechanism by which `has_side_effects=True` primops get a barrier… but I don’t think so
+
+[1:09]  
+writeMutVar does generate some code that dirties the mutvar:
+```emitPrimOp dflags [] WriteMutVarOp [mutv,var]
+   = do emitStore (cmmOffsetW dflags mutv (fixedHdrSizeW dflags)) var
+        emitCCall
+                [{-no results-}]
+                (CmmLit (CmmLabel mkDirty_MUT_VAR_Label))
+                [(CmmReg (CmmGlobal BaseReg), AddrHint), (mutv,AddrHint)]```
+
+[1:12]  
+`Storage.c` contains the funtion `dirty_MUT_VAR`
+
+[1:13]  
+I’ll just paste here because it’s short:
+```/*
+   This is the write barrier for MUT_VARs, a.k.a. IORefs.  A
+   MUT_VAR_CLEAN object is not on the mutable list; a MUT_VAR_DIRTY
+   is.  When written to, a MUT_VAR_CLEAN turns into a MUT_VAR_DIRTY
+   and is put on the mutable list.
+*/
+void
+dirty_MUT_VAR(StgRegTable *reg, StgClosure *p)
+{
+    Capability *cap = regTableToCapability(reg);
+    if (p->header.info == &stg_MUT_VAR_CLEAN_info) {
+        p->header.info = &stg_MUT_VAR_DIRTY_info;
+        recordClosureMutated(cap,p);
+    }
+}
+```
+
+[1:14]  
+And then in `Capability.h`:
+```EXTERN_INLINE void
+recordClosureMutated (Capability *cap, StgClosure *p)
+{
+    bdescr *bd;
+    bd = Bdescr((StgPtr)p);
+    if (bd->gen_no != 0) recordMutableCap(p,cap,bd->gen_no);
+}```
+
+[1:15]  
+I’ll refrain from pasting `recordMutable`… this has to do with updating the capabilities mutable list for generational GC.    It doesn’t mention a memory fence. (edited)
+
+[1:15]  
+Grepping is somewhat hindered by the fact that the exact words “write barrier” are used for the IORef GC write barrier
+
+[1:16]  
+and `write_barrier` / `prim_write_barrier` for the actual memory fences
+
+rrnewton [11:06 AM]  
+@channel: Ok… I’m having one problem with my trace through from last night that leaves me less than fully confident.
+
+
