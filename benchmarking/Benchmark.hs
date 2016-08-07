@@ -288,14 +288,23 @@ writeStackDotYaml dockerfile mountDir fileLoc _pkgIdStrs =
                          ]
                      ]
         extraDeps = "extra-deps" .= array [toJSON ("criterion-1.1.1.0" :: String)]
-        docker   = "docker" .= object
+        -- Invariant: only used if the dockerfile argument is non-Nothing
+        docker df = "docker" .= object
                      [ "enable"    .= True
-                     , "repo"      .= fromMaybe ("fpco/stack-build:" <> ts) dockerfile
+                     , "repo"      .= df
                      , "auto-pull" .= True
                      , "set-user"  .= True
                      , "mount"     .= [mountDir]
                      ]
-        yaml = object [resolver, docker, packages, extraDeps, skipGhcCheck]
+        yaml = object $ [ resolver
+                        , packages
+                        , extraDeps
+                        , skipGhcCheck
+                        ]
+                        ++
+                        (case dockerfile of
+                           Just df -> [docker df]
+                           Nothing -> [])
     in encodeFile fileLoc yaml
 
 -- TODO: This is a temporary hack. Remove when Stackage vets benchmarks.
@@ -397,16 +406,20 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
         pkgId  = case simpleParse pkgIdStr of
                       Just p  -> p
                       Nothing -> error $ "Ill-formatted PackageIdentifier: " ++ pkgIdStr
-    invoke hfuc [ "--noupload"
-                , "--csv=" ++ benchResPrefix <.> "csv"
-                , "--variant=" ++ fromMaybe ("fpco/stack-build:" ++ resolver)
-                                            dockerfile
-                , "--custom=PACKAGE,"    ++ unPackageName (pkgName pkgId)
-                , "--custom=PACKAGEVER," ++ show (disp $ pkgVersion pkgId)
-                , "--custom=RESOLVER,"   ++ resolver
-                , "--json"
-                , benchResPrefix <.> "json"
-                ]
+    invoke hfuc $ [ "--noupload"
+                  , "--csv=" ++ benchResPrefix <.> "csv"
+                  , "--custom=PACKAGE,"    ++ unPackageName (pkgName pkgId)
+                  , "--custom=PACKAGEVER," ++ show (disp $ pkgVersion pkgId)
+                  , "--custom=RESOLVER,"   ++ resolver
+                  ]
+                  ++
+                  (case dockerfile of
+                     Just df -> ["--variant=" ++ df]
+                     Nothing -> [])
+                  ++
+                  [ "--json"
+                  , benchResPrefix <.> "json"
+                  ]
 
 installHSBencherFusion :: Manager -> FilePath -> IO FilePath
 installHSBencherFusion m unpkDir = do
@@ -493,8 +506,7 @@ doIt cmdArgs = do
     t <- getCurrentTime
     let ft          = formatTime defaultTimeLocale "%Y-%m-%d-%H:%M:%S" t
         ts          = targetSlug stackageTarget
-        resolver    = fromMaybe ("fpco/stack-build:" ++ ts) (dockerfile cmdArgs)
-        benchResDir = benchResDirPrefix </> resolver </> targetStr
+        benchResDir = benchResDirPrefix </> fromMaybe "" (dockerfile cmdArgs) </> targetStr
         pkgResDir   = benchResDir </> ft
     createDirectoryIfMissing True pkgResDir
     pkgResDir' <- canonicalizePath pkgResDir
