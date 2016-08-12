@@ -279,13 +279,15 @@ writeStackDotYaml dockerfile mountDir fileLoc _pkgIdStrs =
         resolver = "resolver" .= ts
         packages = "packages" .= array
                      [ toJSON ("." :: String)
-                     , object
+                     {-
+		     , object
                          [ "location" .= object
                              [ "git"    .= ("https://github.com/bos/criterion" :: String)
                              , "commit" .= ("fa26f39a187f422adbb513ea459ee2700301f804" :: String)
                              ]
                          , "extra-dep" .= True
                          ]
+		     -}
                      ]
         extraDeps = "extra-deps" .= array [toJSON ("criterion-1.1.1.0" :: String)]
         -- Invariant: only used if the dockerfile argument is non-Nothing
@@ -298,7 +300,7 @@ writeStackDotYaml dockerfile mountDir fileLoc _pkgIdStrs =
                      ]
         yaml = object $ [ resolver
                         , packages
-                        , extraDeps
+                        -- , extraDeps
                         , skipGhcCheck
                         ]
                         ++
@@ -373,7 +375,7 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
 
     invokeWithYamlFile "setup" []
     -- TODO: Determine a way to run individual benchmarks
-    invokeWithYamlFile "bench" ["--only-dependencies"]
+    -- invokeWithYamlFile "bench" ["--only-dependencies"]
 
     let thePkgName = unPackageName $ pkgName
                                    $ fromMaybe (error "Bad package ID")
@@ -504,7 +506,7 @@ doIt cmdArgs = do
                           in atDef [] chunks (s-1)
           Nothing -> pkgIdStrs'
 
---     downloadPkgTarballs manager benchBuildDir pkgIdStrs
+    downloadPkgTarballs manager benchBuildDir pkgIdStrs
 
     let numPkgsStr  = show $ length pkgIdStrs
         numPkgsStr' = show numPkgs'
@@ -525,8 +527,8 @@ doIt cmdArgs = do
     pkgResDir' <- canonicalizePath pkgResDir
     putStrLn $ "Logging results in " ++ pkgResDir'
 
-    void $ runExceptT $ invokeTee "install-everything.log" "stack" $
-      ["install"]  ++ pkgIdStrs
+--     void $ runExceptT $ invokeTee "install-everything.log" "stack" $
+--       ["install"]  ++ pkgIdStrs
 
     results <- for pkgIdStrs $ \pkgIdStr -> do
         let pkgBuildDir = benchBuildDir </> pkgIdStr
