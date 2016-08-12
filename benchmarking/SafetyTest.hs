@@ -374,6 +374,17 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
     invokeWithYamlFile "setup" []
     -- TODO: Determine a way to run individual benchmarks
     invokeWithYamlFile "bench" ["--only-dependencies"]
+
+    let thePkgName = unPackageName $ pkgName
+                                   $ fromMaybe (error "Bad package ID")
+                                   $ simpleParse pkgIdStr
+        pkgCabalFile = thePkgName <.> "cabal"
+
+    pkgCabalFileContents <- liftIO $ readFile pkgCabalFile
+    case parsePackageDescription $!! pkgCabalFileContents of
+         ParseFailed e -> error $ show e
+         ParseOk _ (GenericPackageDescription{condLibrary = Just lib}) ->
+           liftIO $ print lib
 {-
     -- TODO: Timeout after, say, 10 minutes of inactivity
     invokeWithYamlFile "bench"
@@ -517,7 +528,6 @@ doIt cmdArgs = do
     void $ runExceptT $ invokeTee "install-everything.log" "stack" $
       ["install"]  ++ pkgIdStrs
 
-{-
     results <- for pkgIdStrs $ \pkgIdStr -> do
         let pkgBuildDir = benchBuildDir </> pkgIdStr
         pkgBuildDir' <- canonicalizePath pkgBuildDir
@@ -547,4 +557,4 @@ doIt cmdArgs = do
         for_ successes $ \success -> putStrLn ('\t':success)
         putStrLn $ numFailuresStr   ++ "/" ++ numPkgsStr ++ " packages failed"
         for_ failures  $ \failure -> putStrLn ('\t':failure)
--}
+
