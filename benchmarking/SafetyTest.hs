@@ -277,6 +277,7 @@ writeStackDotYaml dockerfile mountDir fileLoc _pkgIdStrs =
 
         ts       = targetSlug stackageTarget
         resolver = "resolver" .= ts
+        {-
         packages = "packages" .= array
                      [ toJSON ("." :: String)
                      {-
@@ -289,6 +290,7 @@ writeStackDotYaml dockerfile mountDir fileLoc _pkgIdStrs =
                          ]
 		     -}
                      ]
+        -}
         extraDeps = "extra-deps" .= array [toJSON ("criterion-1.1.1.0" :: String)]
         -- Invariant: only used if the dockerfile argument is non-Nothing
         docker df = "docker" .= object
@@ -299,7 +301,7 @@ writeStackDotYaml dockerfile mountDir fileLoc _pkgIdStrs =
                      , "mount"     .= [mountDir]
                      ]
         yaml = object $ [ resolver
-                        , packages
+                        -- , packages
                         -- , extraDeps
                         , skipGhcCheck
                         ]
@@ -367,6 +369,7 @@ runBenchmarks pkgIdStr dockerfile mountDir benchResPrefix = do
                         , "json"
                         -- , "eventlog"
                         ]
+
     liftIO $ do
         writeStackDotYaml dockerfile mountDir stackYamlFile []
         for_ reportFiles $ \f -> do
@@ -388,22 +391,20 @@ runBenchmarks pkgIdStr dockerfile mountDir benchResPrefix = do
                       , packageDescription = PackageDescription
                                                { package = pid }
                       }) -> do
-           let dir    = "test-safety"
-               pidStr = show $ disp pid
-           liftIO $ makeSafetyExe dir pidStr lib
-           liftIO $ setCurrentDirectory dir
+           let dir      = "test-safety"
+               pidStr   = show $ disp pid
+               filename = dir </> pidStr <.> "hs"
+           liftIO $ makeSafetyExe filename lib
            invokeWithYamlFile "exec"
-                 [ "--resolver", "lts-5.16" -- TODO: Don't hardcode this
-                 , "--package", pidStr
+                 [ "--package", show $ disp $ pkgName pid
                  , "runghc"
-                 , pidStr <.> "hs"
+                 , filename
                  ]
          _ -> error "Oh no"
 
-makeSafetyExe :: FilePath -> FilePath -> Library -> IO ()
-makeSafetyExe dir pidStr (Library {exposedModules = ems}) = do
-    createDirectoryIfMissing True dir
-    writeFile (dir </> pidStr <.> "hs") $ unlines $
+makeSafetyExe :: FilePath -> Library -> IO ()
+makeSafetyExe fp (Library {exposedModules = ems}) = do
+    writeFile fp $ unlines $
       [ "{-# LANGUAGE Safe #-}"
       , "module Main (main) where"
       , ""
