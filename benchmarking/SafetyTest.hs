@@ -342,7 +342,7 @@ runSafetyTest pkgIdStr dockerfile mountDir benchResPrefix = do
                filename  = pidStr <.> "hs"
                teeFile   = benchResPrefix <.> "log"
                args      = stackArgs dockerfile mountDir
-           liftIO $ makeSafetyExe filename lib
+           liftIO $ makeSafetyExe filename pid lib
            invokeTee teeFile "stack" $
                  "exec":args
                  ++
@@ -352,14 +352,18 @@ runSafetyTest pkgIdStr dockerfile mountDir benchResPrefix = do
                  ]
          _ -> error "Oh no"
 
-makeSafetyExe :: FilePath -> Library -> IO ()
-makeSafetyExe fp (Library {exposedModules = ems}) = do
+makeSafetyExe :: FilePath -> PackageIdentifier -> Library -> IO ()
+makeSafetyExe fp pid (Library {exposedModules = ems}) = do
     writeFile fp $ unlines $
-      [ "{-# LANGUAGE Safe #-}"
+      [ "{-# LANGUAGE PackageImports #-}"
+      , "{-# LANGUAGE Safe #-}"
       , "module Main (main) where"
       , ""
       ]
-      ++ map (\x -> "import " ++ show (disp x) ++ " ()") ems
+      ++ map (\x -> "import \"" ++ show (disp (pkgName pid))
+                                ++ "\" "
+                                ++ show (disp x)
+                                ++ " ()") ems
       ++ ["", "main :: IO ()", "main = return ()"]
 
 data CmdArgs = CmdArgs
