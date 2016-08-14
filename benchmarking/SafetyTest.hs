@@ -276,7 +276,6 @@ stackArgs dockerfile mountDir =
   ++
   case dockerfile of
     Just df -> [ "--docker-repo", df
-               , "--docker"
                , "--docker-auto-pull"
                , "--docker-set-user"
                , "--docker-mount", mountDir
@@ -433,9 +432,8 @@ doIt cmdArgs = do
         let pkgBuildDir = benchBuildDir </> pkgIdStr
         createDirectoryIfMissing True pkgBuildDir
         pkgBuildDir' <- canonicalizePath pkgBuildDir
-        cabalFileData <- downloadCabalFile manager
-                           $ fromMaybe (error "bad id")
-                           $ simpleParse pkgIdStr
+        let cabalFile = fromMaybe (error "bad id") $ simpleParse pkgIdStr
+        cabalFileData <- downloadCabalFile manager cabalFile
         BL.writeFile (pkgBuildDir' </> pkgIdStr <.> "cabal") cabalFileData
         putStrLn "-------------------------"
         putStrLn $ "Benchmarking " ++ pkgIdStr
@@ -449,6 +447,7 @@ doIt cmdArgs = do
         case res of
              Left (cmd, c) -> do
                  let errMsg = "ERROR: " ++ cmd ++ " returned exit code " ++ show c
+                            ++ "\n-------------------------"
                  putStrLn errMsg
                  appendFile benchResLog errMsg
                  pure $ Left pkgIdStr
