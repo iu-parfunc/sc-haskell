@@ -350,13 +350,12 @@ invokeCommon action cmd args = do
          ExitSuccess   -> pure ()
          ExitFailure c -> throwError (fullCmd, c)
 
-runBenchmarks :: FilePath -- hsbencher-fusion-upload-criterion
-              -> String -- Package + version
+runBenchmarks :: String -- Package + version
               -> Maybe String
               -> FilePath
               -> FilePath
               -> ShellM ()
-runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
+runBenchmarks pkgIdStr dockerfile mountDir benchResPrefix = do
     -- TODO REALLY IMPORTANT: Remove hacky-stack.yaml hack
     let stackYamlFile                  = "hacky-stack" <.> "yaml"
         teeFile                        = benchResPrefix <.> "log"
@@ -392,12 +391,13 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
            let dir    = "test-safety"
                pidStr = show $ disp pid
            liftIO $ makeSafetyExe dir pidStr lib
+           liftIO $ setCurrentDirectory dir
            invokeWithYamlFile "exec"
-             [ "--resolver", "lts-5.16" -- TODO: Don't hardcode this
-             , "--package", pidStr
-             , "runghc"
-             , dir </> pidStr <.> "hs"
-             ]
+                 [ "--resolver", "lts-5.16" -- TODO: Don't hardcode this
+                 , "--package", pidStr
+                 , "runghc"
+                 , pidStr <.> "hs"
+                 ]
          _ -> error "Oh no"
 
 makeSafetyExe :: FilePath -> FilePath -> Library -> IO ()
@@ -410,29 +410,6 @@ makeSafetyExe dir pidStr (Library {exposedModules = ems}) = do
       ]
       ++ map (\x -> "import " ++ show (disp x) ++ " ()") ems
       ++ ["", "main :: IO ()", "main = return ()"]
-
-installHSBencherFusion :: Manager -> FilePath -> IO FilePath
-installHSBencherFusion m unpkDir = do
-    let hsbencherFileName    = "HSBencher-" ++ hsbencherSHA
-        hsbencherTarballName = hsbencherFileName <.> "tar" <.> "gz"
-        hsbencherDir         = unpkDir </> hsbencherFileName
-    unlessM (doesDirectoryExist hsbencherDir) $ do
-      initialRequest <- parseUrl $ "GET " ++ hsbencherURL
-      withProgress ("Downloading " ++ hsbencherURL) $ do
-          bytes <- httpRetry initialRequest m
-          for_ bytes $ BL.writeFile hsbencherTarballName
-      putStrLn "Proceeding to install HSBencher"
-      res <- runExceptT $ do
-          invoke "tar" ["-xvf", hsbencherTarballName]
-          res' <- liftIO $ withCurrentDirectory hsbencherDir $ do
-            runExceptT $ invoke "stack" ["install", "hsbencher-fusion"]
-          ExceptT $ pure res'
-      case res of
-           Left (cmd, c) ->
-             let errMsg = "ERROR: " ++ cmd ++ " returned exit code " ++ show c
-             in error errMsg
-           Right () -> pure ()
-    pure $ hsbencherDir </> "bin" </> "hsbencher-fusion-upload-criterion"
 
 data CmdArgs = CmdArgs
     { target     :: Maybe String -- TODO: This could perhaps be formatted better
@@ -455,8 +432,6 @@ doIt cmdArgs = do
 
     manager <- newManager tlsManagerSettings
     curDir  <- getCurrentDirectory
-
-    hfuc <- installHSBencherFusion manager curDir
 
     let targetStr     = targetSlug stackageTarget
         benchBuildDir = benchBuildDirPrefix </> targetStr
@@ -516,7 +491,7 @@ doIt cmdArgs = do
             mountDir       = curDir
         res <- withCurrentDirectory pkgBuildDir
                  $ runExceptT
-                 $ runBenchmarks hfuc pkgIdStr (dockerfile cmdArgs) mountDir benchResPrefix
+                 $ runBenchmarks pkgIdStr (dockerfile cmdArgs) mountDir benchResPrefix
         case res of
              Left (cmd, c) -> do
                  let errMsg = "ERROR: " ++ cmd ++ " returned exit code " ++ show c
