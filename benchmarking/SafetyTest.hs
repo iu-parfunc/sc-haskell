@@ -394,7 +394,9 @@ runBenchmarks pkgIdStr dockerfile mountDir benchResPrefix = do
            let dir      = "test-safety"
                pidStr   = show $ disp pid
                filename = dir </> pidStr <.> "hs"
-           liftIO $ makeSafetyExe filename lib
+           liftIO $ do
+             createDirectoryIfMissing True dir
+             makeSafetyExe filename lib
            invokeWithYamlFile "exec"
                  [ "--package", show $ disp $ pkgName pid
                  , "runghc"
