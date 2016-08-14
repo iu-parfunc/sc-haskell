@@ -384,57 +384,32 @@ runBenchmarks hfuc pkgIdStr dockerfile mountDir benchResPrefix = do
 
     pkgCabalFileContents <- liftIO $ readFile pkgCabalFile
     case parsePackageDescription $!! pkgCabalFileContents of
-         ParseFailed e -> error $ show e
-         ParseOk _ (GenericPackageDescription{condLibrary = Just lib}) ->
-           liftIO $ print lib
-{-
-    -- TODO: Timeout after, say, 10 minutes of inactivity
-    invokeWithYamlFile "bench"
-        [ "--ghc-options='-rtsopts'" -- -eventlog
-        , "--benchmark-arguments='" ++ unwords
-            [ "+RTS", "-T", "-RTS" -- -lu-s-g-p
-            , "--output="  ++ benchResPrefix <.> "html"
-            -- , "--csv="     ++ benchResPrefix <.> "csv"
-            -- , "--raw="     ++ benchResPrefix <.> "crit"
-            , "--json="    ++ benchResPrefix <.> "json"
-            , "--regress=" ++ "allocated:iters"
-            , "--regress=" ++ "bytesCopied:iters"
-            , "--regress=" ++ "cycles:iters"
-            , "--regress=" ++ "numGcs:iters"
-            , "--regress=" ++ "mutatorWallSeconds:iters"
-            , "--regress=" ++ "gcWallSeconds:iters"
-            , "--regress=" ++ "cpuTime:iters"
-            -- , "--iters=1"
+         ParseOk _ (GenericPackageDescription
+                      { condLibrary = Just (CondNode{ condTreeData = lib })
+                      , packageDescription = PackageDescription
+                                               { package = pid }
+                      }) -> do
+           let dir    = "test-safety"
+               pidStr = show $ disp pid
+           liftIO $ makeSafetyExe dir pidStr lib
+           invokeWithYamlFile "exec"
+             [ "--resolver", "lts-5.16" -- TODO: Don't hardcode this
+             , "--package", pidStr
+             , "runghc"
+             , dir </> pidStr <.> "hs"
+             ]
+         _ -> error "Oh no"
 
-            -- Try to run for longer to reduce noise
-            , "-L", "20"
-            ] ++ "'"
-        ]
--}
-
-{-
-    invoke "mkdir" ["-p", benchResPrefix]
-    invoke "cp" ["*.eventlog", benchResPrefix]
--}
-
-    let resolver = targetSlug stackageTarget
-        pkgId  = case simpleParse pkgIdStr of
-                      Just p  -> p
-                      Nothing -> error $ "Ill-formatted PackageIdentifier: " ++ pkgIdStr
-    invoke hfuc $ [ "--noupload"
-                  , "--csv=" ++ benchResPrefix <.> "csv"
-                  , "--custom=PACKAGE,"    ++ unPackageName (pkgName pkgId)
-                  , "--custom=PACKAGEVER," ++ show (disp $ pkgVersion pkgId)
-                  , "--custom=RESOLVER,"   ++ resolver
-                  ]
-                  ++
-                  (case dockerfile of
-                     Just df -> ["--variant=" ++ df]
-                     Nothing -> [])
-                  ++
-                  [ "--json"
-                  , benchResPrefix <.> "json"
-                  ]
+makeSafetyExe :: FilePath -> FilePath -> Library -> IO ()
+makeSafetyExe dir pidStr (Library {exposedModules = ems}) = do
+    createDirectoryIfMissing True dir
+    writeFile (dir </> pidStr <.> "hs") $ unlines $
+      [ "{-# LANGUAGE Safe #-}"
+      , "module Main (main) where"
+      , ""
+      ]
+      ++ map (\x -> "import " ++ show (disp x) ++ " ()") ems
+      ++ ["", "main :: IO ()", "main = return ()"]
 
 installHSBencherFusion :: Manager -> FilePath -> IO FilePath
 installHSBencherFusion m unpkDir = do
