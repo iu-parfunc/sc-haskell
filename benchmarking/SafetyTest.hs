@@ -239,6 +239,7 @@ getPkgsWithBenchmarks m benchBuildDir pkgIds = do
          pkgIdStrs <- forMaybe pkgIds $ \pkgId -> do
              cabalFile <- downloadCabalFile m pkgId
              let pkgIdStr = show $ disp pkgId
+                 pkgStr   = show $ disp $ pkgName pkgId
                  pkgDescr = case parsePackageDescription (BL.unpack cabalFile) of
                               ParseFailed pe -> error $ show pe
                               ParseOk _ d    -> d
@@ -265,51 +266,22 @@ downloadPkgTarballs m benchBuildDir pkgIdStrs = for_ pkgIdStrs $ \pkgIdStr -> do
         doesDirectoryExist pkgBuildDir
     unless dirExists $ extractPkgTarball m benchBuildDir pkgIdStr
 
-writeStackDotYaml :: Maybe String
-                  -> FilePath
-                  -> FilePath
-                  -> [String]
-                  -> IO ()
-writeStackDotYaml dockerfile mountDir fileLoc _pkgIdStrs =
-    let -- packages = "packages" .= map ("." </>) pkgIdStrs
-
-        skipGhcCheck = "skip-ghc-check" .= True
-
-        ts       = targetSlug stackageTarget
-        resolver = "resolver" .= ts
-        {-
-        packages = "packages" .= array
-                     [ toJSON ("." :: String)
-                     {-
-		     , object
-                         [ "location" .= object
-                             [ "git"    .= ("https://github.com/bos/criterion" :: String)
-                             , "commit" .= ("fa26f39a187f422adbb513ea459ee2700301f804" :: String)
-                             ]
-                         , "extra-dep" .= True
-                         ]
-		     -}
-                     ]
-        -}
-        extraDeps = "extra-deps" .= array [toJSON ("criterion-1.1.1.0" :: String)]
-        -- Invariant: only used if the dockerfile argument is non-Nothing
-        docker df = "docker" .= object
-                     [ "enable"    .= True
-                     , "repo"      .= df
-                     , "auto-pull" .= True
-                     , "set-user"  .= True
-                     , "mount"     .= [mountDir]
-                     ]
-        yaml = object $ [ resolver
-                        -- , packages
-                        -- , extraDeps
-                        , skipGhcCheck
-                        ]
-                        ++
-                        (case dockerfile of
-                           Just df -> [docker df]
-                           Nothing -> [])
-    in encodeFile fileLoc yaml
+stackArgs :: Maybe String
+          -> FilePath
+          -> [String]
+stackArgs dockerfile mountDir =
+  [ "--skip-ghc-check"
+  , "--resolver", targetSlug stackageTarget
+  ]
+  ++
+  case dockerfile of
+    Just df -> [ "--docker-repo", df
+               , "--docker"
+               , "--docker-auto-pull"
+               , "--docker-set-user"
+               , "--docker-mount", mountDir
+               ]
+    Nothing -> []
 
 -- TODO: This is a temporary hack. Remove when Stackage vets benchmarks.
 writeCacheFile :: FilePath
@@ -352,37 +324,13 @@ invokeCommon action cmd args = do
          ExitSuccess   -> pure ()
          ExitFailure c -> throwError (fullCmd, c)
 
-runBenchmarks :: String -- Package + version
+runSafetyTest :: String -- Package + version
               -> Maybe String
               -> FilePath
               -> FilePath
               -> ShellM ()
-runBenchmarks pkgIdStr dockerfile mountDir benchResPrefix = do
-    -- TODO REALLY IMPORTANT: Remove hacky-stack.yaml hack
-    let stackYamlFile                  = "hacky-stack" <.> "yaml"
-        teeFile                        = benchResPrefix <.> "log"
-        invokeWithYamlFile subcmd args = invokeTee teeFile "stack" $ subcmd:["--stack-yaml", stackYamlFile] ++ args
-        reportFiles = map (benchResPrefix <.>)
-                        [ "html"
-                        , "csv"
-                        , "crit"
-                        , "json"
-                        -- , "eventlog"
-                        ]
-
-    liftIO $ do
-        writeStackDotYaml dockerfile mountDir stackYamlFile []
-        for_ reportFiles $ \f -> do
-            whenM (doesFileExist f) $ removeFile f
-
-    invokeWithYamlFile "setup" []
-    -- TODO: Determine a way to run individual benchmarks
-    -- invokeWithYamlFile "bench" ["--only-dependencies"]
-
-    let thePkgName = unPackageName $ pkgName
-                                   $ fromMaybe (error "Bad package ID")
-                                   $ simpleParse pkgIdStr
-        pkgCabalFile = thePkgName <.> "cabal"
+runSafetyTest pkgIdStr dockerfile mountDir benchResPrefix = do
+    let pkgCabalFile = pkgIdStr <.> "cabal"
 
     pkgCabalFileContents <- liftIO $ readFile pkgCabalFile
     case parsePackageDescription $!! pkgCabalFileContents of
@@ -391,14 +339,15 @@ runBenchmarks pkgIdStr dockerfile mountDir benchResPrefix = do
                       , packageDescription = PackageDescription
                                                { package = pid }
                       }) -> do
-           let dir      = "test-safety"
-               pidStr   = show $ disp pid
-               filename = dir </> pidStr <.> "hs"
-           liftIO $ do
-             createDirectoryIfMissing True dir
-             makeSafetyExe filename lib
-           invokeWithYamlFile "exec"
-                 [ "--package", show $ disp $ pkgName pid
+           let pidStr    = show $ disp pid
+               filename  = pidStr <.> "hs"
+               teeFile   = benchResPrefix <.> "log"
+               args      = stackArgs dockerfile mountDir
+           liftIO $ makeSafetyExe filename lib
+           invokeTee teeFile "stack" $
+                 "exec":args
+                 ++
+                 [ "--package", pidStr
                  , "runghc"
                  , filename
                  ]
@@ -459,7 +408,7 @@ doIt cmdArgs = do
                           in atDef [] chunks (s-1)
           Nothing -> pkgIdStrs'
 
-    downloadPkgTarballs manager benchBuildDir pkgIdStrs
+    -- downloadPkgTarballs manager benchBuildDir pkgIdStrs
 
     let numPkgsStr  = show $ length pkgIdStrs
         numPkgsStr' = show numPkgs'
@@ -480,12 +429,14 @@ doIt cmdArgs = do
     pkgResDir' <- canonicalizePath pkgResDir
     putStrLn $ "Logging results in " ++ pkgResDir'
 
---     void $ runExceptT $ invokeTee "install-everything.log" "stack" $
---       ["install"]  ++ pkgIdStrs
-
     results <- for pkgIdStrs $ \pkgIdStr -> do
         let pkgBuildDir = benchBuildDir </> pkgIdStr
+        createDirectoryIfMissing True pkgBuildDir
         pkgBuildDir' <- canonicalizePath pkgBuildDir
+        cabalFileData <- downloadCabalFile manager
+                           $ fromMaybe (error "bad id")
+                           $ simpleParse pkgIdStr
+        BL.writeFile (pkgBuildDir' </> pkgIdStr <.> "cabal") cabalFileData
         putStrLn "-------------------------"
         putStrLn $ "Benchmarking " ++ pkgIdStr
         putStrLn $ "Entering " ++ pkgBuildDir'
@@ -494,7 +445,7 @@ doIt cmdArgs = do
             mountDir       = curDir
         res <- withCurrentDirectory pkgBuildDir
                  $ runExceptT
-                 $ runBenchmarks pkgIdStr (dockerfile cmdArgs) mountDir benchResPrefix
+                 $ runSafetyTest pkgIdStr (dockerfile cmdArgs) mountDir benchResPrefix
         case res of
              Left (cmd, c) -> do
                  let errMsg = "ERROR: " ++ cmd ++ " returned exit code " ++ show c
@@ -508,8 +459,8 @@ doIt cmdArgs = do
             numSuccessesStr = show $ length successes
             numFailuresStr  = show $ length failures
         putStrLn "-------------------------"
-        putStrLn $ numSuccessesStr ++ "/" ++ numPkgsStr ++ " packages succeeded"
+        putStrLn $ numSuccessesStr ++ "/" ++ numPkgsStr ++ " packages are Safe"
         for_ successes $ \success -> putStrLn ('\t':success)
-        putStrLn $ numFailuresStr   ++ "/" ++ numPkgsStr ++ " packages failed"
+        putStrLn $ numFailuresStr   ++ "/" ++ numPkgsStr ++ " packages are not Safe"
         for_ failures  $ \failure -> putStrLn ('\t':failure)
 
