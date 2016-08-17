@@ -34,6 +34,7 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE PackageImports #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE ViewPatterns #-}
 module Main (main) where
@@ -41,10 +42,10 @@ module Main (main) where
 import qualified Codec.Archive.Tar as Tar
 import qualified Codec.Compression.GZip as GZip
 
-import           Control.Concurrent.Async
+import "async"   Control.Concurrent.Async
 import           Control.DeepSeq (($!!))
 import           Control.Exception.Extra (bracket, catch, retry)
-import           Control.Monad.Extra
+import "extra"   Control.Monad.Extra
 import           Control.Monad.Except (MonadError(..))
 import           Control.Monad.IO.Class (MonadIO(..))
 import           Control.Monad.Trans.Except (ExceptT(..), runExceptT)
@@ -62,7 +63,7 @@ import           Data.Conduit.Process
 import           Data.Either (partitionEithers)
 import           Data.Foldable (for_)
 import qualified Data.HashMap.Strict as HM
-import           Data.List.Extra (chunksOf)
+import "extra"   Data.List.Extra (chunksOf)
 import           Data.Maybe (fromMaybe, isJust)
 import           Data.Monoid ((<>))
 import qualified Data.Text    as TS
@@ -350,7 +351,8 @@ runSafetyTest pkgIdStr dockerfile mountDir benchResPrefix = do
                  , "runghc"
                  , filename
                  ]
-         _ -> error "Oh no"
+         ParseOk{}     -> return ()
+         ParseFailed{} -> error "Oh no"
 
 makeSafetyExe :: FilePath -> PackageIdentifier -> Library -> IO ()
 makeSafetyExe fp pid (Library {exposedModules = ems}) = do
