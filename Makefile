@@ -66,7 +66,7 @@ dock4: Dockerfile_opt_dbg
 	docker run -it $(NAME4) /usr/bin/ghc --version
 
 dock5: Dockerfile_readbarrier
-	docker build -t $(NAME5) -f Dockerfile_readbarrier
+	docker build -t $(NAME5) -f Dockerfile_readbarrier .
 	docker run -it $(NAME5) /usr/bin/ghc --version
 
 push1:
