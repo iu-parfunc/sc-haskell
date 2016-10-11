@@ -45,7 +45,7 @@ Dockerfile_opt_dbg:
 # Read barriers
 # [2016.10.11] 3c009f104a4ec7d6fa2aff86b9e5f3c5599005b8
 Dockerfile_readbarrier:
-	sed 's/REPLACE_ME_WITH_SHA/3c009f104a4ec7d6fa2aff86b9e5f3c5599005b8/' Dockerfile.i    n > $@
+	sed 's/REPLACE_ME_WITH_SHA/3c009f104a4ec7d6fa2aff86b9e5f3c5599005b8/' Dockerfile.in > $@
 
 #----------------------------------------
 
