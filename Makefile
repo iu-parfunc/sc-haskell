@@ -5,14 +5,15 @@ NAME1= parfunc/sc-haskell:$(VER)
 NAME2= parfunc/sc-haskell:$(VER)-dbg
 NAME3= parfunc/sc-haskell:$(VER)-opt
 NAME4= parfunc/sc-haskell:$(VER)-opt-dbg
+NAME5= parfunc/sc-haskell:$(VER)-readbarrier
 
-dockall: dock1 dock2 dock3 dock4
-pushall: push1 push2 push3 push4
+dockall: dock1 dock2 dock3 dock4 dock5
+pushall: push1 push2 push3 push4 push5
 
 # Build four different docker images
 # ================================================================================
 
-dockerfiles: Dockerfile Dockerfile_dbg Dockerfile_opt Dockerfile_opt_dbg
+dockerfiles: Dockerfile Dockerfile_dbg Dockerfile_opt Dockerfile_opt_dbg Dockerfile_readbarrier
 
 # * wip/sc-ghc-7.10 branch: 2e98e616dc217b92dd19eeb1f781271e440aad5a
 # * same branch, update version to 7.10.4, sc-haskell release v0.4:
@@ -41,6 +42,11 @@ Dockerfile_opt:
 Dockerfile_opt_dbg:
 #	sed 's/REPLACE_ME_WITH_SHA//' Dockerfile.in > $@
 
+# Read barriers
+# [2016.10.11] 3c009f104a4ec7d6fa2aff86b9e5f3c5599005b8
+Dockerfile_readbarrier:
+	sed 's/REPLACE_ME_WITH_SHA/3c009f104a4ec7d6fa2aff86b9e5f3c5599005b8/' Dockerfile.i    n > $@
+
 #----------------------------------------
 
 dock1: Dockerfile
@@ -55,9 +61,13 @@ dock3: Dockerfile_opt
 	docker build -t $(NAME3) -f Dockerfile_opt .
 	docker run -it $(NAME3) /usr/bin/ghc --version
 
-dock3: Dockerfile_opt_dbg
+dock4: Dockerfile_opt_dbg
 	docker build -t $(NAME4) -f Dockerfile_opt_dbg .
 	docker run -it $(NAME4) /usr/bin/ghc --version
+
+dock5: Dockerfile_readbarrier
+	docker build -t $(NAME5) -f Dockerfile_readbarrier
+	docker run -it $(NAME5) /usr/bin/ghc --version
 
 push1:
 	docker push $(NAME1)
@@ -71,6 +81,8 @@ push3:
 push4:
 	docker push $(NAME4)
 
+push5:
+	docker push $(NAME5)
 
 clean:
 	rm Dockerfile Dockerfile_dbg
