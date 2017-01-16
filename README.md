@@ -1,6 +1,8 @@
 
 # sc-haskell
 
+ [Docker Hub]: http://img.shields.io/docker/status/parfunc/sc-haskell.svg
+
 A survey on the topic of sequentially consistent Haskell.
 
 ### Inventory of docker images:
