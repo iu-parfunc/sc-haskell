@@ -1,7 +1,7 @@
 
 # sc-haskell
 
-[![Docker Hub status][http://img.shields.io/docker/status/parfunc/sc-haskell.svg]][]
+[![Docker Hub status](http://img.shields.io/docker/status/parfunc/sc-haskell.svg)][]
 
 A survey on the topic of sequentially consistent Haskell.
 
